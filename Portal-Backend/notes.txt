@@ -1,0 +1,5 @@
+disable cors npm package for production - https://www.npmjs.com/package/cors (allows use to make axios calls to localhost)
+
+run: node .\index.js --watch
+, then npx ngrok http 3000 and adjust the backendUrl variable in the frontend.
+go to http://localhost:4040/status to find your ngrok url

@@ -1,6 +1,7 @@
 import React from "react";
 import { SafeAreaView, View, TouchableOpacity, Text } from "react-native";
 import { router } from "expo-router";
+import { Stack } from "expo-router/stack";
 
 const Home = () => {
   const goToLoginPage = () => {
@@ -12,11 +13,17 @@ const Home = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
+      <Stack.Screen
+        options={{
+          headerTitle: "Home",
+          headerShown: false,
+        }}
+      />
       <View style={{ flex: 9, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontWeight: "700", fontSize: 75 }}>P O R N</Text>
+        <Text style={{ fontWeight: "700", fontSize: 75 }}>P O R T A L</Text>
         <Text style={{ fontSize: 20, color: "grey" }}>
-          Discover naked oil twerk
+          Discover your future career
         </Text>
       </View>
       {/* login and register */}

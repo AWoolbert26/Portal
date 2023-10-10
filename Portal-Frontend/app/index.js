@@ -12,6 +12,10 @@ const Home = () => {
     router.push("/register");
   };
 
+  const goToInterestsPage = () => {
+    router.push("/register/interests");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
       <Stack.Screen
@@ -66,6 +70,24 @@ const Home = () => {
             }}
           >
             REGISTER
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={goToInterestsPage}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            width: 180,
+            height: 50,
+            backgroundColor: "black",
+          }}
+        >
+          <Text
+            style={{
+              color: "white",
+            }}
+          >
+            Interests Page
           </Text>
         </TouchableOpacity>
       </View>

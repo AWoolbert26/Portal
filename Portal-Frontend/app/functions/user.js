@@ -13,6 +13,8 @@ export const login = async (email, password) => {
 
     await SecureStore.setItemAsync("portal_jwt", token.data);
 
+    axios.defaults.headers.common["Authorization"] = token.data;
+
     return token.data; //returns jwt token
   } catch (err) {
     throw err;
@@ -50,9 +52,24 @@ export const register = async ({ email, password, username }) => {
       password: password,
       username: username,
     });
+    axios.defaults.headers.common["Authorization"] = token.data;
     return token;
   } catch (err) {
     console.log(err);
     return { err: "User couldn't be created." };
+  }
+};
+
+export const updateUserType = async (typeNum) => {
+  try {
+    const result = await axios.patch(`${backendUrl}/updateUserType`, {
+      type: typeNum,
+    });
+
+    console.log(result.data);
+    return result.data; //change success/failure code that backend returns
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 };

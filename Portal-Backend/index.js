@@ -90,6 +90,7 @@ app.post("/register", async (req, res) => {
         {
           exp: Math.floor(Date.now() / 1000) + 60 * 60,
           data: {
+            id: newUser.id,
             type: newUser.type,
             email: newUser.email,
             username: newUser.username,
@@ -105,6 +106,26 @@ app.post("/register", async (req, res) => {
   } catch (error) {
     res.status(500);
     res.send("Unknown error");
+  }
+});
+
+//change user type
+app.patch("/updateUserType", async (req, res) => {
+  try {
+    const user = jsonwebtoken.verify(req.headers.authorization, "secret");
+    console.log(req.body);
+    await prisma.user.update({
+      where: { id: user.data.id },
+      data: {
+        type: req.body.type,
+      },
+    });
+    res.status(200);
+    res.send("Success");
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    res.send("Failure");
   }
 });
 

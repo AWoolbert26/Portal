@@ -9,6 +9,11 @@ const port = 3000;
 app.use(express.json()); //middleware to interpret all request body as json
 const url = await ngrok.connect(3000); //tunnel for backend requests
 
+const getUserFromToken = (token) => {
+  const user = jsonwebtoken.verify(token, "secret");
+  return user.data;
+};
+
 //checking if email is unique
 app.post("/checkUniqueEmail", async (req, res) => {
   try {
@@ -21,7 +26,7 @@ app.post("/checkUniqueEmail", async (req, res) => {
     res.send(user == null ? "0" : "Email is already taken"); //0 for success, 1 for email taken
   } catch (err) {
     res.status(500);
-    res.send("Unknown error");
+    res.send(err);
   }
 });
 
@@ -38,7 +43,7 @@ app.post("/checkUniqueUsername", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500);
-    res.send("Unknown error");
+    res.send(err);
   }
 });
 
@@ -105,17 +110,17 @@ app.post("/register", async (req, res) => {
     // res.send(`New user ${newUser.username} created!`);
   } catch (error) {
     res.status(500);
-    res.send("Unknown error");
+    res.send(error);
   }
 });
 
 //change user type
 app.patch("/updateUserType", async (req, res) => {
   try {
-    const user = jsonwebtoken.verify(req.headers.authorization, "secret");
+    const user = getUserFromToken(req.headers.authorization);
     console.log(req.body);
     await prisma.user.update({
-      where: { id: user.data.id },
+      where: { id: user.id },
       data: {
         type: req.body.type,
       },
@@ -125,7 +130,31 @@ app.patch("/updateUserType", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500);
-    res.send("Failure");
+    res.send(err);
+  }
+});
+
+app.post("/selectInterests", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+
+    const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); //{id: name, id: name}
+    console.log(body);
+    const result = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        categories: {
+          connect: body,
+        },
+      },
+    });
+
+    res.send("Success");
+  } catch (err) {
+    console.log(err);
+    res.send(err);
   }
 });
 

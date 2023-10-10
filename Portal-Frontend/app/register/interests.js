@@ -1,27 +1,67 @@
-import React, { useState, useRef } from "react";
-import { Text, View, SafeAreaView, TextInput } from "react-native";
+import React, { useState, useRef, useContext } from "react";
+import { Text, View, SafeAreaView, TextInput, Alert } from "react-native";
 import { Stack } from "expo-router/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthContext } from "../auth/AuthContext";
+import { router } from "expo-router";
+import { selectInterests } from "../functions/user";
 
 const interests = () => {
-  const [interests, setInterests] = useState({
-    Law: false,
-    "Computer Science": false,
-    Business: false,
-  });
+  const { authToken } = useContext(AuthContext);
+  if (authToken === null) {
+    router.replace("/login");
+  }
+
+  const allInterests = { 0: "Law", 1: "Computer Science", 2: "Business" };
+
+  const [selectedInterests, setSelectedInterests] = useState({});
 
   const selected = useRef(0);
 
-  const pressed = (interest, value) => {
-    if (value) {
+  const pressed = (key) => {
+    if (selectedInterests[key] === undefined) {
+      //if not already selected
       selected.current++;
+      setSelectedInterests((current) => {
+        current[key] = allInterests[key];
+        return { ...current };
+      });
     } else {
       selected.current--;
+      setSelectedInterests((current) => {
+        delete current[key];
+
+        return { ...current };
+      });
     }
-    setInterests({
-      ...interests,
-      [interest]: value,
-    });
+    // console.log(key in selectedInterests);
+  };
+
+  const getColor = (key) => {
+    //works, but color rerender doesn't work
+    if (key in selectedInterests) {
+      return "#5481C6";
+    }
+    return "black";
+  };
+
+  const alert = () => {
+    Alert.alert("Error", "Couldn't set interests due to server side error", [
+      { text: "OK", onPress: () => console.log("OK Pressed") },
+    ]);
+  };
+  const submit = async () => {
+    // we send {id: name, id: name}
+
+    selectInterests(selectedInterests)
+      .then((res) => {
+        router.replace("/home");
+      })
+      .catch((err) => {
+        //handle any errors in a better way
+        console.log(err);
+        alert();
+      });
   };
 
   return (
@@ -32,13 +72,21 @@ const interests = () => {
         }}
       />
       <View style={{ alignItems: "center", marginTop: 30 }}>
+        {/* bro hardcoding -- wrap this cuh */}
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
           Select at least five of your
         </Text>
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
           professional and academic
         </Text>
-        <Text style={{ fontWeight: "bold", fontSize: 25 }}>interests</Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 25,
+          }}
+        >
+          interests
+        </Text>
       </View>
       <TextInput
         autoCapitalize="none"
@@ -63,22 +111,26 @@ const interests = () => {
           marginTop: 20,
         }}
       >
-        {Object.entries(interests).map(([key, value]) => {
+        {Object.entries(allInterests).map(([key, value]) => {
           return (
             <TouchableOpacity
               key={key}
-              onPress={() => pressed(key, !value)}
+              onPress={() => pressed(key)}
               style={{
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 10,
-                borderColor: value == false ? "black" : "blue",
+                borderColor: getColor(key),
                 borderStyle: "solid",
                 borderWidth: 1,
               }}
             >
-              <Text style={{ color: value == false ? "black" : "blue" }}>
-                {key}
+              <Text
+                style={{
+                  color: getColor(key),
+                }}
+              >
+                {value}
               </Text>
             </TouchableOpacity>
           );
@@ -114,6 +166,7 @@ const interests = () => {
                 padding: 5,
                 paddingHorizontal: 15,
               }}
+              onPress={submit}
             >
               <Text style={{ fontWeight: "bold", fontSize: 20 }}>Confirm</Text>
             </TouchableOpacity>

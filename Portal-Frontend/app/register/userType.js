@@ -26,16 +26,12 @@ const initProfile = () => {
   };
 
   const submit = async () => {
-    try {
-      if (selectedNumber !== 3 && selectedNumber !== 0) {
-        //if 0 or 3, it will stay as 0 (default)
-        console.log(selectedNumber);
-        await updateUserType(selectedNumber);
-      }
-      router.push("/home");
-    } catch (err) {
-      console.log(err);
+    if (selectedNumber !== 3 && selectedNumber !== 0) {
+      //if 0 or 3, it will stay as 0 (default)
+      console.log(selectedNumber);
+      await updateUserType(selectedNumber);
     }
+    router.push("/register/interests");
   };
 
   return (

@@ -12,9 +12,9 @@ const Home = () => {
     router.push("/register");
   };
 
-  const goToInterestsPage = () => {
-    router.push("/register/interests");
-  };
+  // const goToInterestsPage = () => {
+  //   router.push("/register/interests");
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
@@ -72,7 +72,7 @@ const Home = () => {
             REGISTER
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={goToInterestsPage}
           style={{
             justifyContent: "center",
@@ -89,7 +89,7 @@ const Home = () => {
           >
             Interests Page
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

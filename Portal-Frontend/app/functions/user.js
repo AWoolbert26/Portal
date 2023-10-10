@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://192.168.12.98:3000";
+const backendUrl = "http://192.168.1.81:3000";
 
 export const login = async (email, password) => {
   try {
@@ -70,6 +70,15 @@ export const updateUserType = async (typeNum) => {
     return result.data; //change success/failure code that backend returns
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const selectInterests = async (interests) => {
+  try {
+    const result = await axios.post(`${backendUrl}/selectInterests`, interests);
+
+    return result.data;
+  } catch (err) {
     throw err;
   }
 };

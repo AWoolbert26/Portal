@@ -39,7 +39,7 @@ const Register = () => {
     register(data)
       .then((token) => {
         setAuthToken(token.data);
-        router.push("/register/initProfile");
+        router.push("/register/userType");
       })
       .catch((err) => {
         console.log(err);

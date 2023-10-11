@@ -158,6 +158,27 @@ app.post("/selectInterests", async (req, res) => {
   }
 });
 
+app.get("/getInterests", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+
+    const result = await prisma.user.findFirst({
+      where: {
+        id: user.id,
+      },
+      select: {
+        categories: true,
+      },
+    });
+
+    console.log(result);
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -72,7 +72,7 @@ const Home = () => {
             REGISTER
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={goToPage}
           style={{
             justifyContent: "center",
@@ -89,7 +89,7 @@ const Home = () => {
           >
             Page
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

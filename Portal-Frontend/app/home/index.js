@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { AuthContext } from "../auth/AuthContext";
-import { Text, View, SafeAreaView, StatusBar } from "react-native";
+import { Text, View, SafeAreaView, StatusBar, Touchable } from "react-native";
 import { Stack } from "expo-router/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -9,10 +9,32 @@ import {
   faUser,
   faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
+import { getInterests } from "../functions/user";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { router } from "expo-router";
 
 const Home = () => {
   const { authToken } = useContext(AuthContext);
-  // need to protect and change status bar
+  if (authToken === null) {
+    router.replace("/login");
+  }
+
+  const goToHome = () => {
+    router.replace("/home");
+  };
+
+  const [interests, setInterests] = useState({});
+
+  const getUserInterests = async () => {
+    try {
+      setInterests(await getInterests());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  getUserInterests();
+
+  // need to change status bar
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
@@ -47,7 +69,19 @@ const Home = () => {
           }}
         />
       </View>
+      {/* page */}
+      <View style={{ flexDirection: "row", alignSelf: "center" }}>
+        {interests.categories != null &&
+          interests.categories.map((category) => {
+            return (
+              <View key={category.id}>
+                <Text style={{ fontSize: 20 }}>{category.name}</Text>
+              </View>
+            );
+          })}
+      </View>
       {/* footer (need to make global) */}
+      {/* <Footer/> */}
       <View
         style={{
           position: "absolute",
@@ -71,7 +105,9 @@ const Home = () => {
           }}
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} size={40} />
-          <FontAwesomeIcon icon={faCircle} size={40} />
+          <TouchableOpacity onPress={goToHome}>
+            <FontAwesomeIcon icon={faCircle} size={40} />
+          </TouchableOpacity>
           <FontAwesomeIcon icon={faUser} size={40} />
         </View>
       </View>

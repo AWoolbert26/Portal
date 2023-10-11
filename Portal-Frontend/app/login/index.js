@@ -34,7 +34,7 @@ const Login = () => {
       .then((token) => {
         // console.log(res.data);
         setAuthToken(token.data);
-        router.push("/home");
+        router.replace("/home");
       })
       .catch((err) => {
         setError("root", {

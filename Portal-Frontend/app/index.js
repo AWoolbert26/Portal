@@ -16,6 +16,10 @@ const Home = () => {
     router.replace("/home");
   };
 
+  const goToUserProfile = () => {
+    router.replace("/userProfile");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
       <Stack.Screen
@@ -73,7 +77,7 @@ const Home = () => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={goToPage}
+          onPress={goToUserProfile}
           style={{
             justifyContent: "center",
             alignItems: "center",
@@ -87,7 +91,7 @@ const Home = () => {
               color: "white",
             }}
           >
-            Page
+            PROFILE
           </Text>
         </TouchableOpacity>
       </View>

@@ -35,6 +35,10 @@ const Register = () => {
 
   const { authToken, setAuthToken } = useContext(AuthContext);
 
+  useEffect(() => {
+    router.replace("/home");
+  });
+
   const onSubmit = async (data) => {
     register(data)
       .then((token) => {

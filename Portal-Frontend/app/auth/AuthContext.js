@@ -19,8 +19,8 @@ export const AuthProvider = ({ children }) => {
 
         setAuthToken(token);
       }
-      loadToken();
     };
+    loadToken();
   }, []);
 
   return (

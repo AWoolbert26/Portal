@@ -8,16 +8,22 @@ import {
   faCircle,
   faUser,
   faCaretDown,
+  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
-import { getInterests } from "../functions/user";
+import { getInterests, deleteAuthToken } from "../functions/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
 
 const Home = () => {
-  const { authToken } = useContext(AuthContext);
+  const { authToken, setAuthToken } = useContext(AuthContext);
   if (authToken === null) {
-    router.replace("/login");
+    router.replace("/");
   }
+
+  const logout = () => {
+    deleteAuthToken();
+    setAuthToken(null);
+  };
 
   const goToHome = () => {
     router.replace("/home");
@@ -32,7 +38,6 @@ const Home = () => {
       console.log(err);
     }
   };
-  getUserInterests();
 
   // need to change status bar
   return (
@@ -43,14 +48,7 @@ const Home = () => {
         }}
       />
       {/* header */}
-      <View
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 50,
-        }}
-      >
+      <TouchableOpacity style={{}}>
         <View
           style={{
             alignSelf: "center",
@@ -62,13 +60,7 @@ const Home = () => {
           <Text style={{ fontSize: 30 }}>Home</Text>
           <FontAwesomeIcon icon={faCaretDown} />
         </View>
-        <View
-          style={{
-            borderColor: "black",
-            borderWidth: 0.5,
-          }}
-        />
-      </View>
+      </TouchableOpacity>
       {/* page */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         {interests.categories != null &&
@@ -101,14 +93,17 @@ const Home = () => {
             alignSelf: "center",
             flexDirection: "row",
             marginTop: 20,
-            gap: 90,
+            gap: 50,
           }}
         >
-          <FontAwesomeIcon icon={faMagnifyingGlass} size={40} />
+          <FontAwesomeIcon icon={faMagnifyingGlass} size={25} />
           <TouchableOpacity onPress={goToHome}>
-            <FontAwesomeIcon icon={faCircle} size={40} />
+            <FontAwesomeIcon icon={faCircle} size={25} />
           </TouchableOpacity>
-          <FontAwesomeIcon icon={faUser} size={40} />
+          <FontAwesomeIcon icon={faUser} size={25} />
+          <TouchableOpacity onPress={logout}>
+            <FontAwesomeIcon icon={faSignOut} size={25} />
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

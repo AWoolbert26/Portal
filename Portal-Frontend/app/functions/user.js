@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://10.232.179.167:3000";
+const backendUrl = "http://192.168.12.165:3000";
 
 export const login = async (email, password) => {
   try {
@@ -16,6 +16,14 @@ export const login = async (email, password) => {
     axios.defaults.headers.common["Authorization"] = token.data;
 
     return token.data; //returns jwt token
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const deleteAuthToken = async () => {
+  try {
+    await SecureStore.deleteItemAsync("portal-jwt");
   } catch (err) {
     throw err;
   }

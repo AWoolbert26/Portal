@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   SafeAreaView,
@@ -28,7 +28,14 @@ const Login = () => {
     },
   });
 
-  const { setAuthToken } = useContext(AuthContext);
+  const { authToken, setAuthToken } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (authToken) {
+      router.replace("/home");
+    }
+  });
+
   const onSubmit = async ({ email, password }) => {
     login(email, password)
       .then((token) => {

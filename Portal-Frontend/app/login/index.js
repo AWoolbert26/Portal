@@ -9,8 +9,8 @@ import {
 
 import { Stack } from "expo-router/stack";
 import { router } from "expo-router";
-import { test } from "../functions/user";
-import { login } from "../functions/user";
+import { test } from "../../functions/user";
+import { login } from "../../functions/user";
 import { useForm, Controller } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
@@ -39,9 +39,8 @@ const Login = () => {
   const onSubmit = async ({ email, password }) => {
     login(email, password)
       .then((res) => {
-        console.log(res);
         setAuthUser(res);
-        router.replace("/home");
+        // router.replace("/home");
       })
       .catch((err) => {
         setError("root", {

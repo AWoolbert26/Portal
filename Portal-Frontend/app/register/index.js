@@ -15,7 +15,7 @@ import {
   checkUniqueEmail,
   checkUniqueUsername,
   register,
-} from "../functions/user";
+} from "../../functions/user";
 import { AuthContext } from "../auth/AuthContext";
 
 const Register = () => {

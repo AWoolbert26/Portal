@@ -11,13 +11,19 @@ import {
   faSignOut,
   faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { getInterests, deleteAuthUser } from "../functions/user";
+import { getInterests, deleteAuthUser } from "../../functions/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import Footer from "../../components/footer";
+import Header from "../../components/header";
+import CategoryMenu from "../../components/categoryMenu";
 
 const Home = () => {
   const [interests, setInterests] = useState({});
+
+  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const statusBarBGColor = useRef("white");
+  const [currentCategory, setCurrentCategory] = useState("Home");
 
   const getUserInterests = async () => {
     try {
@@ -27,28 +33,32 @@ const Home = () => {
     }
   };
 
+  const openCategoryMenu = () => {
+    setCategoryMenuOpen(true);
+    statusBarBGColor.current = "black";
+  };
+  const close = () => {
+    setCategoryMenuOpen(false);
+    statusBarBGColor.current = "white";
+  };
+
   // need to change status bar
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: statusBarBGColor.current }}
+    >
+      {categoryMenuOpen && (
+        <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
+      )}
       <Stack.Screen
         options={{
           headerShown: false,
         }}
       />
-      {/* header */}
-      <TouchableOpacity style={{}}>
-        <View
-          style={{
-            alignSelf: "center",
-            marginBottom: 10,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 30 }}>Home</Text>
-          <FontAwesomeIcon icon={faCaretDown} />
-        </View>
-      </TouchableOpacity>
+      <Header
+        openCategoryMenu={openCategoryMenu}
+        currentCategory={currentCategory}
+      />
       {/* page */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         {interests.categories != null &&

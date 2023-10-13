@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../app/auth/AuthContext";
 import { router } from "expo-router";
-import { deleteAuthUser } from "../app/functions/user";
+import { deleteAuthUser } from "../functions/user";
 
 const Footer = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
@@ -21,6 +21,7 @@ const Footer = () => {
   const logout = () => {
     setAuthUser(null);
     deleteAuthUser();
+    router.replace("/");
   };
 
   const goToHome = () => {

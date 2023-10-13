@@ -15,7 +15,7 @@ import {
   checkUniqueEmail,
   checkUniqueUsername,
   register,
-} from "../functions/user";
+} from "../../functions/user";
 import { AuthContext } from "../auth/AuthContext";
 
 const Register = () => {
@@ -33,12 +33,12 @@ const Register = () => {
     values,
   });
 
-  const { authToken, setAuthToken } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     register(data)
-      .then((token) => {
-        setAuthToken(token.data);
+      .then((res) => {
+        setAuthUser(res);
         router.push("/register/userType");
       })
       .catch((err) => {

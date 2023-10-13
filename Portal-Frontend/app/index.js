@@ -2,6 +2,9 @@ import React from "react";
 import { SafeAreaView, View, TouchableOpacity, Text } from "react-native";
 import { router } from "expo-router";
 import { Stack } from "expo-router/stack";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./auth/AuthContext";
 
 const Home = () => {
   const goToLoginPage = () => {
@@ -12,9 +15,12 @@ const Home = () => {
     router.push("/register");
   };
 
-  const goToPage = () => {
-    router.replace("/home");
-  };
+  const { authUser } = useContext(AuthContext);
+  useEffect(() => {
+    if (authUser) {
+      router.replace("/home");
+    }
+  });
 
   const goToUserProfile = () => {
     router.replace("/userProfile");

@@ -1,7 +1,7 @@
 Frontend: https://www.youtube.com/watch?v=mJ3bGvy0WAY
 Backend: https://www.youtube.com/watch?v=fgTGADljAeg
 
-Change each instance of 192.168.12.165:3000 or 10.232.157.58:3000 to wherever you're hosting the API
-
-Home:  192.168.12.165:3000
-School: 10.232.157.58:3000
+Steps:
+- run xampp server
+- specify ip in frontend
+- run backend and frontend

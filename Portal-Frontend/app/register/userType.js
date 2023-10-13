@@ -3,7 +3,7 @@ import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 import { Stack } from "expo-router/stack";
 import { AuthContext } from "../auth/AuthContext";
 import { router } from "expo-router";
-import { updateUserType } from "../functions/user";
+import { updateUserType } from "../../functions/user";
 
 const initProfile = () => {
   const { authUser } = useContext(AuthContext);

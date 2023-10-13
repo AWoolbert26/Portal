@@ -3,7 +3,7 @@
     import { Stack } from "expo-router";
     import { TouchableOpacity } from "react-native-gesture-handler";
     import { useState, useEffect } from "react";
-    import { getUserInformation } from "../functions/user";
+    import { getUserInformation } from "../../functions/user";
 
     const userProfile = () => {
         const [username, setUsername] = useState(null);

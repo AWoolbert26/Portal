@@ -4,7 +4,7 @@ import { Stack } from "expo-router/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext } from "../auth/AuthContext";
 import { router } from "expo-router";
-import { selectInterests } from "../functions/user";
+import { selectInterests } from "../../functions/user";
 
 const interests = () => {
   const { authUser } = useContext(AuthContext);

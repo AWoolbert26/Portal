@@ -28,19 +28,19 @@ const Login = () => {
     },
   });
 
-  const { authToken, setAuthToken } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
 
   useEffect(() => {
-    if (authToken) {
+    if (authUser) {
       router.replace("/home");
     }
   });
 
   const onSubmit = async ({ email, password }) => {
     login(email, password)
-      .then((token) => {
-        // console.log(res.data);
-        setAuthToken(token.data);
+      .then((res) => {
+        console.log(res);
+        setAuthUser(res);
         router.replace("/home");
       })
       .catch((err) => {

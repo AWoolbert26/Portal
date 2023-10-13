@@ -6,8 +6,8 @@ import { router } from "expo-router";
 import { updateUserType } from "../functions/user";
 
 const initProfile = () => {
-  const { authToken } = useContext(AuthContext);
-  if (authToken === null) {
+  const { authUser } = useContext(AuthContext);
+  if (authUser === null) {
     router.replace("/login");
   }
 

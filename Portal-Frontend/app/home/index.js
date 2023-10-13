@@ -9,26 +9,14 @@ import {
   faUser,
   faCaretDown,
   faSignOut,
+  faPlusCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { getInterests, deleteAuthToken } from "../functions/user";
+import { getInterests, deleteAuthUser } from "../functions/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { router } from "expo-router";
+import Footer from "../../components/footer";
 
 const Home = () => {
-  const { authToken, setAuthToken } = useContext(AuthContext);
-  if (authToken === null) {
-    router.replace("/");
-  }
-
-  const logout = () => {
-    deleteAuthToken();
-    setAuthToken(null);
-  };
-
-  const goToHome = () => {
-    router.replace("/home");
-  };
-
   const [interests, setInterests] = useState({});
 
   const getUserInterests = async () => {
@@ -73,39 +61,7 @@ const Home = () => {
           })}
       </View>
       {/* footer (need to make global) */}
-      {/* <Footer/> */}
-      <View
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 30,
-        }}
-      >
-        <View
-          style={{
-            borderColor: "black",
-            borderWidth: 0.5,
-          }}
-        />
-        <View
-          style={{
-            alignSelf: "center",
-            flexDirection: "row",
-            marginTop: 20,
-            gap: 50,
-          }}
-        >
-          <FontAwesomeIcon icon={faMagnifyingGlass} size={25} />
-          <TouchableOpacity onPress={goToHome}>
-            <FontAwesomeIcon icon={faCircle} size={25} />
-          </TouchableOpacity>
-          <FontAwesomeIcon icon={faUser} size={25} />
-          <TouchableOpacity onPress={logout}>
-            <FontAwesomeIcon icon={faSignOut} size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Footer />
     </SafeAreaView>
   );
 };

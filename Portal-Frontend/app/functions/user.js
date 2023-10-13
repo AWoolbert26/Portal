@@ -6,24 +6,26 @@ const backendUrl = "http://192.168.12.165:3000";
 
 export const login = async (email, password) => {
   try {
-    const token = await axios.post(`${backendUrl}/login`, {
+    const result = await axios.post(`${backendUrl}/login`, {
       email: email,
       password: password,
     });
 
-    await SecureStore.setItemAsync("portal_jwt", token.data);
+    await SecureStore.setItemAsync("authToken", result.data.authToken);
 
-    axios.defaults.headers.common["Authorization"] = token.data;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${result.data.authToken}`;
 
-    return token.data; //returns jwt token
+    return result.data.user; //returns user object
   } catch (err) {
     throw err;
   }
 };
 
-export const deleteAuthToken = async () => {
+export const deleteAuthUser = async () => {
   try {
-    await SecureStore.deleteItemAsync("portal-jwt");
+    await SecureStore.deleteItemAsync("authToken");
   } catch (err) {
     throw err;
   }
@@ -55,13 +57,19 @@ export const checkUniqueUsername = async (username) => {
 
 export const register = async ({ email, password, username }) => {
   try {
-    const token = await axios.post(`${backendUrl}/register`, {
+    const result = await axios.post(`${backendUrl}/register`, {
       email: email,
       password: password,
       username: username,
     });
-    axios.defaults.headers.common["Authorization"] = token.data;
-    return token;
+
+    await SecureStore.setItemAsync("authToken", result.data.authToken);
+
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${result.data.authToken}`;
+
+    return result.data.user;
   } catch (err) {
     console.log(err);
     return { err: "User couldn't be created." };

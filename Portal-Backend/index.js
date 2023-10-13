@@ -69,7 +69,11 @@ app.post("/login", async (req, res) => {
         },
         "secret"
       );
-      res.send(token);
+      console.log(token);
+      res.send({
+        authToken: token,
+        user: { id: user.id, type: user.type },
+      });
     }
   } catch (err) {
     res.status(500);
@@ -103,7 +107,11 @@ app.post("/register", async (req, res) => {
         },
         "secret"
       );
-      res.send(token);
+
+      res.send({
+        authToken: token,
+        user: { id: newUser.id, type: newUser.type },
+      });
     }
 
     // res.status(200); // 200 for success

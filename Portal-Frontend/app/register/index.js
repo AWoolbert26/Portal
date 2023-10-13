@@ -33,16 +33,12 @@ const Register = () => {
     values,
   });
 
-  const { authToken, setAuthToken } = useContext(AuthContext);
-
-  useEffect(() => {
-    router.replace("/home");
-  });
+  const { authUser, setAuthUser } = useContext(AuthContext);
 
   const onSubmit = async (data) => {
     register(data)
-      .then((token) => {
-        setAuthToken(token.data);
+      .then((res) => {
+        setAuthUser(res);
         router.push("/register/userType");
       })
       .catch((err) => {

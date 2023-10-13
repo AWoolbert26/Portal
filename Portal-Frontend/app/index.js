@@ -15,9 +15,9 @@ const Home = () => {
     router.push("/register");
   };
 
-  const { authToken } = useContext(AuthContext);
+  const { authUser } = useContext(AuthContext);
   useEffect(() => {
-    if (authToken) {
+    if (authUser) {
       router.replace("/home");
     }
   });

@@ -7,8 +7,8 @@ import { router } from "expo-router";
 import { selectInterests } from "../functions/user";
 
 const interests = () => {
-  const { authToken } = useContext(AuthContext);
-  if (authToken === null) {
+  const { authUser } = useContext(AuthContext);
+  if (authUser === null) {
     router.replace("/login");
   }
 

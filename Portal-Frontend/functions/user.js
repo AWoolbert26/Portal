@@ -13,9 +13,7 @@ export const login = async (email, password) => {
 
     await SecureStore.setItemAsync("authToken", result.data.authToken);
 
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${result.data.authToken}`;
+    axios.defaults.headers.common["Authorization"] = result.data.authToken;
 
     return result.data.user; //returns user object
   } catch (err) {

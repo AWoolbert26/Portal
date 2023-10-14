@@ -27,7 +27,8 @@ const Home = () => {
 
   const getUserInterests = async () => {
     try {
-      setInterests(await getInterests());
+      const gotInterests = await getInterests();
+      setInterests(gotInterests);
     } catch (err) {
       console.log(err);
     }
@@ -71,6 +72,9 @@ const Home = () => {
           })}
       </View>
       {/* footer (need to make global) */}
+      <TouchableOpacity style={{ marginTop: 50 }} onPress={getInterests}>
+        <Text>Hiweiwoenioievnwoeincwce</Text>
+      </TouchableOpacity>
       <Footer />
     </SafeAreaView>
   );

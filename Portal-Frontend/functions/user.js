@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "http://10.232.207.118:3000";
 
 export const login = async (email, password) => {
   try {
@@ -60,9 +60,7 @@ export const register = async ({ email, password, username }) => {
       password: password,
       username: username,
     });
-
     await SecureStore.setItemAsync("authToken", result.data.authToken);
-
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${result.data.authToken}`;
@@ -79,7 +77,6 @@ export const updateUserType = async (typeNum) => {
     const result = await axios.patch(`${backendUrl}/updateUserType`, {
       type: typeNum,
     });
-
     console.log(result.data);
     return result.data; //change success/failure code that backend returns
   } catch (err) {
@@ -90,12 +87,21 @@ export const updateUserType = async (typeNum) => {
 export const selectInterests = async (interests) => {
   try {
     const result = await axios.post(`${backendUrl}/selectInterests`, interests);
-
     return result.data;
   } catch (err) {
     throw err;
   }
 };
+
+export const getUserInformation = async () => {
+  try {
+    const res = await axios.get(`${backendUrl}/myProfile`)
+    console.log(res.data)
+    return res
+  } catch (error) {
+    throw error;
+}
+}
 
 export const getInterests = async () => {
   try {

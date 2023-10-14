@@ -145,8 +145,7 @@ app.patch("/updateUserType", async (req, res) => {
 app.post("/selectInterests", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-
-    const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); //{id: name, id: name}
+    const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); // {id: name, id: name}
     console.log(body);
     const result = await prisma.user.update({
       where: {
@@ -158,13 +157,45 @@ app.post("/selectInterests", async (req, res) => {
         },
       },
     });
-
     res.send("Success");
   } catch (err) {
     console.log(err);
     res.send(err);
   }
 });
+
+const getUser = async (id) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id
+      }
+    })
+    return user
+  }
+  catch (err) {
+    throw err
+  }
+}
+
+app.get("/myProfile", async (req, res) => {
+  try {
+    const tokenUser = getUserFromToken(req.headers.authorization)
+    const user = await getUser(tokenUser.id)
+    res.send(user)
+  } catch (err) {
+    res.send(err)
+  }
+})
+
+app.get("/users/:userId", async (req, res) => {
+  try {
+    const user = getUser(req.params.id)
+    res.send(user)
+  } catch (err) {
+    res.send(err)
+  }
+})
 
 app.get("/getInterests", async (req, res) => {
   try {

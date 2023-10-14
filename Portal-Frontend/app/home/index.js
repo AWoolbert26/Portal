@@ -3,6 +3,7 @@ import { AuthContext } from "../auth/AuthContext";
 import { Text, View, SafeAreaView, StatusBar, Touchable } from "react-native";
 import { Stack } from "expo-router/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { Info } from 'lucide-react-native'
 import {
   faMagnifyingGlass,
   faCircle,
@@ -33,7 +34,9 @@ const Home = () => {
       console.log(err);
     }
   };
-
+  const goToDescription = () => {
+    router.push("/home/categorySummary");
+  };
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
     statusBarBGColor.current = "black";
@@ -56,10 +59,20 @@ const Home = () => {
           headerShown: false,
         }}
       />
-      <Header
-        openCategoryMenu={openCategoryMenu}
-        currentCategory={currentCategory}
-      />
+      <View style={{flex:1, flexDirection:'row', justifyContent:'flex-end', marginTop: 20}}>
+      <View style={{ flex: 1 }}></View>
+        <View style={{flex:2}}>
+          <Header
+            openCategoryMenu={openCategoryMenu}
+            currentCategory={currentCategory}
+          />
+        </View>
+      <View style={{flex: 1, flexDirection:'row', justifyContent:'center'}}>
+        <TouchableOpacity onPress={goToDescription}>
+          <Info size={35} color="#000"/>
+        </TouchableOpacity>
+        </View>
+      </View>
       {/* page */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         {interests.categories != null &&

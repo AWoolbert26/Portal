@@ -79,7 +79,7 @@
 
         
         return (
-            <SafeAreaView style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center', backgroundColor: '#fff'}}>
+            <SafeAreaView style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
                 <Stack.Screen
                     options={{
                     title: '',
@@ -177,7 +177,7 @@
                 </View>
                 <View style={{flex:1, borderWidth: .5, marginTop: 30, width: ScreenWidth}}/>
                 </ScrollView>
-                <Footer style={{flex:1}}/>
+                <Footer/>
             </SafeAreaView>
         )
     }

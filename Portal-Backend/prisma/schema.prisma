@@ -21,10 +21,12 @@ model User {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  users User[]
+  id          Int    @id @default(autoincrement())
+  name        String
+  users       User[]
+  summary     CategorySummary?
 }
+
 
 model Profile {
   id         Int    @id @default(autoincrement())
@@ -34,4 +36,17 @@ model Profile {
   bio        String
   location   String
   occupation String
+  followers  Int?
+}
+
+model CategorySummary {
+  id            Int       @id @default(autoincrement())
+  summary       String
+  hardSkills    String
+  commonTraits  String
+  education     String
+  averagePay    String
+  threatOfAI    String
+  category      Category  @relation(fields:[categoryId], references:[id])
+  categoryId    Int       @unique
 }

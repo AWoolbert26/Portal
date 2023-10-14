@@ -274,6 +274,20 @@ app.get("/getProfileInformation", async(req, res) => {
   }
 })
 
+// MAKE SURE TO DESERIALIZE INTO SINGLE STRING WHEN SUPPLYING DATA FOR COMMON TRAITS AND HARD SKILLS
+app.get("/getCategorySummary", async(req,res) => {
+  try {
+    const summary = await prisma.categorysummary.findFirst({
+      where: {
+        id: req.body.categoryId
+      }
+    })
+    return summary
+  } catch (err){
+    throw err
+  }
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

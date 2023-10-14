@@ -11,6 +11,7 @@ import {
 import { AuthContext } from "../app/auth/AuthContext";
 import { router } from "expo-router";
 import { deleteAuthUser } from "../functions/user";
+import { User, Home, Search, LogOut } from 'lucide-react-native'
 
 const Footer = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
@@ -60,9 +61,9 @@ const Footer = () => {
           gap: 35,
         }}
       >
-        <FontAwesomeIcon icon={faMagnifyingGlass} size={35} />
+        <Search color="#000" size={35}/>
         <TouchableOpacity onPress={goToHome}>
-          <FontAwesomeIcon icon={faCircle} size={35} />
+          <Home color="#000" size={35}/>
         </TouchableOpacity>
         {authUser && authUser.type === 1 && (
           <TouchableOpacity onPress={goToCreatePost}>
@@ -70,10 +71,10 @@ const Footer = () => {
           </TouchableOpacity>
         )}
         <TouchableOpacity onPress={goToProfile}>
-          <FontAwesomeIcon icon={faUser} size={35} />
+          <User color="#000" size={35}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={logout}>
-          <FontAwesomeIcon icon={faSignOut} size={35} />
+          <LogOut color="#000" size={35}/>
         </TouchableOpacity>
       </View>
     </View>

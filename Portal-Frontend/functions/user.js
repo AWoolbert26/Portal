@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "http://10.232.207.118:3000";
 
 export const login = async (email, password) => {
   try {
@@ -96,7 +96,6 @@ export const selectInterests = async (interests) => {
 export const getUserInformation = async () => {
   try {
     const res = await axios.get(`${backendUrl}/myProfile`);
-    console.log(res.data);
     return res;
   } catch (error) {
     throw error;
@@ -111,3 +110,26 @@ export const getInterests = async () => {
     console.log(err);
   }
 };
+
+export const setProfile = async ({name, location, occupation, bio}) => {
+  try {
+    const profile = await axios.post(`${backendUrl}/setProfileInformation`, {
+      name: name,
+      location: location,
+      occupation: occupation,
+      bio: bio,
+    })
+    return profile
+  } catch(err){
+    throw error;
+  }
+}
+
+export const getProfile = async () => {
+  try {
+    const profile = await axios.get(`${backendUrl}/getProfileInformation`);
+    console.log("Profile data:" + profile);
+    return profile
+  } catch (err) {
+  }
+}

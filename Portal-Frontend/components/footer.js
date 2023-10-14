@@ -28,6 +28,10 @@ const Footer = () => {
     router.replace("/home");
   };
 
+  const goToProfile = () => {
+    router.replace("/userProfile");
+  };
+  
   const goToCreatePost = () => {
     console.log("Going to create post page");
     console.log(authUser);
@@ -64,8 +68,9 @@ const Footer = () => {
             <FontAwesomeIcon icon={faPlusCircle} size={35} />
           </TouchableOpacity>
         )}
-
-        <FontAwesomeIcon icon={faUser} size={35} />
+        <TouchableOpacity onPress={goToProfile}>
+          <FontAwesomeIcon icon={faUser} size={35} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={logout}>
           <FontAwesomeIcon icon={faSignOut} size={35} />
         </TouchableOpacity>

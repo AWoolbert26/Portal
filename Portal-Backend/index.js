@@ -126,7 +126,6 @@ app.post("/register", async (req, res) => {
 app.patch("/updateUserType", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-    console.log(req.body);
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -136,7 +135,6 @@ app.patch("/updateUserType", async (req, res) => {
     res.status(200);
     res.send("Success");
   } catch (err) {
-    console.log(err);
     res.status(500);
     res.send(err);
   }
@@ -146,7 +144,6 @@ app.post("/selectInterests", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); // {id: name, id: name}
-    console.log(body);
     const result = await prisma.user.update({
       where: {
         id: user.id,
@@ -200,7 +197,6 @@ app.get("/users/:userId", async (req, res) => {
 app.get("/getInterests", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-
     const result = await prisma.user.findFirst({
       where: {
         id: user.id,
@@ -209,14 +205,49 @@ app.get("/getInterests", async (req, res) => {
         categories: true,
       },
     });
-
-    console.log(result);
     res.send(result);
   } catch (err) {
     console.log(err);
     res.send(err);
   }
 });
+
+app.post("/setProfileInformation", async(req, res) => {
+  try {
+  const tokenUser = getUserFromToken(req.headers.authorization)
+  const user = await getUser(tokenUser.id)
+  const newProfile = await prisma.profile.create({
+    data: {
+      user: {
+        connect: { id: user.id}
+      },
+      name: req.body.name,
+      location: req.body.location,
+      occupation: req.body.occupation,
+      bio: req.body.bio
+      }
+    });
+    res.send(newProfile)
+  } catch (err){
+    res.send(err)
+  }
+})
+
+app.get("/getProfileInformation", async(req, res) => {
+  try{
+    const tokenUser = getUserFromToken(req.headers.authorization)
+    const user = await getUser(tokenUser.id)
+    const profile = await prisma.profile.findFirst({
+      where: {
+        userId: user.id
+      },
+    })
+    console.log("profile:" + profile);
+    res.send(profile)
+  } catch (err){
+    res.send(err)
+  }
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

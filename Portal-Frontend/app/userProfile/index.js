@@ -1,5 +1,5 @@
     import React from "react";
-    import { View, Text, SafeAreaView, ScrollView, Button, TextInput} from "react-native";
+    import { View, Text, SafeAreaView, ScrollView, Button, TextInput, Modal} from "react-native";
     import { Stack } from "expo-router";
     import { TouchableOpacity } from "react-native-gesture-handler";
     import { useState, useEffect } from "react";
@@ -63,7 +63,6 @@
 
         const onSubmit = async (data) => {
             try {
-                console.log("in here")
                 await setProfile(data)
             } catch (err){
                 console.log(err)
@@ -159,16 +158,11 @@
                     flexDirection: 'column',
                     marginHorizontal: 25
                 }}>
-                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Name:</Text>
-                    <Text style={{ fontSize: 15}}>{name}</Text>
-                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Location:</Text>
-                    <Text style={{ fontSize: 15}}>{location}</Text>
-                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Occupation:</Text>
-                    <Text style={{ fontSize: 15}}>{occupation}</Text>
-                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Bio:</Text>
-                    <Text style={{ fontSize: 15}}>{bio}</Text>
-                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Interests:</Text>
-                    <Text style={{ fontSize: 15}}>{interests}</Text>
+                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Name: <Text style={{fontSize: 15, fontWeight:'400'}}>{name}</Text></Text>
+                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Location: <Text style={{fontSize: 15, fontWeight:'400'}}>{location}</Text></Text>
+                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Occupation: <Text style={{fontSize: 15, fontWeight:'400'}}>{occupation}</Text></Text>
+                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Bio: <Text style={{fontSize: 15, fontWeight:'400'}}>{bio}</Text></Text>
+                    <Text style={{ fontSize: 15, fontWeight:'bold'}}>Interests: <Text style={{fontSize: 15, fontWeight:'400'}}>{interests}</Text></Text>
                 </View>
                 </ScrollView>
             </SafeAreaView>

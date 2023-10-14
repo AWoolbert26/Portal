@@ -216,18 +216,44 @@ app.post("/setProfileInformation", async(req, res) => {
   try {
   const tokenUser = getUserFromToken(req.headers.authorization)
   const user = await getUser(tokenUser.id)
-  const newProfile = await prisma.profile.create({
-    data: {
-      user: {
-        connect: { id: user.id}
-      },
-      name: req.body.name,
-      location: req.body.location,
-      occupation: req.body.occupation,
-      bio: req.body.bio
-      }
-    });
-    res.send(newProfile)
+
+  const profileAlreadyExists = await prisma.profile.findUnique({
+    where: {
+      userId: user.id
+    }
+  });
+
+  if (profileAlreadyExists) {
+    try { 
+      await prisma.profile.update({
+        where: {
+          userId: user.id
+        },
+        data: {
+          name: req.body.name,
+          location: req.body.location,
+          occupation: req.body.occupation,
+          bio: req.body.bio
+        }
+      })
+      res.send("Success")
+    } catch (err){
+      throw err
+    }
+  } else {
+      const newProfile = await prisma.profile.create({
+        data: {
+          user: {
+            connect: { id: user.id}
+          },
+          name: req.body.name,
+          location: req.body.location,
+          occupation: req.body.occupation,
+          bio: req.body.bio
+        }
+      });
+      res.send(newProfile)
+    }
   } catch (err){
     res.send(err)
   }
@@ -242,7 +268,6 @@ app.get("/getProfileInformation", async(req, res) => {
         userId: user.id
       },
     })
-    console.log("profile:" + profile);
     res.send(profile)
   } catch (err){
     res.send(err)

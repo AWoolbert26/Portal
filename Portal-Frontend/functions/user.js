@@ -77,7 +77,6 @@ export const updateUserType = async (typeNum) => {
     const result = await axios.patch(`${backendUrl}/updateUserType`, {
       type: typeNum,
     });
-    console.log(result.data);
     return result.data; //change success/failure code that backend returns
   } catch (err) {
     console.log(err);
@@ -119,6 +118,7 @@ export const setProfile = async ({name, location, occupation, bio}) => {
       occupation: occupation,
       bio: bio,
     })
+    console.log(profile.data)
     return profile
   } catch(err){
     throw error;
@@ -128,8 +128,8 @@ export const setProfile = async ({name, location, occupation, bio}) => {
 export const getProfile = async () => {
   try {
     const profile = await axios.get(`${backendUrl}/getProfileInformation`);
-    console.log("Profile data:" + profile);
     return profile
   } catch (err) {
+    throw err
   }
 }

@@ -72,9 +72,6 @@ const Home = () => {
           })}
       </View>
       {/* footer (need to make global) */}
-      <TouchableOpacity style={{ marginTop: 50 }} onPress={getInterests}>
-        <Text>Hiweiwoenioievnwoeincwce</Text>
-      </TouchableOpacity>
       <Footer />
     </SafeAreaView>
   );

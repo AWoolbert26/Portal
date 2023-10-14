@@ -38,10 +38,10 @@ const Login = () => {
 
   const onSubmit = async ({ email, password }) => {
     login(email, password)
-      .then((token) => {
+      .then((res) => {
         // console.log(res.data);
-        setAuthToken(token.data);
-        router.replace("/userProfile");
+        setAuthUser(res);
+        router.replace("/home");
       })
       .catch((err) => {
         setError("root", {

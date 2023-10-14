@@ -5,6 +5,7 @@ import { Stack } from "expo-router/stack";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "./auth/AuthContext";
+import { login } from "../functions/user";
 
 const Home = () => {
   const goToLoginPage = () => {
@@ -15,7 +16,7 @@ const Home = () => {
     router.push("/register");
   };
 
-  const { authUser } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   useEffect(() => {
     if (authUser) {
       router.replace("/home");
@@ -24,6 +25,18 @@ const Home = () => {
 
   const goToUserProfile = () => {
     router.replace("/userProfile");
+  };
+
+  const developerQuickLogin = () => {
+    login("a@gmail.com", "a")
+      .then((res) => {
+        // console.log(res.data);
+        setAuthUser(res);
+        router.replace("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -41,6 +54,16 @@ const Home = () => {
         </Text>
       </View>
       {/* login and register */}
+      <TouchableOpacity
+        style={{
+          backgroundColor: "lightgrey",
+          marginBottom: 10,
+          alignItems: "center",
+        }}
+        onPress={developerQuickLogin}
+      >
+        <Text style={{ padding: 10 }}>Developer Quick Login</Text>
+      </TouchableOpacity>
       <View
         style={{
           flex: 1,
@@ -55,11 +78,12 @@ const Home = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            width: 180,
+            flex: 1,
             height: 50,
             borderColor: "black",
             borderStyle: "solid",
             borderWidth: 1,
+            marginLeft: 6,
           }}
         >
           <Text style={{}}>LOG IN</Text>
@@ -69,9 +93,13 @@ const Home = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            width: 180,
+            flex: 1,
             height: 50,
             backgroundColor: "black",
+            marginRight: 6,
+            borderColor: "black",
+            borderStyle: "solid",
+            borderWidth: 1,
           }}
         >
           <Text
@@ -80,24 +108,6 @@ const Home = () => {
             }}
           >
             REGISTER
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={goToUserProfile}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            width: 180,
-            height: 50,
-            backgroundColor: "black",
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-            }}
-          >
-            PROFILE
           </Text>
         </TouchableOpacity>
       </View>

@@ -59,7 +59,7 @@ const Footer = () => {
         <TouchableOpacity onPress={goToHome}>
           <FontAwesomeIcon icon={faCircle} size={35} />
         </TouchableOpacity>
-        {authUser.type === 1 && (
+        {authUser && authUser.type === 1 && (
           <TouchableOpacity onPress={goToCreatePost}>
             <FontAwesomeIcon icon={faPlusCircle} size={35} />
           </TouchableOpacity>

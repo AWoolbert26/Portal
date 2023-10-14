@@ -1,11 +1,11 @@
     import React from "react";
-    import { View, Text, SafeAreaView, ScrollView, Button, TextInput, Modal, Dimensions} from "react-native";
+    import { View, Text, SafeAreaView, ScrollView, Button, TextInput, Modal, Dimensions, Image} from "react-native";
     import { Stack } from "expo-router";
     import { TouchableOpacity } from "react-native-gesture-handler";
     import { useState, useEffect } from "react";
     import { getUserInformation, getInterests, setProfile, getProfile} from "../../functions/user";
     import { useForm, Controller } from "react-hook-form";
-
+    import Footer from "../../components/footer";
     const ScreenWidth = Dimensions.get("window").width;
 
     const userProfile = () => {
@@ -83,10 +83,11 @@
                 <Stack.Screen
                     options={{
                     title: '',
-                    headerTransparent: true,
+                    headerShown: false
                     }}
                 />
                 <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{flex:1, flexDirection:'row', marginTop: 30}}>
                 <View 
                     style={{
                         flex: 1,
@@ -97,11 +98,11 @@
                      <Text style={{fontSize: 23}}>{username}</Text>
                      <Text style={{fontSize: 18}}>{email}</Text>
                 </View>
-                
+                <Image style={{width:150, height:150, marginRight:20, borderRadius: 100}} source={{uri: 'https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80'}}/>
+                </View>
                 <View
                     style={{
                     flex: 1,
-                    paddingTop: 50,
                     alignContent: 'flex-start',
                     flexDirection: 'column',
                     marginHorizontal: 25
@@ -116,6 +117,7 @@
                         <View style={{ flex: 1, flexDirection:'column', justifyContent:'flex-end', alignItems: 'center', marginTop: 60}}>
                             <View style={{ margin: 20, borderRadius: 20, padding: 35, alignItems: 'center', elevation: 5}}>
                                 <Text style={{fontSize: 30}}>Edit your profile</Text>
+                                <Image style={{width:150, height:150, marginTop:60, borderRadius: 100}} source={{uri: 'https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80'}}/>
                                 <View style={{flex:1, justifyContent:'flex-start', paddingTop: 50}}>
                                     <Text style={{ fontSize: 15, fontWeight: 'bold', paddingVertical: 15 }}>Name:</Text>
                                     <Controller
@@ -166,7 +168,7 @@
                                         name="bio"
                                     />
                                     <View style={{marginTop: 60}}>
-                                        <Button title="Done" color="black" onPress={handleSubmit(onSubmit)}></Button>
+                                        <Button title="Save" color="black" onPress={handleSubmit(onSubmit)}></Button>
                                     </View>
                                 </View>
                             </View>
@@ -175,6 +177,7 @@
                 </View>
                 <View style={{flex:1, borderWidth: .5, marginTop: 30, width: ScreenWidth}}/>
                 </ScrollView>
+                <Footer style={{flex:1}}/>
             </SafeAreaView>
         )
     }

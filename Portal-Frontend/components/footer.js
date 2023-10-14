@@ -25,11 +25,12 @@ const Footer = () => {
   };
 
   const goToHome = () => {
-    router.replace("/home");
+    router.push("/home");
   };
 
   const goToProfile = () => {
-    router.replace("/userProfile");
+    router.push("/userProfile");
+
   };
   
   const goToCreatePost = () => {

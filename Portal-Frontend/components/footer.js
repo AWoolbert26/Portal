@@ -29,8 +29,7 @@ const Footer = () => {
   };
 
   const goToCreatePost = () => {
-    console.log("Going to create post page");
-    console.log(authUser);
+    router.push("/createPost");
   };
   return (
     <View

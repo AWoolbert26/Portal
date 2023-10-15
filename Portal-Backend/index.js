@@ -3,11 +3,36 @@ import express from "express";
 const prisma = new PrismaClient();
 import ngrok from "ngrok";
 import jsonwebtoken from "jsonwebtoken";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import fileUpload from "express-fileupload";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 app.use(express.json()); //middleware to interpret all request body as json
-const url = await ngrok.connect(3000); //tunnel for backend requests
+// const url = await ngrok.connect(3000); //tunnel for backend requests
+app.use(
+  fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  })
+);
+app.use(cors());
+
+import { S3Client } from "@aws-sdk/client-s3";
+
+// const globalForS3 = globalThis
+
+const s3Client =
+  //   globalForS3.s3Client ??
+  new S3Client({
+    region: "us-east-1",
+    credentials: {
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    },
+  });
+
+// if (process.env.NODE_ENV !== "production") globalForS3.s3Client = s3Client;
 
 const getUserFromToken = (token) => {
   const user = jsonwebtoken.verify(token, "secret");
@@ -69,7 +94,6 @@ app.post("/login", async (req, res) => {
         },
         "secret"
       );
-      console.log(token);
       res.send({
         authToken: token,
         user: { id: user.id, type: user.type },
@@ -168,34 +192,33 @@ const getUser = async (id) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: id
-      }
-    })
-    return user
+        id: id,
+      },
+    });
+    return user;
+  } catch (err) {
+    throw err;
   }
-  catch (err) {
-    throw err
-  }
-}
+};
 
 app.get("/myProfile", async (req, res) => {
   try {
-    const tokenUser = getUserFromToken(req.headers.authorization)
-    const user = await getUser(tokenUser.id)
-    res.send(user)
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
+    res.send(user);
   } catch (err) {
-    res.send(err)
+    res.send(err);
   }
-})
+});
 
 app.get("/users/:userId", async (req, res) => {
   try {
-    const user = getUser(req.params.id)
-    res.send(user)
+    const user = getUser(req.params.id);
+    res.send(user);
   } catch (err) {
-    res.send(err)
+    res.send(err);
   }
-})
+});
 
 app.get("/getInterests", async (req, res) => {
   try {
@@ -215,6 +238,64 @@ app.get("/getInterests", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send(err);
+  }
+});
+
+app.post("/post", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const video = req.files.video;
+    const description = req.body.description;
+
+    if (video !== "null" && video !== null) {
+      const videoBuffer = Buffer.from(await video.data);
+
+      console.log("Buffer conversion passed");
+
+      const post = await prisma.post.create({
+        data: {
+          userId: user.id,
+          description: description + ".",
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      const fileExtension = "mov"; //change this to match whatever the file extension is
+
+      //upload videoBlob to s3 to the videos folder
+      const commandParams = {
+        Key: `videos/${post.id}.${fileExtension}`, //for other video types, adjust by sending proper type to backend
+        Bucket: "portal-437",
+        Body: videoBuffer,
+        //setting cache to 1 minute
+        Metadata: {
+          "Cache-Control": "max-age=60",
+        },
+      };
+
+      await prisma.post.update({
+        where: { id: post.id },
+        data: {
+          url: `${process.env.S3_DOMAIN}/videos/${post.id}.${fileExtension}`,
+        },
+      });
+      const command = new PutObjectCommand(commandParams);
+
+      const s3response = await s3Client.send(command);
+
+      console.log("Successfully uploaded");
+
+      //set video in prisma post object
+      //create prisma post and get back id
+      // const videoUrl =
+      //   process.env.CDN_DOMAIN + "videos/" + video.id + "." + fileExtension;
+
+      res.send("Success");
+    }
+  } catch (err) {
+    console.log(err);
   }
 });
 

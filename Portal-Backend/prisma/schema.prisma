@@ -17,10 +17,20 @@ model User {
   username   String     @unique
   type       Int        @default(0) // 0 for user, 1 for creator, 2 for company, 3 for not sure
   categories Category[]
+  posts      Post[]
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   name  String
   users User[]
+}
+
+model Post {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [userId], references: [id])
+  url         String?
+  description String
+
+  userId Int
 }

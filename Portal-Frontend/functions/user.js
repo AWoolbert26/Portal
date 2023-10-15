@@ -61,9 +61,7 @@ export const register = async ({ email, password, username }) => {
       username: username,
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${result.data.authToken}`;
+    axios.defaults.headers.common["Authorization"] = result.data.authToken;
 
     return result.data.user;
   } catch (err) {

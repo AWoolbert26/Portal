@@ -94,130 +94,132 @@ const Home = () => {
           })}
       </View> */}
       {/* posts */}
-      <ScrollView style={{ marginBottom: 50 }}>
-        {/* single post */}
-        <View style={{}}>
-          {/* background image */}
-          <Image
-            source={{
-              uri: "https://static1.srcdn.com/wordpress/wp-content/uploads/2023/04/shark-tale-oscar-what-kind-fish.jpg?q=50&fit=contain&w=1140&h=&dpr=1.5",
-            }}
-            style={{
-              width: "100%",
-              // Without height undefined it won't work
-              height: undefined,
-              // figure out your image aspect ratio
-              aspectRatio: 9 / 11,
-              resizeMode: "stretch",
-            }}
-          />
-          {/* user stuff at top */}
-          <View
-            style={{
-              position: "absolute",
-              flexDirection: "row",
-              alignItems: "center",
-              paddingLeft: 7,
-              marginTop: 7,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              width: "100%",
-            }}
-          >
+      {!categoryMenuOpen && (
+        <ScrollView style={{ marginBottom: 50 }}>
+          {/* single post */}
+          <View style={{}}>
+            {/* background image */}
             <Image
               source={{
-                uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+                uri: "https://static1.srcdn.com/wordpress/wp-content/uploads/2023/04/shark-tale-oscar-what-kind-fish.jpg?q=50&fit=contain&w=1140&h=&dpr=1.5",
               }}
               style={{
-                width: 30,
-                height: 30,
-                borderRadius: 15,
-                borderWidth: 1,
-                borderColor: "black",
-                backgroundColor: "white",
+                width: "100%",
+                // Without height undefined it won't work
+                height: undefined,
+                // figure out your image aspect ratio
+                aspectRatio: 9 / 11,
+                resizeMode: "stretch",
               }}
             />
-            <Text style={{ marginLeft: 7, color: "white" }}>Vicky</Text>
-          </View>
-          {/* caption */}
-          <View
-            style={{
-              position: "absolute",
-              marginTop: "115%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              width: "100%",
-            }}
-          >
-            <Text
+            {/* user stuff at top */}
+            <View
               style={{
-                color: "white",
+                position: "absolute",
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: 7,
+                marginTop: 7,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                width: "100%",
               }}
             >
-              Post Caption: Hello guys its me Victor, please work for me
-            </Text>
+              <Image
+                source={{
+                  uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+                }}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 15,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  backgroundColor: "white",
+                }}
+              />
+              <Text style={{ marginLeft: 7, color: "white" }}>Vicky</Text>
+            </View>
+            {/* caption */}
+            <View
+              style={{
+                position: "absolute",
+                marginTop: "115%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                }}
+              >
+                Post Caption: Hello guys its me Victor, please work for me
+              </Text>
+            </View>
           </View>
-        </View>
-        {/* another post */}
-        <View style={{}}>
-          {/* background image */}
-          <Image
-            source={{
-              uri: "https://carboncostume.com/wordpress/wp-content/uploads/2015/10/fatalbert.jpg",
-            }}
-            style={{
-              width: "100%",
-              // Without height undefined it won't work
-              height: undefined,
-              // figure out your image aspect ratio
-              aspectRatio: 9 / 11,
-              resizeMode: "stretch",
-            }}
-          />
-          {/* user stuff at top */}
-          <View
-            style={{
-              position: "absolute",
-              flexDirection: "row",
-              alignItems: "center",
-              paddingLeft: 7,
-              marginTop: 7,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              width: "100%",
-            }}
-          >
+          {/* another post */}
+          <View style={{}}>
+            {/* background image */}
             <Image
               source={{
-                uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+                uri: "https://carboncostume.com/wordpress/wp-content/uploads/2015/10/fatalbert.jpg",
               }}
               style={{
-                width: 30,
-                height: 30,
-                borderRadius: 15,
-                borderWidth: 1,
-                borderColor: "black",
-                backgroundColor: "white",
+                width: "100%",
+                // Without height undefined it won't work
+                height: undefined,
+                // figure out your image aspect ratio
+                aspectRatio: 9 / 11,
+                resizeMode: "stretch",
               }}
             />
-            <Text style={{ marginLeft: 7, color: "white" }}>Mustafa</Text>
-          </View>
-          {/* caption */}
-          <View
-            style={{
-              position: "absolute",
-              marginTop: "115%",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              width: "100%",
-            }}
-          >
-            <Text
+            {/* user stuff at top */}
+            <View
               style={{
-                color: "white",
+                position: "absolute",
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: 7,
+                marginTop: 7,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                width: "100%",
               }}
             >
-              Post Caption: Hey hey hey Mustafa here, take this job please
-            </Text>
+              <Image
+                source={{
+                  uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+                }}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 15,
+                  borderWidth: 1,
+                  borderColor: "black",
+                  backgroundColor: "white",
+                }}
+              />
+              <Text style={{ marginLeft: 7, color: "white" }}>Mustafa</Text>
+            </View>
+            {/* caption */}
+            <View
+              style={{
+                position: "absolute",
+                marginTop: "115%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{
+                  color: "white",
+                }}
+              >
+                Post Caption: Hey hey hey Mustafa here, take this job please
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
       {/* footer */}
       <Footer />
     </SafeAreaView>

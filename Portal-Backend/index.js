@@ -150,7 +150,6 @@ app.post("/register", async (req, res) => {
 app.patch("/updateUserType", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-    console.log(req.body);
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -160,17 +159,15 @@ app.patch("/updateUserType", async (req, res) => {
     res.status(200);
     res.send("Success");
   } catch (err) {
-    console.log(err);
     res.status(500);
     res.send(err);
   }
 });
 
-app.post("/selectInterests", async (req, res) => {
+app.post("/selectCategories", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); // {id: name, id: name}
-    console.log(body);
     const result = await prisma.user.update({
       where: {
         id: user.id,
@@ -220,10 +217,9 @@ app.get("/users/:userId", async (req, res) => {
   }
 });
 
-app.get("/getInterests", async (req, res) => {
+app.get("/getCategories", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-
     const result = await prisma.user.findFirst({
       where: {
         id: user.id,
@@ -232,8 +228,6 @@ app.get("/getInterests", async (req, res) => {
         categories: true,
       },
     });
-
-    console.log(result);
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -296,6 +290,82 @@ app.post("/post", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+  }
+});
+
+app.post("/setProfileInformation", async (req, res) => {
+  try {
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
+
+    const profileAlreadyExists = await prisma.profile.findUnique({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (profileAlreadyExists) {
+      try {
+        await prisma.profile.update({
+          where: {
+            userId: user.id,
+          },
+          data: {
+            name: req.body.name,
+            location: req.body.location,
+            occupation: req.body.occupation,
+            bio: req.body.bio,
+          },
+        });
+        res.send("Success");
+      } catch (err) {
+        throw err;
+      }
+    } else {
+      const newProfile = await prisma.profile.create({
+        data: {
+          user: {
+            connect: { id: user.id },
+          },
+          name: req.body.name,
+          location: req.body.location,
+          occupation: req.body.occupation,
+          bio: req.body.bio,
+        },
+      });
+      res.send(newProfile);
+    }
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+app.get("/getProfileInformation", async (req, res) => {
+  try {
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
+    const profile = await prisma.profile.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+    res.send(profile);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// MAKE SURE TO DESERIALIZE INTO SINGLE STRING WHEN SUPPLYING DATA FOR COMMON TRAITS AND HARD SKILLS
+app.get("/getCategorySummary", async (req, res) => {
+  try {
+    const summary = await prisma.categorysummary.findFirst({
+      where: {
+        id: req.body.categoryId,
+      },
+    });
+    return summary;
+  } catch (err) {
+    throw err;
   }
 });
 

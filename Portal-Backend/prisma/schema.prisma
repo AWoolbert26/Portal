@@ -17,13 +17,38 @@ model User {
   username   String     @unique
   type       Int        @default(0) // 0 for user, 1 for creator, 2 for company, 3 for not sure
   categories Category[]
+  profile    Profile?
   posts      Post[]
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  users User[]
+  id      Int              @id @default(autoincrement())
+  name    String
+  users   User[]
+  summary CategorySummary?
+}
+
+model Profile {
+  id         Int    @id @default(autoincrement())
+  user       User   @relation(fields: [userId], references: [id])
+  userId     Int    @unique
+  name       String
+  bio        String
+  location   String
+  occupation String
+  followers  Int?
+}
+
+model CategorySummary {
+  id           Int      @id @default(autoincrement())
+  summary      String
+  hardSkills   String
+  commonTraits String
+  education    String
+  averagePay   String
+  threatOfAI   String
+  category     Category @relation(fields: [categoryId], references: [id])
+  categoryId   Int      @unique
 }
 
 model Post {

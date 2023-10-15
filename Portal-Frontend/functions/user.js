@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "http://10.232.156.108:3000";
 
 export const login = async (email, password) => {
   try {
@@ -75,16 +75,18 @@ export const updateUserType = async (typeNum) => {
     const result = await axios.patch(`${backendUrl}/updateUserType`, {
       type: typeNum,
     });
-    console.log(result.data);
     return result.data; //change success/failure code that backend returns
   } catch (err) {
     console.log(err);
   }
 };
 
-export const selectInterests = async (interests) => {
+export const selectCategories = async (categories) => {
   try {
-    const result = await axios.post(`${backendUrl}/selectInterests`, interests);
+    const result = await axios.post(
+      `${backendUrl}/selectCategories`,
+      categories
+    );
     return result.data;
   } catch (err) {
     throw err;
@@ -94,18 +96,41 @@ export const selectInterests = async (interests) => {
 export const getUserInformation = async () => {
   try {
     const res = await axios.get(`${backendUrl}/myProfile`);
-    console.log(res.data);
     return res;
   } catch (error) {
     throw error;
   }
 };
 
-export const getInterests = async () => {
+export const getCategories = async () => {
   try {
-    const result = await axios.get(`${backendUrl}/getInterests`);
+    const result = await axios.get(`${backendUrl}/getCategories`);
     return result.data;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const setProfile = async ({ name, location, occupation, bio }) => {
+  try {
+    const profile = await axios.post(`${backendUrl}/setProfileInformation`, {
+      name: name,
+      location: location,
+      occupation: occupation,
+      bio: bio,
+    });
+    console.log(profile.data);
+    return profile;
+  } catch (err) {
+    throw error;
+  }
+};
+
+export const getProfile = async () => {
+  try {
+    const profile = await axios.get(`${backendUrl}/getProfileInformation`);
+    return profile;
+  } catch (err) {
+    throw err;
   }
 };

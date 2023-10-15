@@ -4,56 +4,56 @@ import { Stack } from "expo-router/stack";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AuthContext } from "../auth/AuthContext";
 import { router } from "expo-router";
-import { selectInterests } from "../../functions/user";
+import { selectCategories } from "../../functions/user";
 
-const interests = () => {
+const categories = () => {
   const { authUser } = useContext(AuthContext);
   if (authUser === null) {
     router.replace("/login");
   }
 
-  const allInterests = { 0: "Law", 1: "Computer Science", 2: "Business" };
+  const allcategories = { 0: "Law", 1: "Computer Science", 2: "Business" };
 
-  const [selectedInterests, setSelectedInterests] = useState({});
+  const [selectedCategories, setSelectedCategories] = useState({});
 
   const selected = useRef(0);
 
   const pressed = (key) => {
-    if (selectedInterests[key] === undefined) {
+    if (selectedCategories[key] === undefined) {
       //if not already selected
       selected.current++;
-      setSelectedInterests((current) => {
-        current[key] = allInterests[key];
+      setSelectedCategories((current) => {
+        current[key] = allcategories[key];
         return { ...current };
       });
     } else {
       selected.current--;
-      setSelectedInterests((current) => {
+      setSelectedCategories((current) => {
         delete current[key];
 
         return { ...current };
       });
     }
-    // console.log(key in selectedInterests);
+    // console.log(key in selectedCategories);
   };
 
   const getColor = (key) => {
     //works, but color rerender doesn't work
-    if (key in selectedInterests) {
+    if (key in selectedCategories) {
       return "#5481C6";
     }
     return "black";
   };
 
   const alert = () => {
-    Alert.alert("Error", "Couldn't set interests due to server side error", [
+    Alert.alert("Error", "Couldn't set categories due to server side error", [
       { text: "OK", onPress: () => console.log("OK Pressed") },
     ]);
   };
   const submit = async () => {
     // we send {id: name, id: name}
 
-    selectInterests(selectedInterests)
+    selectCategories(selectedCategories)
       .then((res) => {
         router.replace("/home");
       })
@@ -85,7 +85,7 @@ const interests = () => {
             fontSize: 25,
           }}
         >
-          interests
+          categories
         </Text>
       </View>
       <TextInput
@@ -111,7 +111,7 @@ const interests = () => {
           marginTop: 20,
         }}
       >
-        {Object.entries(allInterests).map(([key, value]) => {
+        {Object.entries(allcategories).map(([key, value]) => {
           return (
             <TouchableOpacity
               key={key}
@@ -177,4 +177,4 @@ const interests = () => {
   );
 };
 
-export default interests;
+export default categories;

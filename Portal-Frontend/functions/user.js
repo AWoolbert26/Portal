@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://10.232.207.118:3000";
+const backendUrl = "http://10.232.156.108:3000";
 
 export const login = async (email, password) => {
   try {
@@ -61,9 +61,7 @@ export const register = async ({ email, password, username }) => {
       username: username,
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${result.data.authToken}`;
+    axios.defaults.headers.common["Authorization"] = result.data.authToken;
 
     return result.data.user;
   } catch (err) {
@@ -83,9 +81,12 @@ export const updateUserType = async (typeNum) => {
   }
 };
 
-export const selectInterests = async (interests) => {
+export const selectCategories = async (categories) => {
   try {
-    const result = await axios.post(`${backendUrl}/selectInterests`, interests);
+    const result = await axios.post(
+      `${backendUrl}/selectCategories`,
+      categories
+    );
     return result.data;
   } catch (err) {
     throw err;
@@ -101,35 +102,35 @@ export const getUserInformation = async () => {
   }
 };
 
-export const getInterests = async () => {
+export const getCategories = async () => {
   try {
-    const result = await axios.get(`${backendUrl}/getInterests`);
+    const result = await axios.get(`${backendUrl}/getCategories`);
     return result.data;
   } catch (err) {
     console.log(err);
   }
 };
 
-export const setProfile = async ({name, location, occupation, bio}) => {
+export const setProfile = async ({ name, location, occupation, bio }) => {
   try {
     const profile = await axios.post(`${backendUrl}/setProfileInformation`, {
       name: name,
       location: location,
       occupation: occupation,
       bio: bio,
-    })
-    console.log(profile.data)
-    return profile
-  } catch(err){
+    });
+    console.log(profile.data);
+    return profile;
+  } catch (err) {
     throw error;
   }
-}
+};
 
 export const getProfile = async () => {
   try {
     const profile = await axios.get(`${backendUrl}/getProfileInformation`);
-    return profile
+    return profile;
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};

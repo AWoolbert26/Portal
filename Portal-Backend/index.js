@@ -140,7 +140,7 @@ app.patch("/updateUserType", async (req, res) => {
   }
 });
 
-app.post("/selectInterests", async (req, res) => {
+app.post("/selectCategories", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const body = Object.keys(req.body).map((id) => ({ id: parseInt(id) })); // {id: name, id: name}
@@ -165,36 +165,35 @@ const getUser = async (id) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: id
-      }
-    })
-    return user
+        id: id,
+      },
+    });
+    return user;
+  } catch (err) {
+    throw err;
   }
-  catch (err) {
-    throw err
-  }
-}
+};
 
 app.get("/myProfile", async (req, res) => {
   try {
-    const tokenUser = getUserFromToken(req.headers.authorization)
-    const user = await getUser(tokenUser.id)
-    res.send(user)
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
+    res.send(user);
   } catch (err) {
-    res.send(err)
+    res.send(err);
   }
-})
+});
 
 app.get("/users/:userId", async (req, res) => {
   try {
-    const user = getUser(req.params.id)
-    res.send(user)
+    const user = getUser(req.params.id);
+    res.send(user);
   } catch (err) {
-    res.send(err)
+    res.send(err);
   }
-})
+});
 
-app.get("/getInterests", async (req, res) => {
+app.get("/getCategories", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const result = await prisma.user.findFirst({
@@ -212,81 +211,81 @@ app.get("/getInterests", async (req, res) => {
   }
 });
 
-app.post("/setProfileInformation", async(req, res) => {
+app.post("/setProfileInformation", async (req, res) => {
   try {
-  const tokenUser = getUserFromToken(req.headers.authorization)
-  const user = await getUser(tokenUser.id)
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
 
-  const profileAlreadyExists = await prisma.profile.findUnique({
-    where: {
-      userId: user.id
-    }
-  });
+    const profileAlreadyExists = await prisma.profile.findUnique({
+      where: {
+        userId: user.id,
+      },
+    });
 
-  if (profileAlreadyExists) {
-    try { 
-      await prisma.profile.update({
-        where: {
-          userId: user.id
-        },
-        data: {
-          name: req.body.name,
-          location: req.body.location,
-          occupation: req.body.occupation,
-          bio: req.body.bio
-        }
-      })
-      res.send("Success")
-    } catch (err){
-      throw err
-    }
-  } else {
+    if (profileAlreadyExists) {
+      try {
+        await prisma.profile.update({
+          where: {
+            userId: user.id,
+          },
+          data: {
+            name: req.body.name,
+            location: req.body.location,
+            occupation: req.body.occupation,
+            bio: req.body.bio,
+          },
+        });
+        res.send("Success");
+      } catch (err) {
+        throw err;
+      }
+    } else {
       const newProfile = await prisma.profile.create({
         data: {
           user: {
-            connect: { id: user.id}
+            connect: { id: user.id },
           },
           name: req.body.name,
           location: req.body.location,
           occupation: req.body.occupation,
-          bio: req.body.bio
-        }
+          bio: req.body.bio,
+        },
       });
-      res.send(newProfile)
+      res.send(newProfile);
     }
-  } catch (err){
-    res.send(err)
+  } catch (err) {
+    res.send(err);
   }
-})
+});
 
-app.get("/getProfileInformation", async(req, res) => {
-  try{
-    const tokenUser = getUserFromToken(req.headers.authorization)
-    const user = await getUser(tokenUser.id)
+app.get("/getProfileInformation", async (req, res) => {
+  try {
+    const tokenUser = getUserFromToken(req.headers.authorization);
+    const user = await getUser(tokenUser.id);
     const profile = await prisma.profile.findFirst({
       where: {
-        userId: user.id
+        userId: user.id,
       },
-    })
-    res.send(profile)
-  } catch (err){
-    res.send(err)
+    });
+    res.send(profile);
+  } catch (err) {
+    res.send(err);
   }
-})
+});
 
 // MAKE SURE TO DESERIALIZE INTO SINGLE STRING WHEN SUPPLYING DATA FOR COMMON TRAITS AND HARD SKILLS
-app.get("/getCategorySummary", async(req,res) => {
+app.get("/getCategorySummary", async (req, res) => {
   try {
     const summary = await prisma.categorysummary.findFirst({
       where: {
-        id: req.body.categoryId
-      }
-    })
-    return summary
-  } catch (err){
-    throw err
+        id: req.body.categoryId,
+      },
+    });
+    return summary;
+  } catch (err) {
+    throw err;
   }
-})
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

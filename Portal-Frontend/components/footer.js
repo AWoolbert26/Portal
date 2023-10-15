@@ -29,13 +29,17 @@ const Footer = () => {
     router.push("/home");
   };
 
+  const goToSearch = () => {
+    router.push("/search");
+  };
+
   const goToProfile = () => {
     router.push("/userProfile");
-
   };
   
   const goToCreatePost = () => {
-    router.push("/createPost");
+    console.log("Going to create post page");
+    console.log(authUser);
   };
   return (
     <View
@@ -60,7 +64,9 @@ const Footer = () => {
           gap: 35,
         }}
       >
-        <Search color="#000" size={35}/>
+        <TouchableOpacity onPress={goToSearch}>
+          <Search color="#000" size={35}/>
+        </TouchableOpacity>
         <TouchableOpacity onPress={goToHome}>
           <Home color="#000" size={35}/>
         </TouchableOpacity>

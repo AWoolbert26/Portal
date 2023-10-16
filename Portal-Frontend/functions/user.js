@@ -135,6 +135,17 @@ export const getProfile = async () => {
   }
 };
 
+export const getCategorySummary = async (name) => {
+  try {
+    const summary = await axios.get(
+      `${backendUrl}/getCategorySummary?name=${name}`
+    );
+    return summary.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 // will modify to only get for specific categories
 export const getPosts = async () => {
   try {

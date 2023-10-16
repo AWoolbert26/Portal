@@ -2,11 +2,7 @@ import { useContext } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-  faMagnifyingGlass,
-  faCircle,
-  faUser,
   faPlusCircle,
-  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../app/auth/AuthContext";
 import { router } from "expo-router";
@@ -15,9 +11,6 @@ import { User, Home, Search, LogOut } from "lucide-react-native";
 
 const Footer = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
-  if (authUser === null) {
-    router.replace("/");
-  }
 
   const logout = () => {
     setAuthUser(null);
@@ -42,6 +35,12 @@ const Footer = () => {
     console.log(authUser);
     router.push("/createPost");
   };
+
+  if (authUser === null) {
+    // Handle the case when there's no authenticated user
+    return null; // Render nothing when there's no user
+  }
+
   return (
     <View
       style={{
@@ -71,7 +70,7 @@ const Footer = () => {
         <TouchableOpacity onPress={goToHome}>
           <Home color="#000" size={35} />
         </TouchableOpacity>
-        {authUser && authUser.type === 1 && (
+        {authUser.type === 1 && (
           <TouchableOpacity onPress={goToCreatePost}>
             <FontAwesomeIcon icon={faPlusCircle} size={35} />
           </TouchableOpacity>

@@ -162,7 +162,7 @@ const userProfile = () => {
             Bio: <Text style={{ fontSize: 15, fontWeight: "400" }}>{bio}</Text>
           </Text>
           <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            categories:{" "}
+            Interests:{" "}
             <Text style={{ fontSize: 15, fontWeight: "400" }}>
               {categories}
             </Text>

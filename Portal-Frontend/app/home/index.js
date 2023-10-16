@@ -8,6 +8,9 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { router } from "expo-router";
+import { getCategories, deleteAuthUser } from "../../functions/user";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
@@ -24,6 +27,17 @@ const Home = () => {
   const goToDescription = () => {
     router.push("/home/categorySummary");
   };
+  const getUserCategories = async () => {
+    try {
+      const gotCategories = await getCategories();
+      setCategories(gotCategories);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  getUserCategories();
+
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
     statusBarBGColor.current = "black";
@@ -73,9 +87,19 @@ const Home = () => {
         <View
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
-          <TouchableOpacity onPress={goToDescription}>
-            <Info size={35} color="#000" />
-          </TouchableOpacity>
+          <Link
+            href={{
+              pathname: "/home/categorySummary",
+              params: { categoryName: currentCategory },
+            }}
+            asChild
+          >
+            {currentCategory != "Home" && (
+              <TouchableOpacity>
+                <Info size={35} color="#000" />
+              </TouchableOpacity>
+            )}
+          </Link>
         </View>
       </View>
       {/* page */}

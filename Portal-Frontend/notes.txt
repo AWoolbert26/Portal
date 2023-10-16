@@ -5,3 +5,15 @@ Steps:
 - run xampp server
 - specify ip in frontend
 - run backend and frontend
+
+
+
+// mock summaries:
+Law:
+INSERT INTO `CategorySummary` (`id`, `summary`, `hardSkills`, `commonTraits`, `education`, `averagePay`, `threatOfAI`, `categoryId`) VALUES (NULL, 'Law involves interpreting, applying legal principles, advocating for justice, resolving disputes, advising, and ensuring legal compliance and ethics.', 'Legal Expertise, Research, Writing legal documents, Courtroom representation', 'Problem-solving skills, Communication skills, Attention to Detail, Reading and Writing skills', 'The level of education depends on the role within the field of law', 'Year 0-1: $45,000, Year 2-4: $50,000', 'Medium', '0')
+
+Computer Science:
+INSERT INTO `CategorySummary` (`id`, `summary`, `hardSkills`, `commonTraits`, `education`, `averagePay`, `threatOfAI`, `categoryId`) VALUES (NULL, 'Computer science, a broad, evolving field, presents endless career paths, from software engineering to AI research, in the tech-driven world.', 'Programming, Problem-Solving, Adaptability', 'Analytical Thinking, Attention to detail', 'Most computer science professionals have at least a bachelor\'s degree in computer science, software engineering, or a related field.', ' $80,000 to $120,000', 'High', '1')
+
+Businesss:
+INSERT INTO `CategorySummary` (`id`, `summary`, `hardSkills`, `commonTraits`, `education`, `averagePay`, `threatOfAI`, `categoryId`) VALUES (NULL, 'Careers in business encompass a wide spectrum of roles, from finance to marketing, offering diverse opportunities for success.', 'Sales, Project Management, Entrepreneurship', 'Networking skills, Negotiation skills, Leadership, Communication skills', 'The specific educational requirements and preferences can vary significantly based on the sector of the business field.', '$40,000 to $200,000', 'Medium', '2')

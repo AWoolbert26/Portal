@@ -1,39 +1,26 @@
-import React, { useContext, useRef, useState } from "react";
-import { AuthContext } from "../auth/AuthContext";
-import {
-  Text,
-  View,
-  SafeAreaView,
-  StatusBar,
-  Touchable,
-  Image,
-} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Text, View, SafeAreaView, Image } from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
-import { getCategories, deleteAuthUser } from "../../functions/user";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native-gesture-handler";
 import { router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
+import { getPosts } from "../../functions/user";
+import { Video, ResizeMode } from "expo-av";
+import Constants from "expo-constants";
 
 const Home = () => {
-  const [categories, setCategories] = useState({});
-
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const statusBarBGColor = useRef("white");
   const [currentCategory, setCurrentCategory] = useState("Home");
+  const [posts, setPosts] = useState();
 
-  const getUserCategories = async () => {
-    try {
-      const gotCategories = await getCategories();
-      setCategories(gotCategories);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  getUserCategories();
   const goToDescription = () => {
     router.push("/home/categorySummary");
   };
@@ -45,6 +32,16 @@ const Home = () => {
     setCategoryMenuOpen(false);
     statusBarBGColor.current = "white";
   };
+
+  const settingPosts = async () => {
+    setPosts(await getPosts());
+  };
+
+  useEffect(() => {
+    settingPosts();
+  }, []);
+
+  const video = React.useRef(null);
 
   // need to change status bar
   return (
@@ -94,130 +91,79 @@ const Home = () => {
           })}
       </View> */}
       {/* posts */}
-      {!categoryMenuOpen && (
+      {!categoryMenuOpen && posts && (
+        // should use flatlist instead
         <ScrollView style={{ marginBottom: 50 }}>
           {/* single post */}
-          <View style={{}}>
-            {/* background image */}
-            <Image
-              source={{
-                uri: "https://static1.srcdn.com/wordpress/wp-content/uploads/2023/04/shark-tale-oscar-what-kind-fish.jpg?q=50&fit=contain&w=1140&h=&dpr=1.5",
-              }}
-              style={{
-                width: "100%",
-                // Without height undefined it won't work
-                height: undefined,
-                // figure out your image aspect ratio
-                aspectRatio: 9 / 11,
-                resizeMode: "stretch",
-              }}
-            />
-            {/* user stuff at top */}
-            <View
-              style={{
-                position: "absolute",
-                flexDirection: "row",
-                alignItems: "center",
-                paddingLeft: 7,
-                marginTop: 7,
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                width: "100%",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-                }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 15,
-                  borderWidth: 1,
-                  borderColor: "black",
-                  backgroundColor: "white",
-                }}
-              />
-              <Text style={{ marginLeft: 7, color: "white" }}>Vicky</Text>
-            </View>
-            {/* caption */}
-            <View
-              style={{
-                position: "absolute",
-                marginTop: "115%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                }}
-              >
-                Post Caption: Hello guys its me Victor, please work for me
-              </Text>
-            </View>
-          </View>
-          {/* another post */}
-          <View style={{}}>
-            {/* background image */}
-            <Image
-              source={{
-                uri: "https://carboncostume.com/wordpress/wp-content/uploads/2015/10/fatalbert.jpg",
-              }}
-              style={{
-                width: "100%",
-                // Without height undefined it won't work
-                height: undefined,
-                // figure out your image aspect ratio
-                aspectRatio: 9 / 11,
-                resizeMode: "stretch",
-              }}
-            />
-            {/* user stuff at top */}
-            <View
-              style={{
-                position: "absolute",
-                flexDirection: "row",
-                alignItems: "center",
-                paddingLeft: 7,
-                marginTop: 7,
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                width: "100%",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-                }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 15,
-                  borderWidth: 1,
-                  borderColor: "black",
-                  backgroundColor: "white",
-                }}
-              />
-              <Text style={{ marginLeft: 7, color: "white" }}>Mustafa</Text>
-            </View>
-            {/* caption */}
-            <View
-              style={{
-                position: "absolute",
-                marginTop: "115%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                width: "100%",
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                }}
-              >
-                Post Caption: Hey hey hey Mustafa here, take this job please
-              </Text>
-            </View>
-          </View>
+          {posts.map((post) => {
+            return (
+              <View key={post.id} style={{}}>
+                {/* background video */}
+                <Video
+                  ref={video}
+                  source={{
+                    uri: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
+                  }}
+                  style={{
+                    width: "100%",
+                    // Without height undefined it won't work
+                    height: undefined,
+                    // figure out your image aspect ratio
+                    aspectRatio: 9 / 11,
+                  }}
+                  shouldPlay={true}
+                  isLooping={true}
+                  resizeMode="cover"
+                />
+                {/* user stuff at top */}
+                <View
+                  style={{
+                    position: "absolute",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingLeft: 7,
+                    marginTop: 7,
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    width: "100%",
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
+                    }}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 15,
+                      borderWidth: 1,
+                      borderColor: "black",
+                      backgroundColor: "white",
+                    }}
+                  />
+                  <Text style={{ marginLeft: 7, color: "white" }}>
+                    {post.user.username}
+                  </Text>
+                </View>
+                {/* caption */}
+                <View
+                  style={{
+                    position: "absolute",
+                    marginTop: "115%",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    width: "100%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                    }}
+                  >
+                    {post.description}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
         </ScrollView>
       )}
       {/* footer */}

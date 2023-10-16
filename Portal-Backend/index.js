@@ -369,6 +369,23 @@ app.get("/getCategorySummary", async (req, res) => {
   }
 });
 
+app.get("/getPosts", async (req, res) => {
+  try {
+    const posts = await prisma.post.findMany({
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+    res.send(posts);
+  } catch (err) {
+    throw err;
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

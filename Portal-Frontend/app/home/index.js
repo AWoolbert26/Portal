@@ -12,7 +12,7 @@ import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
 import { getCategories, deleteAuthUser } from "../../functions/user";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
@@ -34,9 +34,11 @@ const Home = () => {
   };
 
   getUserCategories();
+
   const goToDescription = () => {
-    router.push("/home/categorySummary");
+    router.push("/home/categorySummary", { categoryName: currentCategory });
   };
+
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
     statusBarBGColor.current = "black";
@@ -76,9 +78,11 @@ const Home = () => {
         <View
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
-          <TouchableOpacity onPress={goToDescription}>
+          <Link href={{ pathname: "/home/categorySummary", params: { categoryName: currentCategory }}} asChild>
+          <TouchableOpacity>
             <Info size={35} color="#000" />
           </TouchableOpacity>
+          </Link>
         </View>
       </View>
       {/* page */}

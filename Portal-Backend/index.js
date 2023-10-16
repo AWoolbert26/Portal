@@ -355,19 +355,53 @@ app.get("/getProfileInformation", async (req, res) => {
   }
 });
 
-// MAKE SURE TO DESERIALIZE INTO SINGLE STRING WHEN SUPPLYING DATA FOR COMMON TRAITS AND HARD SKILLS
+// const getCategoryId = async (name) => {
+//   try {
+//     const categoryId = await prisma.category.findUnique({
+//       where: {
+//         name: name
+//       },
+//       select: {
+//         id: true,
+//       }
+//     });
+//     print("Category Id: " + categoryId)
+//     return categoryId
+//   } catch (err) {
+//     return err;
+//   }
+// }
+
+// deserializes, supplying single string for common traits and hard values that should be seperated by ','
 app.get("/getCategorySummary", async (req, res) => {
   try {
-    const summary = await prisma.categorysummary.findFirst({
+    const categoryName = req.query.name;
+    const category = await prisma.category.findFirst({
       where: {
-        id: req.body.categoryId,
+        name: categoryName,
       },
     });
-    return summary;
+    if (category) {
+      const summary = await prisma.categorySummary.findUnique({
+        where: {
+          categoryId: category.id,
+        },
+      });
+      if (summary) {
+        console.log(summary);
+        res.send(summary);
+      } else {
+        res.status(404).send("Category summary not found");
+      }
+    } else {
+      res.status(404).send("Category not found");
+    }
   } catch (err) {
-    throw err;
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

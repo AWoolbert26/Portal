@@ -35,10 +35,6 @@ const Home = () => {
 
   getUserCategories();
 
-  const goToDescription = () => {
-    router.push("/home/categorySummary", { categoryName: currentCategory });
-  };
-
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
     statusBarBGColor.current = "black";
@@ -79,9 +75,11 @@ const Home = () => {
           style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
         >
           <Link href={{ pathname: "/home/categorySummary", params: { categoryName: currentCategory }}} asChild>
+          { currentCategory != "Home" &&
           <TouchableOpacity>
             <Info size={35} color="#000" />
           </TouchableOpacity>
+          }
           </Link>
         </View>
       </View>

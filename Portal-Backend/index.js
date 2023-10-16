@@ -388,7 +388,6 @@ app.get("/getCategorySummary", async (req, res) => {
         },
       });
       if (summary) {
-        console.log(summary);
         res.send(summary);
       } else {
         res.status(404).send("Category summary not found");

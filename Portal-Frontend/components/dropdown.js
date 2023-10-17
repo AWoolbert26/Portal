@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, FlatList, Text, Dimensions } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Search } from "lucide-react-native";
+import { getUser } from "../functions/user";
 
 const UserSearchDropdown = ({ onUserSelect }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,17 +17,14 @@ const UserSearchDropdown = ({ onUserSelect }) => {
   ];
 
   useEffect(() => {
-    // Filter users based on search query
-    const filteredUsers = allUsers.filter((user) =>
-      user.username.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    setSearchResults(filteredUsers);
+    async function search() {
+      const user = await getUser(searchQuery);
+      setSearchResults(user.data);
+    }
+    search();
   }, [searchQuery]);
 
   const handleUserSelect = (user) => {
-    setSearchQuery("");
-    setIsDropdownVisible(false);
     onUserSelect(user);
   };
 
@@ -45,12 +42,9 @@ const UserSearchDropdown = ({ onUserSelect }) => {
           paddingHorizontal: 10,
         }}
       >
-        <FontAwesomeIcon
-          icon={faSearch}
-          style={{ marginRight: 10 }}
-          size={16}
-          color="#333"
-        />
+        <View style={{ marginHorizontal: 10 }}>
+          <Search size={16} color="#333" />
+        </View>
         <TextInput
           placeholder="Search"
           value={searchQuery}
@@ -62,18 +56,18 @@ const UserSearchDropdown = ({ onUserSelect }) => {
       </View>
 
       {isDropdownVisible && (
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <Text
-              style={{ padding: 10, borderBottomWidth: 1, borderColor: "#ccc" }}
-              onPress={() => handleUserSelect(item)}
-            >
-              {item.username}
-            </Text>
-          )}
-        />
+        <Text
+          style={{
+            borderBottomWidth: 1,
+            borderColor: "#ccc",
+            marginLeft: 30,
+            marginTop: 40,
+            fontSize: 20,
+          }}
+          onPress={() => handleUserSelect(searchResults)}
+        >
+          {searchResults}
+        </Text>
       )}
     </View>
   );

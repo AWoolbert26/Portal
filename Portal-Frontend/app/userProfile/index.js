@@ -48,6 +48,7 @@ const userProfile = () => {
   const [bio, setBio] = useState(null);
   const [editScreenVisible, setEditScreenVisible] = useState(false);
   const show = () => setEditScreenVisible(true);
+  const [followers, setFollowers] = useState(0);
 
   useEffect(() => {
     getUserInformation()
@@ -123,6 +124,7 @@ const userProfile = () => {
           >
             <Text style={{ fontSize: 23 }}>{username}</Text>
             <Text style={{ fontSize: 18 }}>{email}</Text>
+            <Text style={{fontSize: 20, marginTop: 20}}>Followers: {followers}</Text>
           </View>
           <Image
             style={{
@@ -327,6 +329,7 @@ const userProfile = () => {
             width: ScreenWidth,
           }}
         />
+        
       </ScrollView>
       <Footer />
     </SafeAreaView>

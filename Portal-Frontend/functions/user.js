@@ -168,3 +168,25 @@ export const getUsers = async (searchTerm) => {
     return users;
   } catch (err) {}
 };
+
+export const getUser = async (username) => {
+  try {
+    const user = await axios.get(
+      `${backendUrl}/searchUser?username=${username}`
+    );
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getUser = async (username) => {
+  try {
+    const user = await axios.get(
+      `${backendUrl}/searchUser?username=${username}`
+    );
+    return user;
+  } catch (err) {
+    throw err;
+  }
+};

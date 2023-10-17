@@ -4,12 +4,9 @@ import { Stack } from "expo-router";
 import Footer from "../../components/footer";
 import UserSearchDropdown from "../../components/dropdown";
 
-const SearchPage = ({ onSearch, isVisible, onClose }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
+const SearchPage = () => {
+  const handleUserSelect = (user) => {
     // Perform search or send searchQuery to parent component
-    onSearch(searchQuery);
   };
 
   return (
@@ -34,10 +31,6 @@ const SearchPage = ({ onSearch, isVisible, onClose }) => {
           onUserSelect={(user) => console.log("Selected user:", user)}
         />
       </View>
-
-      {/* <Button title="Search" onPress={handleSearch} />
-        <Button title="Close" onPress={onClose} /> */}
-
       <Footer></Footer>
     </SafeAreaView>
   );

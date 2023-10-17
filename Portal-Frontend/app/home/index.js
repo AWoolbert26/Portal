@@ -7,14 +7,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native-gesture-handler";
-import { getCategories, deleteAuthUser } from "../../functions/user";
 import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
 import { getPosts } from "../../functions/user";
-import { Video, ResizeMode } from "expo-av";
-import Constants from "expo-constants";
+import { Video } from "expo-av";
 
 const Home = () => {
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
@@ -25,16 +23,6 @@ const Home = () => {
   const goToDescription = () => {
     router.push("/home/categorySummary");
   };
-  const getUserCategories = async () => {
-    try {
-      const gotCategories = await getCategories();
-      setCategories(gotCategories);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  getUserCategories();
 
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
@@ -124,7 +112,7 @@ const Home = () => {
                 <Video
                   ref={video}
                   source={{
-                    uri: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4",
+                    uri: post.url,
                   }}
                   style={{
                     width: "100%",

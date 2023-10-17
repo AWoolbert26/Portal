@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { Video } from "expo-av";
 import { Text, View, Image } from "react-native";
 
@@ -9,6 +14,10 @@ const SinglePost = forwardRef(({ post }, ref) => {
     stop,
     unload,
   }));
+
+  useEffect(() => {
+    return () => unload();
+  }, []);
 
   const play = async () => {
     if (video.current == null) {

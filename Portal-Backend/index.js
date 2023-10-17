@@ -418,6 +418,23 @@ app.get("/getPosts", async (req, res) => {
   }
 });
 
+app.get("/searchUser", async (req,res) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        username: req.query.username
+      }
+    })
+    if(user){
+      console.log(user.username)
+      res.send(user.username)
+    } else {
+      res.send("")
+    }
+  } catch(err){
+    throw err
+  }
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

@@ -1,9 +1,7 @@
 import { useContext } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faPlusCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../app/auth/AuthContext";
 import { router } from "expo-router";
 import { deleteAuthUser } from "../functions/user";
@@ -81,6 +79,9 @@ const Footer = () => {
         <TouchableOpacity onPress={logout}>
           <LogOut color="#000" size={35} />
         </TouchableOpacity>
+        {/* <TouchableOpacity onPress={() => router.push("/user/10")}>
+          <LogOut color="#000" size={35} />
+        </TouchableOpacity> */}
       </View>
     </View>
   );

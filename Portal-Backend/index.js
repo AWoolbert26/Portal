@@ -406,13 +406,22 @@ app.get("/getPosts", async (req, res) => {
     const user = getUserFromToken(req.headers.authorization);
     const posts = await prisma.post.findMany({
       where: {
-        user: {
-          followers: {
-            some: {
-              followerId: user.id,
+        OR: [
+          {
+            user: {
+              id: user.id,
             },
           },
-        },
+          {
+            user: {
+              followers: {
+                some: {
+                  followerId: user.id,
+                },
+              },
+            },
+          },
+        ],
       },
       include: {
         user: {
@@ -427,9 +436,82 @@ app.get("/getPosts", async (req, res) => {
     });
     res.send(posts);
   } catch (err) {
-    throw err;
+    res.send(err);
   }
 });
+
+const follows = async (followerId, followeeId) => {};
+
+app.get("/toggleFollow", async (req, res) => {
+  try {
+    const user = await getUserFromToken(req.headers.authorization);
+    const followeeId = req.query.id;
+
+    if (await follows(user.id, followeeId)) {
+      await prisma.follow.create({
+        data: {
+          followeeId: followeeId,
+          followerId: user.id,
+        },
+      });
+      res.send(true); //true for following
+    } else {
+      await prisma.follow.delete({
+        where: {
+          followerId_followeeId: {
+            followeeId: followeeId,
+            followerId: user.id,
+          },
+        },
+      });
+      res.send(false); //false for not following
+    }
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+app.get("/getOtherProfile/:userId", async (req, res) => {
+  try {
+    const user = await getUserFromToken(req.headers.authorization); // verify user
+    const requestedProfileId = req.params.userId;
+    console.log(requestedProfileId);
+    const profile = await prisma.profile.findUnique({
+      where: {
+        userId: parseInt(requestedProfileId),
+      },
+    });
+    console.log(profile);
+    res.send(profile);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+// app.get("/searchUsers/:searchTerm", async (req, res) => {
+//   try {
+//     const user = getUserFromToken(req.headers.authorization);
+//     const searchTerm = req.params.searchTerm;
+
+//     const users = await prisma.user.findMany({
+//       where: {
+//         username: {
+//           contains: searchTerm,
+//         },
+//       },
+//       select: {
+//         id: true,
+//         username: true,
+//       },
+//     });
+//     console.log(users);
+//     res.send(users);
+//   } catch (err) {
+//     console.log(err);
+//     res.send(err);
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

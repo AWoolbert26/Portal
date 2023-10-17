@@ -13,21 +13,31 @@ const SearchPage = ({ onSearch, isVisible, onClose }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-                <Stack.Screen
-                    options={{
-                    title: '',
-                    headerShown: false
-                    }}
-                />
-      <View style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 60, paddingHorizontal: 20 }}>
-          <UserSearchDropdown onUserSelect={(user) => console.log('Selected user:', user)} />
-          
-        </View>
-      
-        {/* <Button title="Search" onPress={handleSearch} />
+    <SafeAreaView
+      style={{ flex: 1, alignItems: "flex-start", justifyContent: "center" }}
+    >
+      <Stack.Screen
+        options={{
+          title: "",
+          headerShown: false,
+        }}
+      />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-start",
+          paddingTop: 60,
+          paddingHorizontal: 20,
+        }}
+      >
+        <UserSearchDropdown
+          onUserSelect={(user) => console.log("Selected user:", user)}
+        />
+      </View>
+
+      {/* <Button title="Search" onPress={handleSearch} />
         <Button title="Close" onPress={onClose} /> */}
-        
+
       <Footer></Footer>
     </SafeAreaView>
   );

@@ -403,13 +403,26 @@ app.get("/getCategorySummary", async (req, res) => {
 
 app.get("/getPosts", async (req, res) => {
   try {
+    const user = getUserFromToken(req.headers.authorization);
     const posts = await prisma.post.findMany({
+      where: {
+        user: {
+          followers: {
+            some: {
+              followerId: user.id,
+            },
+          },
+        },
+      },
       include: {
         user: {
           select: {
             username: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     res.send(posts);

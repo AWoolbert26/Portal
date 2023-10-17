@@ -99,6 +99,12 @@ export const getUserInformation = async () => {
   }
 };
 
+export const getOtherProfile = async (userId) => {
+  const profile = await axios.get(`${backendUrl}/getOtherProfile/${userId}`);
+  console.log(`${backendUrl}/getOtherProfile/${userId}`);
+  return profile.data;
+};
+
 export const getCategories = async () => {
   try {
     const result = await axios.get(`${backendUrl}/getCategories`);
@@ -152,6 +158,15 @@ export const getPosts = async () => {
     console.log(err);
     throw err;
   }
+};
+
+export const getUsers = async (searchTerm) => {
+  try {
+    const users = await axios.get(`${backendUrl}/searchUsers/${searchTerm}`);
+    console.log(users);
+
+    return users;
+  } catch (err) {}
 };
 
 export const getUser = async (username) => {

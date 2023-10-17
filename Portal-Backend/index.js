@@ -406,13 +406,22 @@ app.get("/getPosts", async (req, res) => {
     const user = getUserFromToken(req.headers.authorization);
     const posts = await prisma.post.findMany({
       where: {
-        user: {
-          followers: {
-            some: {
-              followerId: user.id,
+        OR: [
+          {
+            user: {
+              id: user.id,
             },
           },
-        },
+          {
+            user: {
+              followers: {
+                some: {
+                  followerId: user.id,
+                },
+              },
+            },
+          },
+        ],
       },
       include: {
         user: {
@@ -427,8 +436,7 @@ app.get("/getPosts", async (req, res) => {
     });
     res.send(posts);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+    res.send(err);
   }
 });
 
@@ -446,8 +454,7 @@ app.get("/searchUser", async (req, res) => {
       res.send("");
     }
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Internal Server Error");
+    res.send(err);
   }
 });
 app.listen(port, () => {

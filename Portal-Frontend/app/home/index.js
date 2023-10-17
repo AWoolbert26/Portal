@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View, SafeAreaView, Image } from "react-native";
+import { View, SafeAreaView } from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
-import {
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
 import { getPosts } from "../../functions/user";
-import { Video } from "expo-av";
+import SinglePost from "../../components/singlePost";
 
 const Home = () => {
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
@@ -41,7 +37,19 @@ const Home = () => {
     settingPosts();
   }, []);
 
-  const video = React.useRef(null);
+  const postRefs = useRef([]);
+  const onViewableItemsChanged = useRef(({ changed }) => {
+    changed.forEach((element) => {
+      const cell = postRefs.current[element.item.id];
+      if (cell) {
+        if (element.isViewable) {
+          cell.play();
+        } else {
+          cell.stop();
+        }
+      }
+    });
+  });
 
   // need to change status bar
   return (
@@ -102,79 +110,22 @@ const Home = () => {
       </View> */}
       {/* posts */}
       {!categoryMenuOpen && posts && (
-        // should use flatlist instead
-        <ScrollView style={{ marginBottom: 50 }}>
-          {/* single post */}
-          {posts.map((post) => {
-            return (
-              <View key={post.id} style={{}}>
-                {/* background video */}
-                <Video
-                  ref={video}
-                  source={{
-                    uri: post.url,
-                  }}
-                  style={{
-                    width: "100%",
-                    // Without height undefined it won't work
-                    height: undefined,
-                    // figure out your image aspect ratio
-                    aspectRatio: 9 / 11,
-                  }}
-                  shouldPlay={true}
-                  isLooping={true}
-                  resizeMode="cover"
-                />
-                {/* user stuff at top */}
-                <View
-                  style={{
-                    position: "absolute",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingLeft: 7,
-                    marginTop: 7,
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    width: "100%",
-                  }}
-                >
-                  <Image
-                    source={{
-                      uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-                    }}
-                    style={{
-                      width: 30,
-                      height: 30,
-                      borderRadius: 15,
-                      borderWidth: 1,
-                      borderColor: "black",
-                      backgroundColor: "white",
-                    }}
-                  />
-                  <Text style={{ marginLeft: 7, color: "white" }}>
-                    {post.user.username}
-                  </Text>
-                </View>
-                {/* caption */}
-                <View
-                  style={{
-                    position: "absolute",
-                    marginTop: "115%",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    width: "100%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                    }}
-                  >
-                    {post.description}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          style={{ marginBottom: 47 }}
+          data={posts}
+          renderItem={({ item }) => (
+            <SinglePost
+              ref={(postRef) => (postRefs.current[item.id] = postRef)}
+              post={item}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          pagingEnabled
+          onViewableItemsChanged={onViewableItemsChanged.current}
+          windowSize={3}
+          removeClippedSubviews
+          viewabilityConfig={{ itemVisiblePercentThreshold: 75 }}
+        />
       )}
       {/* footer */}
       <Footer />

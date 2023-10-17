@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { Image, SafeAreaView, View, Text } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { getOtherProfile } from "../../functions/user";
+import { toggleFollow } from "../../functions/user";
 
 const Profile = () => {
   const { userId } = useLocalSearchParams();
@@ -35,6 +42,16 @@ const Profile = () => {
           <Text>Bio: {profile.bio}</Text>
           <Text>Location: {profile.location}</Text>
           <Text>Occupation: {profile.occupation}</Text>
+          <TouchableOpacity
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "black",
+            }}
+            onPress={() => toggleFollow(profile.userId)}
+          >
+            <Text style={{ padding: 5 }}>Follow</Text>
+          </TouchableOpacity>
         </View>
       )}
     </SafeAreaView>

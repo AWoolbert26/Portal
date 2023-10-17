@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, TextInput, FlatList, Text, Dimensions } from "react-native";
 import { Search } from "lucide-react-native";
-import { getUser } from "../functions/user";
+import { getUsers } from "../functions/user";
+import { router } from "expo-router";
 
 const UserSearchDropdown = ({ onUserSelect }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,7 +19,8 @@ const UserSearchDropdown = ({ onUserSelect }) => {
 
   useEffect(() => {
     async function search() {
-      const user = await getUser(searchQuery);
+      const user = await getUsers(searchQuery);
+      console.log(user.data);
       setSearchResults(user.data);
     }
     search();
@@ -55,20 +57,25 @@ const UserSearchDropdown = ({ onUserSelect }) => {
         />
       </View>
 
-      {isDropdownVisible && (
-        <Text
-          style={{
-            borderBottomWidth: 1,
-            borderColor: "#ccc",
-            marginLeft: 30,
-            marginTop: 40,
-            fontSize: 20,
-          }}
-          onPress={() => handleUserSelect(searchResults)}
-        >
-          {searchResults}
-        </Text>
-      )}
+      {isDropdownVisible &&
+        searchResults &&
+        searchResults.map((user, index) => {
+          return (
+            <Text
+              key={index}
+              style={{
+                borderBottomWidth: 1,
+                borderColor: "#ccc",
+                marginLeft: 30,
+                marginTop: 40,
+                fontSize: 20,
+              }}
+              onPress={() => router.push(`/user/${user.id}`)}
+            >
+              {user.username}
+            </Text>
+          );
+        })}
     </View>
   );
 };

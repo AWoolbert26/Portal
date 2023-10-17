@@ -38,13 +38,13 @@ model Category {
 }
 
 model Profile {
-  id         Int    @id @default(autoincrement())
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int    @unique
-  name       String
-  bio        String
-  location   String
-  occupation String
+  id         Int     @id @default(autoincrement())
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int     @unique
+  name       String?
+  bio        String?
+  location   String?
+  occupation String?
   followers  Int?
 }
 

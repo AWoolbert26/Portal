@@ -118,6 +118,14 @@ app.post("/register", async (req, res) => {
       },
     });
 
+    console.log("here");
+
+    await prisma.profile.create({
+      data: {
+        userId: newUser.id,
+      },
+    });
+
     if (newUser != null) {
       const token = jsonwebtoken.sign(
         {
@@ -216,7 +224,19 @@ app.get("/users/:userId", async (req, res) => {
     res.send(err);
   }
 });
-
+app.get("/getOtherProfile/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const profile = await prisma.profile.findFirst({
+      where: { userId: parseInt(userId) },
+    });
+    console.log(profile);
+    res.send(profile);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
 app.get("/getCategories", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
@@ -440,23 +460,70 @@ app.get("/getPosts", async (req, res) => {
   }
 });
 
-app.get("/searchUser", async (req, res) => {
+app.get("/searchUsers", async (req, res) => {
   try {
-    const user = await prisma.user.findFirst({
+    const users = await prisma.user.findMany({
       where: {
-        username: req.query.username,
+        username: {
+          contains: req.query.username,
+        },
+      },
+      select: {
+        id: true,
+        username: true,
       },
     });
-    if (user) {
-      console.log(user.username);
-      res.send(user.username);
-    } else {
-      res.send("");
-    }
+    console.log(users);
+    res.send(users);
   } catch (err) {
-    throw err;
+    res.send(err);
   }
 });
+
+const getFollows = async (followeeId, followerId) => {
+  const follows = await prisma.follow.findFirst({
+    where: {
+      followeeId: followeeId,
+      followerId: followerId,
+    },
+  });
+  console.log(follows);
+  return follows ? true : false;
+};
+
+app.get("/toggleFollow/:userId", async (req, res) => {
+  try {
+    const user = await getUserFromToken(req.headers.authorization);
+    console.log(user);
+
+    const follows = await getFollows(user.id, parseInt(req.params.userId));
+    console.log(follows);
+
+    if (follows) {
+      await prisma.follow.delete({
+        where: {
+          followerId_followeeId: {
+            followeeId: user.id,
+            followerId: parseInt(req.params.userId),
+          },
+        },
+      });
+      res.send({ follows: false });
+    } else {
+      await prisma.follow.create({
+        data: {
+          followeeId: user.id,
+          followerId: parseInt(req.params.userId),
+        },
+      });
+      res.send({ follows: true }); //1 for follows
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

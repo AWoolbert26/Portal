@@ -125,7 +125,7 @@ export const setProfile = async ({ name, location, occupation, bio }) => {
     console.log(profile.data);
     return profile;
   } catch (err) {
-    throw error;
+    throw err;
   }
 };
 
@@ -160,19 +160,19 @@ export const getPosts = async () => {
   }
 };
 
-export const getUsers = async (searchTerm) => {
-  try {
-    const users = await axios.get(`${backendUrl}/searchUsers/${searchTerm}`);
-    console.log(users);
+// export const getUsers = async (searchTerm) => {
+//   try {
+//     const users = await axios.get(`${backendUrl}/searchUsers/${searchTerm}`);
+//     console.log(users);
 
-    return users;
-  } catch (err) {}
-};
+//     return users;
+//   } catch (err) {}
+// };
 
-export const getUser = async (username) => {
+export const getUsers = async (username) => {
   try {
     const user = await axios.get(
-      `${backendUrl}/searchUser?username=${username}`
+      `${backendUrl}/searchUsers?username=${username}`
     );
     return user;
   } catch (err) {
@@ -180,13 +180,11 @@ export const getUser = async (username) => {
   }
 };
 
-export const getUser = async (username) => {
+export const toggleFollow = async (userId) => {
   try {
-    const user = await axios.get(
-      `${backendUrl}/searchUser?username=${username}`
-    );
-    return user;
+    const response = await axios.get(`${backendUrl}/toggleFollow/${userId}`);
+    return response.data.follows;
   } catch (err) {
-    throw err;
+    console.log(err);
   }
 };

@@ -19,6 +19,15 @@ model User {
   categories Category[]
   profile    Profile?
   posts      Post[]
+
+  createdAt DateTime @default(now())
+
+  //user followers is all the people following the user
+  //it's getting every one where the current user is the "following"
+  followers Follow[] @relation("following")
+  //user following is all the people they're following
+  //it's getting every follow where the current user is the "follower" 
+  following Follow[] @relation("followers")
 }
 
 model Category {
@@ -30,7 +39,7 @@ model Category {
 
 model Profile {
   id         Int    @id @default(autoincrement())
-  user       User   @relation(fields: [userId], references: [id])
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int    @unique
   name       String
   bio        String
@@ -47,15 +56,34 @@ model CategorySummary {
   education    String
   averagePay   String
   threatOfAI   String
-  category     Category @relation(fields: [categoryId], references: [id])
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId   Int      @unique
 }
 
 model Post {
-  id          Int     @id @default(autoincrement())
-  user        User    @relation(fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   url         String?
   description String
+  createdAt   DateTime @default(now())
 
   userId Int
+}
+
+model Follow {
+  //followerId references id in User.
+  //when you're getting a user's following (like the people who the user is following), 
+  //you're looking for when the current user is the follower in this model,
+  //hence why the follower below has a relation with the User model's following
+  //https://www.prisma.io/docs/concepts/components/prisma-schema/relations/self-relations#many-to-many-self-relations
+
+  //follower is the user that is following the other user
+  follower   User     @relation("followers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId Int
+  //followee is the user that is being followed (the user the follower is following)
+  followee   User     @relation("following", fields: [followeeId], references: [id], onDelete: Cascade)
+  followeeId Int
+  createdAt  DateTime @default(now())
+
+  @@id([followerId, followeeId])
 }

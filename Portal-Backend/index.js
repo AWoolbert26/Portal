@@ -427,27 +427,29 @@ app.get("/getPosts", async (req, res) => {
     });
     res.send(posts);
   } catch (err) {
-    throw err;
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 });
 
-app.get("/searchUser", async (req,res) => {
+app.get("/searchUser", async (req, res) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        username: req.query.username
-      }
-    })
-    if(user){
-      console.log(user.username)
-      res.send(user.username)
+        username: req.query.username,
+      },
+    });
+    if (user) {
+      console.log(user.username);
+      res.send(user.username);
     } else {
-      res.send("")
+      res.send("");
     }
-  } catch(err){
-    throw err
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
-})
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

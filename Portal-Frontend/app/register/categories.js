@@ -73,8 +73,9 @@ const categories = () => {
       />
       <View style={{ alignItems: "center", marginTop: 30 }}>
         {/* bro hardcoding -- wrap this cuh */}
+        {/* will change when we put in more */}
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
-          Select at least five of your
+          Select at most three of your
         </Text>
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
           professional and academic
@@ -88,7 +89,8 @@ const categories = () => {
           categories
         </Text>
       </View>
-      <TextInput
+      {/* will add back when working */}
+      {/* <TextInput
         autoCapitalize="none"
         placeholder="Search..."
         placeholderTextColor="black"
@@ -102,7 +104,7 @@ const categories = () => {
           padding: 10,
           fontWeight: "200",
         }}
-      />
+      /> */}
       <View
         style={{
           flexDirection: "row",

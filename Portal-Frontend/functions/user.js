@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-//put in an env file instead
-const backendUrl = "http://10.232.156.175:3000";
+//put an env file instead
+const backendUrl = "http://10.232.157.94:3000";
 
 export const login = async (email, password) => {
   try {
@@ -156,9 +156,11 @@ export const getPosts = async () => {
 
 export const getUser = async (username) => {
   try {
-    const user = await axios.get(`${backendUrl}/searchUser?username=${username}`);
-    return user
+    const user = await axios.get(
+      `${backendUrl}/searchUser?username=${username}`
+    );
+    return user;
   } catch (err) {
     throw err;
   }
-}
+};

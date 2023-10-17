@@ -7,9 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native-gesture-handler";
-import { router } from "expo-router";
 import { getCategories, deleteAuthUser } from "../../functions/user";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";

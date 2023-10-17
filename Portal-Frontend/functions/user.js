@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put in an env file instead
-const backendUrl = "http://10.232.156.108:3000";
+const backendUrl = "http://10.232.207.118:3000";
 
 export const login = async (email, password) => {
   try {
@@ -10,11 +10,8 @@ export const login = async (email, password) => {
       email: email,
       password: password,
     });
-
     await SecureStore.setItemAsync("authToken", result.data.authToken);
-
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
-
     return result.data.user; //returns user object
   } catch (err) {
     throw err;

@@ -480,7 +480,7 @@ app.get("/searchUsers", async (req, res) => {
   }
 });
 
-const getFollows = async (followeeId, followerId) => {
+const getFollows = async (followerId, followeeId) => {
   const follows = await prisma.follow.findFirst({
     where: {
       followeeId: followeeId,
@@ -503,8 +503,8 @@ app.get("/toggleFollow/:userId", async (req, res) => {
       await prisma.follow.delete({
         where: {
           followerId_followeeId: {
-            followeeId: user.id,
-            followerId: parseInt(req.params.userId),
+            followerId: user.id,
+            followeeId: parseInt(req.params.userId),
           },
         },
       });
@@ -512,8 +512,8 @@ app.get("/toggleFollow/:userId", async (req, res) => {
     } else {
       await prisma.follow.create({
         data: {
-          followeeId: user.id,
-          followerId: parseInt(req.params.userId),
+          followeeId: parseInt(req.params.userId),
+          followerId: user.id,
         },
       });
       res.send({ follows: true }); //1 for follows

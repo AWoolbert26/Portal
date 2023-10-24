@@ -19,6 +19,7 @@ app.use(
 app.use(cors());
 
 import { S3Client } from "@aws-sdk/client-s3";
+import { connect } from "http2";
 
 // const globalForS3 = globalThis
 
@@ -518,6 +519,53 @@ app.get("/toggleFollow/:userId", async (req, res) => {
       });
       res.send({ follows: true }); //1 for follows
     }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.get("/isLiked/:postId", async (req, res) => {
+  try {
+    const userId = getUserFromToken(req.headers.authorization).id;
+    const postId = parseInt(req.params.postId);
+
+    const isLiked = await prisma.like.findUnique({
+      where: { userId_postId: { userId: userId, postId: postId } },
+    });
+    isLiked ? res.send(true) : res.send(false);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.post("/likePost/:postId", async (req, res) => {
+  try {
+    const userId = getUserFromToken(req.headers.authorization).id;
+    const postId = parseInt(req.params.postId);
+    const liked = await prisma.like.create({
+      data: {
+        User: { connect: { id: userId } },
+        Post: { connect: { id: postId } },
+      },
+    });
+    liked ? res.send(true) : res.send(false);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.delete("/unlikePost/:postId", async (req, res) => {
+  try {
+    const userId = getUserFromToken(req.headers.authorization).id;
+    const postId = parseInt(req.params.postId);
+
+    const deleted = await prisma.like.delete({
+      where: { userId_postId: { userId: userId, postId: postId } },
+    });
+    deleted ? res.send(false) : res.send(true);
   } catch (err) {
     console.log(err);
     res.send(err);

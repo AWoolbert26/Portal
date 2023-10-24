@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put an env file instead
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "http://10.232.156.109:3000";
 
 export const login = async (email, password) => {
   try {
@@ -186,5 +186,35 @@ export const toggleFollow = async (userId) => {
     return response.data.follows;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const isLiked = async (postId) => {
+  try {
+    const liked = await axios.get(`${backendUrl}/isLiked/${postId}`);
+    return liked.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const likePost = async (postId) => {
+  try {
+    const response = await axios.post(`${backendUrl}/likePost/${postId}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const unlikePost = async (postId) => {
+  try {
+    const response = await axios.delete(`${backendUrl}/unlikePost/${postId}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 };

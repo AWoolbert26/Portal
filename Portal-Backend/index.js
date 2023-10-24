@@ -525,15 +525,24 @@ app.get("/toggleFollow/:userId", async (req, res) => {
   }
 });
 
-app.get("/isLiked/:postId", async (req, res) => {
+app.get("/getPostInfo/:postId", async (req, res) => {
   try {
     const userId = getUserFromToken(req.headers.authorization).id;
     const postId = parseInt(req.params.postId);
 
-    const isLiked = await prisma.like.findUnique({
+    const getIsLiked = await prisma.like.findUnique({
       where: { userId_postId: { userId: userId, postId: postId } },
     });
-    isLiked ? res.send(true) : res.send(false);
+
+    const isLiked = getIsLiked !== null;
+
+    const likeCount = await prisma.like.count({
+      where: { postId: postId },
+    });
+
+    // const commentCount =
+
+    res.send({ isLiked: isLiked, likeCount: likeCount });
   } catch (err) {
     console.log(err);
     res.send(err);

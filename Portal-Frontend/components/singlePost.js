@@ -9,11 +9,17 @@ import { Video } from "expo-av";
 import { Text, View, Image } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Heart, MessageSquare, Minus } from "lucide-react-native";
-import { likePost, unlikePost, isLiked } from "../functions/user";
+import {
+  likePost,
+  getLikeCount,
+  unlikePost,
+  getIsLiked,
+  getPostInfo,
+} from "../functions/user";
 
 const SinglePost = forwardRef(({ post }, ref) => {
   const [captionOpen, setCaptionOpen] = useState(false);
-  const [liked, setLiked] = useState(false);
+  const [postInfo, setPostInfo] = useState(null);
 
   const toggleCaption = async () => {
     setCaptionOpen(!captionOpen);
@@ -40,10 +46,10 @@ const SinglePost = forwardRef(({ post }, ref) => {
     unload,
   }));
 
-  const getIsLiked = async () => {
+  const loadInfo = async () => {
     try {
-      const liked = await isLiked(post.id);
-      setLiked(liked);
+      const postInfo = await getPostInfo(post.id);
+      setPostInfo(postInfo);
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +57,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
 
   useEffect(() => {
     if (captionOpen) {
-      getIsLiked();
+      loadInfo();
     }
   }, [captionOpen]);
 
@@ -159,7 +165,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
             bottom: 5,
           }}
         >
-          {!captionOpen ? (
+          {!captionOpen || !postInfo ? (
             <Text
               style={{
                 color: "white",
@@ -195,20 +201,23 @@ const SinglePost = forwardRef(({ post }, ref) => {
                   marginBottom: 10,
                 }}
               >
-                <View style={{ alignItems: "center", marginRight: 35 }}>
-                  <TouchableWithoutFeedback onPress={pressedLike}>
-                    {liked ? (
-                      <Heart
-                        color="rgba(0, 0, 0, 0)"
-                        size={35}
-                        fill="#ff0000"
-                      ></Heart>
-                    ) : (
-                      <Heart color="#fff" size={35}></Heart>
-                    )}
-                    <Text style={{ color: "white" }}>0 Likes</Text>
-                  </TouchableWithoutFeedback>
-                </View>
+                <TouchableWithoutFeedback
+                  style={{ alignItems: "center", marginRight: 35 }}
+                  onPress={pressedLike}
+                >
+                  {postInfo.isLiked ? (
+                    <Heart
+                      color="rgba(0, 0, 0, 0)"
+                      size={35}
+                      fill="#ff0000"
+                    ></Heart>
+                  ) : (
+                    <Heart color="#fff" size={35}></Heart>
+                  )}
+                  <Text style={{ color: "white" }}>
+                    {postInfo.likeCount} Likes
+                  </Text>
+                </TouchableWithoutFeedback>
                 <Minus
                   style={{ transform: [{ rotate: "90deg" }] }}
                   color="#fff"

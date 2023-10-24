@@ -31,7 +31,7 @@ const SearchPage = () => {
           onUserSelect={(user) => console.log("Selected user:", user)}
         />
       </View>
-      <Footer></Footer>
+      <Footer />
     </SafeAreaView>
   );
 };

@@ -24,20 +24,22 @@ const Profile = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Image
-        style={{
-          width: 150,
-          height: 150,
-          marginRight: 20,
-          borderRadius: 100,
-        }}
-        source={{
-          uri: "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
-        }}
-      />
+    <SafeAreaView
+      style={{ flex: 1, alignItems: "center", gap: 20, marginTop: 15 }}
+    >
       {profile && (
-        <View>
+        <>
+          <Image
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 100,
+              borderWidth: 3,
+            }}
+            source={{
+              uri: "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+            }}
+          />
           <Text>Name: {profile.name}</Text>
           <Text>Bio: {profile.bio}</Text>
           <Text>Location: {profile.location}</Text>
@@ -50,9 +52,9 @@ const Profile = () => {
             }}
             onPress={() => toggleFollow(profile.userId)}
           >
-            <Text style={{ padding: 5 }}>Follow</Text>
+            <Text style={{ padding: 10 }}>Follow</Text>
           </TouchableOpacity>
-        </View>
+        </>
       )}
     </SafeAreaView>
   );

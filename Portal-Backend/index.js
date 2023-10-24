@@ -269,7 +269,7 @@ app.post("/post", async (req, res) => {
       const post = await prisma.post.create({
         data: {
           userId: user.id,
-          description: description + ".",
+          description: description,
         },
         select: {
           id: true,
@@ -289,15 +289,16 @@ app.post("/post", async (req, res) => {
         },
       };
 
+      const command = new PutObjectCommand(commandParams);
+
+      const s3response = await s3Client.send(command);
+
       await prisma.post.update({
         where: { id: post.id },
         data: {
           url: `${process.env.S3_DOMAIN}/videos/${post.id}.${fileExtension}`,
         },
       });
-      const command = new PutObjectCommand(commandParams);
-
-      const s3response = await s3Client.send(command);
 
       console.log("Successfully uploaded");
 
@@ -369,6 +370,10 @@ app.get("/getProfileInformation", async (req, res) => {
         userId: user.id,
       },
     });
+    //send whether they follow in this
+    const follows = await getFollows(user, profile.userId);
+    profile["follows"] = follows ? true : false;
+    console.log(profile["follows"]);
     res.send(profile);
   } catch (err) {
     res.send(err);

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, FlatList, Text, Dimensions } from "react-native";
+import {
+  View,
+  TextInput,
+  FlatList,
+  Text,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { Search } from "lucide-react-native";
 import { getUsers } from "../functions/user";
 import { router } from "expo-router";
@@ -9,18 +17,9 @@ const UserSearchDropdown = ({ onUserSelect }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-  // Simulated user data (replace this with your actual user data)
-  const allUsers = [
-    { id: 1, username: "user1" },
-    { id: 2, username: "user2" },
-    { id: 3, username: "anotheruser" },
-    // ... add more users as needed
-  ];
-
   useEffect(() => {
     async function search() {
       const user = await getUsers(searchQuery);
-      console.log(user.data);
       setSearchResults(user.data);
     }
     search();
@@ -48,34 +47,50 @@ const UserSearchDropdown = ({ onUserSelect }) => {
           <Search size={16} color="#333" />
         </View>
         <TextInput
+          autoComplete="off"
+          autoCorrect={false}
+          autoCapitalize={false}
           placeholder="Search"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
           onFocus={() => setIsDropdownVisible(true)}
-          onBlur={() => setIsDropdownVisible(false)}
+          // onBlur={() => setIsDropdownVisible(false)}
           style={{ flex: 1 }}
         />
       </View>
-
-      {isDropdownVisible &&
-        searchResults &&
-        searchResults.map((user, index) => {
-          return (
-            <Text
-              key={index}
-              style={{
-                borderBottomWidth: 1,
-                borderColor: "#ccc",
-                marginLeft: 30,
-                marginTop: 40,
-                fontSize: 20,
-              }}
-              onPress={() => router.push(`/user/${user.id}`)}
-            >
-              {user.username}
-            </Text>
-          );
-        })}
+      <ScrollView
+        style={{
+          flexDirection: "column",
+          columnGap: 10,
+          overflow: "hidden",
+          marginBottom: 100,
+        }}
+      >
+        {isDropdownVisible &&
+          searchResults &&
+          searchResults.map((user, index) => {
+            return (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  flex: 1,
+                  padding: 10,
+                }}
+                onPress={() => router.push(`/user/${user.id}`)}
+              >
+                <Text
+                  style={{
+                    borderBottomWidth: 1,
+                    borderColor: "#ccc",
+                    fontSize: 20,
+                  }}
+                >
+                  {user.username}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+      </ScrollView>
     </View>
   );
 };

@@ -28,6 +28,8 @@ model User {
   //user following is all the people they're following
   //it's getting every follow where the current user is the "follower" 
   following Follow[] @relation("followers")
+
+  likedPosts Like[]
 }
 
 model Category {
@@ -66,8 +68,18 @@ model Post {
   url         String?
   description String
   createdAt   DateTime @default(now())
+  likes       Like[]
 
   userId Int
+}
+
+model Like {
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+  Post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+
+  @@id([userId, postId])
 }
 
 model Follow {

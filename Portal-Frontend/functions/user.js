@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put an env file instead
-const backendUrl = "http://10.232.178.50:3000";
+const backendUrl = "http://192.168.12.165:3000";
 
 export const login = async (email, password) => {
   try {
@@ -99,12 +99,6 @@ export const getUserInformation = async () => {
   }
 };
 
-export const getOtherProfile = async (userId) => {
-  const profile = await axios.get(`${backendUrl}/getOtherProfile/${userId}`);
-  console.log(`${backendUrl}/getOtherProfile/${userId}`);
-  return profile.data;
-};
-
 export const getCategories = async () => {
   try {
     const result = await axios.get(`${backendUrl}/getCategories`);
@@ -125,7 +119,7 @@ export const setProfile = async ({ name, location, occupation, bio }) => {
     console.log(profile.data);
     return profile;
   } catch (err) {
-    throw err;
+    throw error;
   }
 };
 
@@ -160,21 +154,10 @@ export const getPosts = async () => {
   }
 };
 
-// export const getUsers = async (searchTerm) => {
-//   try {
-//     const users = await axios.get(`${backendUrl}/searchUsers/${searchTerm}`);
-//     console.log(users);
-
-//     return users;
-//   } catch (err) {}
-// };
-
-export const getUsers = async (username) => {
+export const getUser = async (username) => {
   try {
-    const user = await axios.get(
-      `${backendUrl}/searchUsers?username=${username}`
-    );
-    return user;
+    const user = await axios.get(`${backendUrl}/searchUser?username=${username}`);
+    return user
   } catch (err) {
     throw err;
   }
@@ -186,36 +169,5 @@ export const toggleFollow = async (userId) => {
     return response.data.follows;
   } catch (err) {
     console.log(err);
-  }
-};
-
-export const getPostInfo = async (postId) => {
-  try {
-    const postInfo = await axios.get(`${backendUrl}/getPostInfo/${postId}`);
-    console.log(postInfo.data);
-    return postInfo.data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
-
-export const likePost = async (postId) => {
-  try {
-    const response = await axios.post(`${backendUrl}/likePost/${postId}`);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
-
-export const unlikePost = async (postId) => {
-  try {
-    const response = await axios.delete(`${backendUrl}/unlikePost/${postId}`);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw err;
   }
 };

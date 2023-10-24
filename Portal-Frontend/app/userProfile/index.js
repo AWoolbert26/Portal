@@ -169,6 +169,49 @@ const userProfile = () => {
               {categories}
             </Text>
           </Text>
+
+          <View style={{ flexDirection: 'row', marginTop: 15, justifyContent: "center" }}>
+          {/* //message button */}
+          <TouchableOpacity
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              height: 33,
+              width: 100,
+              backgroundColor: "black",
+              marginRight: 6,
+              borderColor: "black",
+              borderStyle: "solid",
+              borderWidth: 1,
+              marginTop: 15,
+            }}
+            //onPress={show}
+          >
+            <Text style={{ color: "white" }}>Message</Text>
+          </TouchableOpacity>
+
+          {/* //following button */}
+          <TouchableOpacity
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              height: 33,
+              width: 100,
+              backgroundColor: "black",
+              marginRight: 6,
+              borderColor: "black",
+              borderStyle: "solid",
+              borderWidth: 1,
+              marginTop: 15,
+            }}
+            //onPress={show}
+          >
+            <Text style={{ color: "white" }}>Following</Text>
+          </TouchableOpacity>
+
+          {/* //edit button */}
           <TouchableOpacity
             style={{
               justifyContent: "center",
@@ -185,8 +228,9 @@ const userProfile = () => {
             }}
             onPress={show}
           >
-            <Text style={{ color: "white" }}>Edit Profile</Text>
+            <Text style={{ color: "white" }}>Edit</Text>
           </TouchableOpacity>
+          </View>
           <Modal
             animationType="fade"
             visible={editScreenVisible}
@@ -329,9 +373,123 @@ const userProfile = () => {
             width: ScreenWidth,
           }}
         />
-        
+
+          {/* posts */}
+
+    <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', padding: 4 }}>
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+                <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />
+      <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          /> 
+        <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          /> 
+        <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          /> 
+        <Image
+            style={{
+              width: 120,
+              height: 100,
+              borderRadius: 10,
+              marginTop: 10
+            }}
+            source={{
+              uri: "https://i.etsystatic.com/35439041/r/il/1533e2/5146234673/il_1588xN.5146234673_ner9.jpg",
+            }}
+          />            
+    </View>
       </ScrollView>
-      <Footer />
+      <Footer/>
     </SafeAreaView>
   );
 };

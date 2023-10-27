@@ -9,13 +9,8 @@ import { Video } from "expo-av";
 import { Text, View, Image } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Heart, MessageSquare, Minus } from "lucide-react-native";
-import {
-  likePost,
-  getLikeCount,
-  unlikePost,
-  getIsLiked,
-  getPostInfo,
-} from "../functions/user";
+import { likePost, unlikePost, getPostInfo } from "../functions/user";
+import { router } from "expo-router";
 
 const SinglePost = forwardRef(({ post }, ref) => {
   const [captionOpen, setCaptionOpen] = useState(false);
@@ -27,16 +22,28 @@ const SinglePost = forwardRef(({ post }, ref) => {
 
   const pressedLike = async () => {
     try {
-      if (liked) {
+      if (postInfo.isLiked) {
         const result = await unlikePost(post.id);
-        setLiked(result);
+        var likeCount = postInfo.likeCount;
+        result != postInfo.isLiked && likeCount--;
+        setPostInfo({
+          ...postInfo,
+          isLiked: result,
+          likeCount: likeCount,
+        });
       } else {
         const result = await likePost(post.id);
-        setLiked(result);
+        var likeCount = postInfo.likeCount;
+        result != postInfo.isLiked && likeCount++;
+        setPostInfo({ ...postInfo, isLiked: result, likeCount: likeCount });
       }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const openComments = () => {
+    router.push("/comments/" + post.id);
   };
 
   const video = useRef(null);
@@ -206,13 +213,9 @@ const SinglePost = forwardRef(({ post }, ref) => {
                   onPress={pressedLike}
                 >
                   {postInfo.isLiked ? (
-                    <Heart
-                      color="rgba(0, 0, 0, 0)"
-                      size={35}
-                      fill="#ff0000"
-                    ></Heart>
+                    <Heart color="rgba(0, 0, 0, 0)" size={35} fill="#ff0000" />
                   ) : (
-                    <Heart color="#fff" size={35}></Heart>
+                    <Heart color="#fff" size={35} />
                   )}
                   <Text style={{ color: "white" }}>
                     {postInfo.likeCount} Likes
@@ -223,10 +226,15 @@ const SinglePost = forwardRef(({ post }, ref) => {
                   color="#fff"
                   size={35}
                 ></Minus>
-                <View style={{ alignItems: "center" }}>
+                <TouchableWithoutFeedback
+                  style={{ alignItems: "center" }}
+                  onPress={openComments}
+                >
                   <MessageSquare color="#fff" size={35}></MessageSquare>
-                  <Text style={{ color: "white" }}>0 Comments</Text>
-                </View>
+                  <Text style={{ color: "white" }}>
+                    {postInfo.commentCount} Comments
+                  </Text>
+                </TouchableWithoutFeedback>
               </View>
             </View>
           )}

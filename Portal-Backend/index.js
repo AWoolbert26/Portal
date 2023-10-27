@@ -545,9 +545,15 @@ app.get("/getPostInfo/:postId", async (req, res) => {
       where: { postId: postId },
     });
 
-    // const commentCount =
+    const commentCount = await prisma.comment.count({
+      where: { postId: postId },
+    });
 
-    res.send({ isLiked: isLiked, likeCount: likeCount });
+    res.send({
+      isLiked: isLiked,
+      likeCount: likeCount,
+      commentCount: commentCount,
+    });
   } catch (err) {
     console.log(err);
     res.send(err);
@@ -580,6 +586,49 @@ app.delete("/unlikePost/:postId", async (req, res) => {
       where: { userId_postId: { userId: userId, postId: postId } },
     });
     deleted ? res.send(false) : res.send(true);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.post("/comment", async (req, res) => {
+  try {
+    const userId = getUserFromToken(req.headers.authorization).id;
+    const { newComment, postId } = req.body;
+
+    const comment = await prisma.comment.create({
+      data: {
+        User: { connect: { id: userId } },
+        Post: { connect: { id: postId } },
+        comment: newComment,
+      },
+    });
+
+    res.send(comment);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.post("/getComments/:postId", async (req, res) => {
+  try {
+    const postId = parseInt(req.params.postId);
+
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId: postId,
+      },
+      include: {
+        User: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
+    res.send(comments);
   } catch (err) {
     console.log(err);
     res.send(err);

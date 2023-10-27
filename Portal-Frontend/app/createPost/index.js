@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import {
-  Button,
   Platform,
   SafeAreaView,
   TextInput,
@@ -8,22 +7,13 @@ import {
   Text,
   View,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
 import { post } from "../../functions/post";
 import { Video } from "expo-av";
 import { Keyboard } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faMagnifyingGlass,
-  faCircle,
-  faUser,
-  faPlusCircle,
-  faSignOut,
-  faKeyboard,
-} from "@fortawesome/free-solid-svg-icons";
-import { Stack, router } from "expo-router";
+import { faKeyboard } from "@fortawesome/free-solid-svg-icons";
+import { Stack } from "expo-router";
 
 //error check for null description and fix case where no video was uploaded
 const CreatePost = () => {

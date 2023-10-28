@@ -43,6 +43,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
   };
 
   const openComments = () => {
+    setCaptionOpen(false);
     router.push("/comments/" + post.id);
   };
 

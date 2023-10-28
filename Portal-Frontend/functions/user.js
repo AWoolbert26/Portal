@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put an env file instead
-const backendUrl = "http://10.232.176.222:3000";
+const backendUrl = "http://10.232.159.93:3000";
 
 export const login = async (email, password) => {
   try {
@@ -101,7 +101,6 @@ export const getUserInformation = async () => {
 
 export const getOtherProfile = async (userId) => {
   const profile = await axios.get(`${backendUrl}/getOtherProfile/${userId}`);
-  console.log(`${backendUrl}/getOtherProfile/${userId}`);
   return profile.data;
 };
 
@@ -160,10 +159,10 @@ export const getPosts = async () => {
   }
 };
 
-export const getUser = async (username) => {
+export const getUsers = async (username) => {
   try {
     const user = await axios.get(
-      `${backendUrl}/searchUser?username=${username}`
+      `${backendUrl}/searchUsers?username=${username}`
     );
     return user;
   } catch (err) {
@@ -230,5 +229,25 @@ export const getComments = async (postId) => {
   } catch (err) {
     console.log(err);
     throw err;
+  }
+};
+
+export const likeComment = async (commentId) => {
+  try {
+    const response = await axios.post(`${backendUrl}/likeComment/${commentId}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const unlikeComment = async (commentId) => {
+  try {
+    const response = await axios.delete(
+      `${backendUrl}/unlikeComment/${commentId}`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
   }
 };

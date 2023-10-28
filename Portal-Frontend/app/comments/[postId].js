@@ -10,8 +10,18 @@ import {
 } from "react-native";
 import { Stack } from "expo-router/stack";
 import { useLocalSearchParams } from "expo-router";
-import { comment, getComments } from "../../functions/user";
+import {
+  comment,
+  getComments,
+  likeComment,
+  unlikeComment,
+} from "../../functions/user";
 import { Heart } from "lucide-react-native";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
+import { router } from "expo-router";
 
 const Comments = () => {
   const { postId } = useLocalSearchParams();
@@ -19,14 +29,37 @@ const Comments = () => {
   const [comments, setComments] = useState(null);
 
   const gettingComments = async () => {
-    console.log("getting comments");
     const result = await getComments(postId);
-    console.log(result);
-    setComments(result);
+    setComments(Object.values(result));
   };
 
-  const handleSubmit = async () => {
+  const createComment = async () => {
     const result = await comment({ newComment: newComment, postId: postId });
+    setComments([...comments, result]);
+  };
+
+  const pressedLike = async (comment) => {
+    if (comment.isLiked) {
+      const result = await unlikeComment(comment.id);
+      var likeCount = comment.likeCount;
+      result != comment.isLiked && likeCount--;
+      comment.likeCount = likeCount;
+      comment.isLiked = result;
+      const index = comments.findIndex((item) => item.id === comment.id);
+      const newComments = [...comments];
+      newComments[index] = comment;
+      setComments(newComments);
+    } else {
+      const result = await likeComment(comment.id);
+      var likeCount = comment.likeCount;
+      result != comment.isLiked && likeCount++;
+      comment.likeCount = likeCount;
+      comment.isLiked = result;
+      const index = comments.findIndex((item) => item.id === comment.id);
+      const newComments = [...comments];
+      newComments[index] = comment;
+      setComments(newComments);
+    }
   };
 
   useEffect(() => {
@@ -44,16 +77,19 @@ const Comments = () => {
       />
       {comments && (
         <FlatList
-          style={{ marginBottom: 47 }}
+          style={{ marginBottom: 85 }}
           data={comments}
           renderItem={({ item }) => (
             <View style={{ marginBottom: 25 }}>
-              <View
+              {/* how to make touch area smaller */}
+              <TouchableOpacity
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
                   marginBottom: 15,
+                  // backgroundColor: "white",
                 }}
+                onPress={() => router.push(`/user/${item.userId}`)}
               >
                 <Image
                   source={{
@@ -72,20 +108,27 @@ const Comments = () => {
                 <Text style={{ color: "white", marginLeft: 10, fontSize: 25 }}>
                   {item.User.username}
                 </Text>
-              </View>
+              </TouchableOpacity>
               <Text style={{ color: "white", marginLeft: 30 }}>
                 {item.comment}
               </Text>
-              <View
+              <TouchableWithoutFeedback
                 style={{
                   alignSelf: "flex-end",
                   marginRight: 40,
                   flexDirection: "row",
                 }}
+                onPress={() => pressedLike(item)}
               >
-                <Heart color="#fff" size={15} fill="#ffff" />
-                <Text style={{ color: "white", marginLeft: 10 }}>Like</Text>
-              </View>
+                {item.isLiked ? (
+                  <Heart color="rgba(0, 0, 0, 0)" size={15} fill="#ff0000" />
+                ) : (
+                  <Heart color="#fff" size={15} fill="#ffff" />
+                )}
+                <Text style={{ color: "white", marginLeft: 10 }}>
+                  {item.likeCount > 0 ? item.likeCount : "Like"}
+                </Text>
+              </TouchableWithoutFeedback>
             </View>
           )}
           keyExtractor={(item) => item.id}
@@ -112,7 +155,7 @@ const Comments = () => {
           }}
           onChangeText={(text) => setNewComment(text)}
         />
-        <Button title="Submit" onPress={handleSubmit} />
+        <Button title="Submit" onPress={createComment} />
       </View>
     </SafeAreaView>
   );

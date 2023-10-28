@@ -29,8 +29,9 @@ model User {
   //it's getting every follow where the current user is the "follower" 
   following Follow[] @relation("followers")
 
-  likedPosts Like[]
-  Comments   Comment[]
+  likedPosts    Like[]
+  Comments      Comment[]
+  likedComments CommentLike[]
 }
 
 model Category {
@@ -85,12 +86,22 @@ model Like {
 }
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id      Int           @id @default(autoincrement())
+  User    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
-  Post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  Post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId  Int
   comment String
+  likes   CommentLike[] @relation(fields: [], references: [])
+}
+
+model CommentLike {
+  Comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  commentId Int
+
+  @@id([userId, commentId])
 }
 
 model Follow {

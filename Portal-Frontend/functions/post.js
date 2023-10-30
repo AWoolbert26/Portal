@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import { router } from "expo-router";
 
-const backendUrl = "10.232.159.93:3000";
+const backendUrl = "http://10.232.159.123:3000";
 
 export const post = async (body) => {
   try {
@@ -14,6 +14,6 @@ export const post = async (body) => {
     router.replace("/home");
     // await axios.post(`${backendUrl}/post`, formData);
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };

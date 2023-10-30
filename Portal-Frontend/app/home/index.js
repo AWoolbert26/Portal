@@ -30,12 +30,12 @@ const Home = () => {
   };
 
   const settingPosts = async () => {
-    setPosts(await getPosts());
+    setPosts(await getPosts(currentCategory));
   };
 
   useEffect(() => {
     settingPosts();
-  }, []);
+  }, [currentCategory]);
 
   const postRefs = useRef([]);
   const onViewableItemsChanged = useRef(({ changed }) => {
@@ -64,37 +64,36 @@ const Home = () => {
           headerShown: false,
         }}
       />
+      {/* header */}
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "flex-end",
+          alignItems: "center",
           marginTop: 20,
         }}
       >
-        <View style={{ flex: 1 }}></View>
-        <View style={{ flex: 2 }}>
+        <View style={{ flex: 1, alignSelf: "center" }}>
           <Header
             openCategoryMenu={openCategoryMenu}
             currentCategory={currentCategory}
           />
         </View>
-        <View
-          style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}
-        >
-          <Link
-            href={{
-              pathname: "/home/categorySummary",
-              params: { categoryName: currentCategory },
-            }}
-            asChild
-          >
-            {currentCategory != "Home" && (
+        {/* shouldnt this be in the header component */}
+        {currentCategory != "Home" && (
+          <View style={{ marginRight: 10 }}>
+            <Link
+              href={{
+                pathname: "/home/categorySummary",
+                params: { categoryName: currentCategory },
+              }}
+              asChild
+            >
               <TouchableOpacity>
                 <Info size={35} color="#000" />
               </TouchableOpacity>
-            )}
-          </Link>
-        </View>
+            </Link>
+          </View>
+        )}
       </View>
       {/* page */}
       {/* <View style={{ flexDirection: "row", alignSelf: "center" }}>

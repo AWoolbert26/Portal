@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
   SafeAreaView,
@@ -14,6 +14,7 @@ import { Keyboard } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { Stack } from "expo-router";
+import { getCategories } from "../../functions/user";
 
 //error check for null description and fix case where no video was uploaded
 const CreatePost = () => {
@@ -22,6 +23,51 @@ const CreatePost = () => {
 
   const videoRef = useRef(false);
   const [status, setStatus] = useState({});
+
+  // const [categories, setCategories] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState({});
+
+  const categories = { 0: "Law", 1: "Computer Science", 2: "Business" };
+  // should we limit what categories each creator can post to?
+  // const getUsercategories = async () => {
+  //   try {
+  //     const gotCategories = await getCategories();
+
+  //     const formatedCategories = {};
+
+  //     gotCategories.categories.forEach((category) => {
+  //       formatedCategories[category.id] = category.name;
+  //     });
+  //     setCategories(formatedCategories);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  const pressed = (id) => {
+    if (selectedCategories[id] === undefined) {
+      //if not already selected
+      setSelectedCategories((current) => {
+        current[id] = categories[id];
+        return { ...current };
+      });
+    } else {
+      // console.log("here ", )
+      setSelectedCategories((current) => {
+        delete current[id];
+
+        return { ...current };
+      });
+    }
+  };
+
+  const getColor = (id) => {
+    //works, but color rerender doesn't work
+    if (id in selectedCategories) {
+      return "#5481C6";
+    }
+    return "black";
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -42,7 +88,6 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
 
   const submit = async () => {
-    console.log(description);
     setLoading(true);
     const body = new FormData();
     body.append("video", {
@@ -54,6 +99,8 @@ const CreatePost = () => {
       name: "video.mov",
     });
     body.append("description", description);
+    const stringifyedCategories = JSON.stringify(selectedCategories);
+    body.append("categories", stringifyedCategories);
 
     await post(body);
   };
@@ -110,6 +157,35 @@ const CreatePost = () => {
             icon={faKeyboard}
           />
         </TouchableOpacity>
+
+        {/* selectable categories */}
+        <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+          {categories &&
+            Object.entries(categories).map(([id, name]) => {
+              return (
+                <TouchableOpacity
+                  key={id}
+                  onPress={() => pressed(id)}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 10,
+                    borderColor: getColor(id),
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: getColor(id),
+                    }}
+                  >
+                    {name}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+        </View>
       </View>
 
       {/* audio only plays if phone not on silent */}
@@ -148,14 +224,26 @@ const CreatePost = () => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        disabled={video === null || description === "" ? true : false}
+        disabled={
+          video === null ||
+          description === "" ||
+          Object.keys(selectedCategories).length === 0
+            ? true
+            : false
+        }
         onPress={submit}
         style={{
           width: "95%",
           alignItems: "center",
           backgroundColor: "black",
           marginTop: 5,
-          opacity: loading || video === null || description === "" ? 0.2 : 1.0,
+          opacity:
+            loading ||
+            video === null ||
+            description === "" ||
+            Object.keys(selectedCategories).length === 0
+              ? 0.2
+              : 1.0,
         }}
       >
         <Text

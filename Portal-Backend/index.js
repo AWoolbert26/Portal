@@ -119,8 +119,6 @@ app.post("/register", async (req, res) => {
       },
     });
 
-    console.log("here");
-
     await prisma.profile.create({
       data: {
         userId: newUser.id,
@@ -262,6 +260,9 @@ app.post("/post", async (req, res) => {
     const user = getUserFromToken(req.headers.authorization);
     const video = req.files.video;
     const description = req.body.description;
+    const categories = Object.keys(JSON.parse(req.body.categories)).map(
+      (id) => ({ id: parseInt(id) })
+    );
 
     if (video !== "null" && video !== null) {
       const videoBuffer = Buffer.from(await video.data);
@@ -272,6 +273,7 @@ app.post("/post", async (req, res) => {
         data: {
           userId: user.id,
           description: description,
+          categories: { connect: categories },
         },
         select: {
           id: true,
@@ -431,37 +433,79 @@ app.get("/getCategorySummary", async (req, res) => {
 app.get("/getPosts", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-    const posts = await prisma.post.findMany({
-      where: {
-        OR: [
-          {
-            user: {
-              id: user.id,
+    const category = req.query.category;
+
+    // could make it where every post has a "Home" category to get rid of the if else
+    if (category == "Home") {
+      const posts = await prisma.post.findMany({
+        where: {
+          OR: [
+            {
+              user: {
+                id: user.id,
+              },
             },
-          },
-          {
-            user: {
-              followers: {
-                some: {
-                  followerId: user.id,
+            {
+              user: {
+                followers: {
+                  some: {
+                    followerId: user.id,
+                  },
                 },
               },
             },
-          },
-        ],
-      },
-      include: {
-        user: {
-          select: {
-            username: true,
+          ],
+        },
+        include: {
+          user: {
+            select: {
+              username: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    res.send(posts);
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      res.send(posts);
+    } else {
+      const posts = await prisma.post.findMany({
+        where: {
+          OR: [
+            {
+              user: {
+                id: user.id,
+              },
+            },
+            {
+              user: {
+                followers: {
+                  some: {
+                    followerId: user.id,
+                  },
+                },
+              },
+            },
+          ],
+          categories: {
+            some: {
+              name: category,
+            },
+          },
+        },
+        include: {
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      res.send(posts);
+    }
   } catch (err) {
     res.send(err);
   }

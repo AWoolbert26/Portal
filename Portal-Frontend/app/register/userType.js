@@ -6,7 +6,7 @@ import { router } from "expo-router";
 import { updateUserType } from "../../functions/user";
 
 const initProfile = () => {
-  const { authUser } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   if (authUser === null) {
     router.replace("/login");
   }
@@ -28,8 +28,10 @@ const initProfile = () => {
   const submit = async () => {
     if (selectedNumber !== 3 && selectedNumber !== 0) {
       //if 0 or 3, it will stay as 0 (default)
-      console.log(selectedNumber);
-      await updateUserType(selectedNumber);
+      // console.log(selectedNumber);
+      await updateUserType(selectedNumber).then((res) => {
+        setAuthUser(res);
+      });
     }
     router.replace("/register/categories");
   };

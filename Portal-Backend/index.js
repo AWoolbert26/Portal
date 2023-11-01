@@ -160,7 +160,7 @@ app.post("/register", async (req, res) => {
 //change user type
 app.patch("/updateUserType", async (req, res) => {
   try {
-    const user = getUserFromToken(req.headers.authorization);
+    var user = getUserFromToken(req.headers.authorization);
     await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -168,16 +168,22 @@ app.patch("/updateUserType", async (req, res) => {
       },
     });
 
-    const oldToken = req.headers.authorization;
-    const decodedToken = jsonwebtoken.decode(oldToken);
-    if (decodedToken && decodedToken.payload) {
-      decodedToken.payload.type = req.body.type;
-    }
+    user.type = req.body.type;
 
-    const newToken = jwt.sign(decodedToken.payload, secret);
+    // dont know if it works security wise because the previous token is still active
+    // will look into blacklisting later
+    // could also make the register web token only last for a few seconds
+    const oldToken = req.headers.authorization;
+    var decodedToken = jsonwebtoken.verify(oldToken, "secret");
+    decodedToken.data.type = req.body.type;
+
+    const newToken = jsonwebtoken.sign(
+      { exp: Math.floor(Date.now() / 1000) + 60 * 60, data: decodedToken.data },
+      "secret"
+    );
 
     res.status(200);
-    res.send({ token: newToken, msg: "Success" });
+    res.send({ authToken: newToken, msg: "Success", user: user });
   } catch (err) {
     res.status(500);
     res.send(err);

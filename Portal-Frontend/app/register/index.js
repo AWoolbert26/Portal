@@ -39,7 +39,7 @@ const Register = () => {
     register(data)
       .then((res) => {
         setAuthUser(res);
-        router.push("/register/userType");
+        router.replace("/register/userType");
       })
       .catch((err) => {
         console.log(err);

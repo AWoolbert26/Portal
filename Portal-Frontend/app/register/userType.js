@@ -31,7 +31,7 @@ const initProfile = () => {
       console.log(selectedNumber);
       await updateUserType(selectedNumber);
     }
-    router.push("/register/categories");
+    router.replace("/register/categories");
   };
 
   return (

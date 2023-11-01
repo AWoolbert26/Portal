@@ -121,6 +121,10 @@ app.post("/register", async (req, res) => {
 
     await prisma.profile.create({
       data: {
+        name: "Not Set",
+        bio: "Not Set",
+        location: "Not Set",
+        occupation: "Not Set",
         userId: newUser.id,
       },
     });
@@ -163,8 +167,17 @@ app.patch("/updateUserType", async (req, res) => {
         type: req.body.type,
       },
     });
+
+    const oldToken = req.headers.authorization;
+    const decodedToken = jsonwebtoken.decode(oldToken);
+    if (decodedToken && decodedToken.payload) {
+      decodedToken.payload.type = req.body.type;
+    }
+
+    const newToken = jwt.sign(decodedToken.payload, secret);
+
     res.status(200);
-    res.send("Success");
+    res.send({ token: newToken, msg: "Success" });
   } catch (err) {
     res.status(500);
     res.send(err);

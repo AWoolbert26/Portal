@@ -13,7 +13,7 @@ const Home = () => {
   };
 
   const goToRegisterPage = () => {
-    router.push("/register");
+    router.replace("/register");
   };
 
   const { authUser, setAuthUser } = useContext(AuthContext);

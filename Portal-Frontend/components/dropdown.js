@@ -49,7 +49,7 @@ const UserSearchDropdown = ({ onUserSelect }) => {
         <TextInput
           autoComplete="off"
           autoCorrect={false}
-          autoCapitalize={false}
+          autoCapitalize="none"
           placeholder="Search"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}

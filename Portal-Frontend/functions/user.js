@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put an env file instead
-const backendUrl = "http://10.232.156.55:3000";
+const backendUrl = "http://10.232.206.65:3000";
 
 export const login = async (email, password) => {
   try {

@@ -19,15 +19,13 @@ const UserSearchDropdown = ({ onUserSelect }) => {
 
   useEffect(() => {
     async function search() {
-      const user = await getUsers(searchQuery);
-      setSearchResults(user.data);
+      if(searchQuery){
+        const user = await getUsers(searchQuery);
+        setSearchResults(user.data);
+      }
     }
     search();
   }, [searchQuery]);
-
-  const handleUserSelect = (user) => {
-    onUserSelect(user);
-  };
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -50,7 +48,7 @@ const UserSearchDropdown = ({ onUserSelect }) => {
           autoComplete="off"
           autoCorrect={false}
           autoCapitalize="none"
-          placeholder="Search"
+          placeholder="Search usernames"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
           onFocus={() => setIsDropdownVisible(true)}
@@ -83,6 +81,8 @@ const UserSearchDropdown = ({ onUserSelect }) => {
                     borderBottomWidth: 1,
                     borderColor: "#ccc",
                     fontSize: 20,
+                    marginTop: 30,
+                    marginHorizontal: 10
                   }}
                 >
                   {user.username}

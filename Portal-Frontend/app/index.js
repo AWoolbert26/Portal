@@ -24,7 +24,7 @@ const Home = () => {
   });
 
   const goToUserProfile = () => {
-    router.replace("/userProfile");
+    router.replace("/register/profile");
   };
 
   const developerQuickLogin = () => {
@@ -64,6 +64,19 @@ const Home = () => {
       >
         <Text style={{ padding: 10 }}>Developer Quick Login</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{
+          backgroundColor: "lightgrey",
+          marginBottom: 10,
+          alignItems: "center",
+        }}
+        onPress={goToUserProfile}
+      >
+        <Text style={{ padding: 10 }}>Test User Profile Creation</Text>
+      </TouchableOpacity>
+
+
       <View
         style={{
           flex: 1,
@@ -86,6 +99,7 @@ const Home = () => {
             marginLeft: 6,
           }}
         >
+          
           <Text style={{}}>LOG IN</Text>
         </TouchableOpacity>
         <TouchableOpacity

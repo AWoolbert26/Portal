@@ -5,10 +5,6 @@ import Footer from "../../components/footer";
 import UserSearchDropdown from "../../components/dropdown";
 
 const SearchPage = () => {
-  const handleUserSelect = (user) => {
-    // Perform search or send searchQuery to parent component
-  };
-
   return (
     <SafeAreaView
       style={{ flex: 1, alignItems: "flex-start", justifyContent: "center" }}

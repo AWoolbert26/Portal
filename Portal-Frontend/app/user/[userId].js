@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { getOtherProfile } from "../../functions/user";
 import { toggleFollow } from "../../functions/user";
+import { Stack } from "expo-router";
 
 const Profile = () => {
   const { userId } = useLocalSearchParams();
@@ -17,7 +18,6 @@ const Profile = () => {
   const getProfileInfo = async () => {
     const receivedProfile = await getOtherProfile(userId);
     setProfile(receivedProfile);
-    console.log(receivedProfile);
   };
   useEffect(() => {
     getProfileInfo();
@@ -27,6 +27,13 @@ const Profile = () => {
     <SafeAreaView
       style={{ flex: 1, alignItems: "center", gap: 20, marginTop: 15 }}
     >
+      <Stack.Screen
+        options={{
+          title: "",
+          headerStyle: { backgroundColor: 'transparent'},
+          headerTransparent: true
+        }}
+      />
       {profile && (
         <>
           <Image

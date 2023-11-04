@@ -44,7 +44,6 @@ const getUserFromToken = (token) => {
 app.post("/checkUniqueEmail", async (req, res) => {
   try {
     const body = req.body;
-
     const user = await prisma.user.findFirst({
       where: { email: body.email },
     });
@@ -393,32 +392,16 @@ app.get("/getProfileInformation", async (req, res) => {
         userId: user.id,
       },
     });
-    //send whether they follow in this
-    const follows = await getFollows(user, profile.userId);
-    profile["follows"] = follows ? true : false;
-    console.log(profile["follows"]);
+    
+    // //send whether they follow in this
+    // const follows = await getFollows(user, profile.userId);
+    // profile["follows"] = follows ? true : false;
+
     res.send(profile);
   } catch (err) {
     res.send(err);
   }
 });
-
-// const getCategoryId = async (name) => {
-//   try {
-//     const categoryId = await prisma.category.findUnique({
-//       where: {
-//         name: name
-//       },
-//       select: {
-//         id: true,
-//       }
-//     });
-//     print("Category Id: " + categoryId)
-//     return categoryId
-//   } catch (err) {
-//     return err;
-//   }
-// }
 
 // deserializes, supplying single string for common traits and hard values that should be seperated by ','
 app.get("/getCategorySummary", async (req, res) => {
@@ -531,11 +514,14 @@ app.get("/getPosts", async (req, res) => {
 });
 
 app.get("/searchUsers", async (req, res) => {
+  console.log("Query: " + req.query.username)
+  const currentUser = getUserFromToken(req.headers.authorization);
   try {
     const users = await prisma.user.findMany({
       where: {
         username: {
           contains: req.query.username,
+          not: currentUser.username,
         },
       },
       select: {

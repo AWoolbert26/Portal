@@ -55,7 +55,7 @@ const categories = () => {
 
     selectCategories(selectedCategories)
       .then((res) => {
-        router.replace("/home");
+        router.replace("/register/profile");
       })
       .catch((err) => {
         //handle any errors in a better way

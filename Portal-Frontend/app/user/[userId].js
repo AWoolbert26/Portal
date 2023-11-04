@@ -8,20 +8,47 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { getOtherProfile } from "../../functions/user";
-import { toggleFollow } from "../../functions/user";
+import { toggleFollow, checkFollowing } from "../../functions/user";
 import { Stack } from "expo-router";
 
 const Profile = () => {
   const { userId } = useLocalSearchParams();
   const [profile, setProfile] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followingBorderColor, setFollowingBorderColor] = useState("black")
+  const [followingColor, setFollowingColor] = useState("transparent")
+  const [followingTextColor, setFollowingTextColor] = useState("black")
+  const [followingText, setFollowingText] = useState("Follow")
 
   const getProfileInfo = async () => {
     const receivedProfile = await getOtherProfile(userId);
     setProfile(receivedProfile);
+    
+    const check = await checkFollowing(userId);
+    setIsFollowing(check)
   };
   useEffect(() => {
     getProfileInfo();
   }, []);
+
+  const handleFollowToggle = async () => {
+    const isNowFollowing = await toggleFollow(profile.userId);
+    setIsFollowing(isNowFollowing);
+  };
+
+  useEffect(() => {
+    if (isFollowing) {
+      setFollowingBorderColor("transparent");
+      setFollowingTextColor("white");
+      setFollowingColor("black");
+      setFollowingText("Following");
+    } else {
+      setFollowingBorderColor("black");
+      setFollowingTextColor("black");
+      setFollowingText("Follow");
+      setFollowingColor("transparent");
+    }
+  }, [isFollowing]);
 
   return (
     <SafeAreaView
@@ -55,11 +82,12 @@ const Profile = () => {
             style={{
               borderStyle: "solid",
               borderWidth: 1,
-              borderColor: "black",
+              borderColor: followingBorderColor,
+              backgroundColor: followingColor,
             }}
-            onPress={() => toggleFollow(profile.userId)}
+            onPress={handleFollowToggle}
           >
-            <Text style={{ padding: 10 }}>Follow</Text>
+            <Text style={{ padding: 10, color: followingTextColor }}>{followingText}</Text>
           </TouchableOpacity>
         </>
       )}

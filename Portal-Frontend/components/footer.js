@@ -21,7 +21,7 @@ const Footer = () => {
   };
 
   const goToSearch = () => {
-    router.replace("/search");
+    router.push("/search");
   };
 
   const goToProfile = () => {

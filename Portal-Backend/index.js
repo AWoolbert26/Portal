@@ -547,6 +547,17 @@ const getFollows = async (followerId, followeeId) => {
   return follows ? true : false;
 };
 
+app.get("/checkFollowing/:userId", async(req, res) => {
+  try {
+    const user = await getUserFromToken(req.headers.authorization);
+    const follows = await getFollows(user.id, parseInt(req.params.userId));
+    console.log("Follows" + follows)
+    res.send(follows)
+  } catch (err) {
+    throw err
+  }
+})
+
 app.get("/toggleFollow/:userId", async (req, res) => {
   try {
     const user = await getUserFromToken(req.headers.authorization);

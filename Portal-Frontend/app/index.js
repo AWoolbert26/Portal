@@ -23,10 +23,6 @@ const Home = () => {
     }
   });
 
-  const goToUserProfile = () => {
-    router.replace("/register/profile");
-  };
-
   const developerQuickLogin = () => {
     login("a@gmail.com", "a")
       .then((res) => {
@@ -64,19 +60,6 @@ const Home = () => {
       >
         <Text style={{ padding: 10 }}>Developer Quick Login</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{
-          backgroundColor: "lightgrey",
-          marginBottom: 10,
-          alignItems: "center",
-        }}
-        onPress={goToUserProfile}
-      >
-        <Text style={{ padding: 10 }}>Test User Profile Creation</Text>
-      </TouchableOpacity>
-
-
       <View
         style={{
           flex: 1,

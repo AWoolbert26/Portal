@@ -184,6 +184,16 @@ export const toggleFollow = async (userId) => {
   }
 };
 
+export const checkFollowing = async (userId) => {
+  try {
+    const response = await axios.get(`${backendUrl}/checkFollowing/${userId}`);
+    print("Data: " + response.data)
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getPostInfo = async (postId) => {
   try {
     const postInfo = await axios.get(`${backendUrl}/getPostInfo/${postId}`);

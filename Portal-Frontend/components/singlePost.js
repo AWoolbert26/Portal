@@ -192,12 +192,6 @@ const SinglePost = forwardRef(({ post }, ref) => {
                 }}
               >
                 {post.description}
-                filler filler filler filler filler filler filler filler filler
-                filler filler filler filler filler filler filler filler filler
-                filler filler filler filler filler filler filler filler filler
-                filler filler filler filler filler filler filler filler filler
-                filler filler filler filler filler filler filler filler filler
-                filler filler filler filler filler filler filler filler filler
               </Text>
               {/* should I make the buttons easier to click? */}
               {/* also spacing seems off */}

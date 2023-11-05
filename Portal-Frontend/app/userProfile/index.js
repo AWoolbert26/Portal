@@ -22,6 +22,10 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import Footer from "../../components/footer";
 const ScreenWidth = Dimensions.get("window").width;
+import { getUserPosts } from "../../functions/user";
+import MiniPost from "../../components/miniPost";
+import SinglePost from "../../components/singlePost";
+import { X } from "lucide-react-native";
 
 const userProfile = () => {
   const {
@@ -49,6 +53,14 @@ const userProfile = () => {
   const [editScreenVisible, setEditScreenVisible] = useState(false);
   const show = () => setEditScreenVisible(true);
   const [followers, setFollowers] = useState(0);
+  const [userPosts, setUserPosts] = useState([]);
+  const numColumns = 3
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   useEffect(() => {
     getUserInformation()
@@ -92,6 +104,18 @@ const userProfile = () => {
         console.error("Error while retrieving profile:", error);
       });
   }, [editScreenVisible]);
+
+  useEffect(() => {
+    // Fetch and set the user's posts when the profile component loads
+    getUserPosts()
+      .then((posts) => {
+        setUserPosts(posts);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
 
   const onSubmit = async (data) => {
     try {
@@ -188,7 +212,7 @@ const userProfile = () => {
             }}
             //onPress={show}
           >
-            <Text style={{ color: "white" }}>Message</Text>
+            <Text style={{ color: "white" }}>Messages</Text>
           </TouchableOpacity>
 
           {/* //following button */}
@@ -376,9 +400,30 @@ const userProfile = () => {
 
           {/* posts */}
 
-    <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', padding: 4 }}>
-     
-    </View>
+      <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', padding: 4 }}>
+        {userPosts.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => {
+              setSelectedPost(item);
+              setModalVisible(true);
+            }}
+          >
+          <MiniPost post={item} />
+         </TouchableOpacity>
+        ))}
+        
+        <Modal 
+          visible={modalVisible} 
+          animationType="slide"
+        >
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'black'}}>
+            <SinglePost post={selectedPost}/>
+            <TouchableOpacity onPress={() => setModalVisible(false)} style={{marginTop: 20}}><X color="white"/></TouchableOpacity>
+          </View>
+        </Modal>
+
+      </View>
       </ScrollView>
       <Footer/>
     </SafeAreaView>

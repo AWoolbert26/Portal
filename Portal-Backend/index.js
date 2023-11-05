@@ -436,7 +436,6 @@ app.get("/getPosts", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const category = req.query.category;
-
     // could make it where every post has a "Home" category to get rid of the if else
     if (category == "Home") {
       const posts = await prisma.post.findMany({
@@ -512,6 +511,34 @@ app.get("/getPosts", async (req, res) => {
     res.send(err);
   }
 });
+
+app.get("/getUserPosts", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const userId = user.id;
+    const posts = await prisma.post.findMany({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    res.send(posts);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 
 app.get("/searchUsers", async (req, res) => {
   console.log("Query: " + req.query.username)

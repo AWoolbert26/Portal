@@ -164,6 +164,17 @@ export const getPosts = async (category) => {
   }
 };
 
+export const getUserPosts = async () => {
+  try {
+    const posts = await axios.get(`${backendUrl}/getUserPosts`);
+    console.log(posts.data)
+    return posts.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
 export const getUsers = async (username) => {
   try {
     const user = await axios.get(

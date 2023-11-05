@@ -336,6 +336,57 @@ app.post("/post", async (req, res) => {
   }
 });
 
+
+app.post('/uploadProfilePicture', async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const image = req.files.profilePicture;
+    
+    if (image !== null) {
+      const imageBuffer = Buffer.from(await image.data);
+      const fileExtension = 'jpg'; // Change this to match the actual file extension
+
+      const commandParams = {
+        Key: `profilePictures/${user.id}.${fileExtension}`, // Unique key for the image
+        Bucket: 'portal-437',
+        Body: imageBuffer,
+        Metadata: {
+          'Cache-Control': 'max-age=60',
+        },
+      };
+      const s3Response = await s3Client.send(new PutObjectCommand(commandParams));
+      const imageUrl = `${process.env.S3_DOMAIN}/profilePictures/${user.id}.${fileExtension}`;
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { profilePicture: imageUrl },
+      });
+
+      console.log('Profile picture uploaded successfully');
+      res.send('Success');
+    } 
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+app.get("/getProfilePicture", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const userId = user.id
+    const profilePicture = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        profilePicture: true,
+      },
+    });
+    res.send(profilePicture)
+  } catch (e) {
+    throw e
+  }
+})
+
 app.post("/setProfileInformation", async (req, res) => {
   try {
     const tokenUser = getUserFromToken(req.headers.authorization);

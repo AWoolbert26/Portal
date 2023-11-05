@@ -26,6 +26,7 @@ import { getUserPosts } from "../../functions/user";
 import MiniPost from "../../components/miniPost";
 import SinglePost from "../../components/singlePost";
 import { X } from "lucide-react-native";
+import { getProfilePicture } from "../../functions/user";
 
 const userProfile = () => {
   const {
@@ -57,10 +58,19 @@ const userProfile = () => {
   const numColumns = 3
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  useEffect(() => {
+    async function fetchProfilePicture() {
+      try {
+        const url = await getProfilePicture();
+        setProfilePictureUrl(url.profilePicture);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchProfilePicture();
+  }, []);
 
   useEffect(() => {
     getUserInformation()
@@ -157,9 +167,8 @@ const userProfile = () => {
               marginRight: 20,
               borderRadius: 100,
             }}
-            source={{
-              uri: "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
-            }}
+            source={{ url: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80" }}
+            resizeMode={'cover'}
           />
         </View>
         <View
@@ -286,9 +295,8 @@ const userProfile = () => {
                     marginTop: 60,
                     borderRadius: 100,
                   }}
-                  source={{
-                    uri: "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
-                  }}
+                  source={{ url: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80" }}
+                  resizeMode={'cover'}
                 />
                 <View
                   style={{

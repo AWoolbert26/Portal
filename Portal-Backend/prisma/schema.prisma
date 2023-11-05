@@ -19,7 +19,7 @@ model User {
   categories Category[]
   profile    Profile?
   posts      Post[]
-
+  profilePicture String?
   createdAt DateTime @default(now())
 
   //user followers is all the people following the user

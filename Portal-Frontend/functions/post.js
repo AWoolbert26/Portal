@@ -17,3 +17,32 @@ export const post = async (body) => {
     console.log(error.message);
   }
 };
+
+export const postProfilePicture = async (formData) => {
+  try {
+    const response = await axios.post(`${backendUrl}/uploadProfilePicture`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+      },
+    });
+    router.replace("/home")
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    throw error;
+  }
+};
+
+export const getProfilePicture = async () => {
+  try { 
+    
+  } catch (e) {
+    throw e
+  }
+}
+
+
+
+
+
+

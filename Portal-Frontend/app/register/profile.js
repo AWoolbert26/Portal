@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Text, View, TextInput, Button, Alert, SafeAreaView, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView} from "react-native";
+import { Text, View, TextInput, SafeAreaView, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView} from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Stack } from "expo-router/stack";
 import { AuthContext } from "../auth/AuthContext";
@@ -9,10 +9,10 @@ import { setProfile } from "../../functions/user";
 const ScreenWidth = Dimensions.get("window").width;
 
 const createProfile = () => {
-    // const { authUser, setAuthUser } = useContext(AuthContext);
-    // if (authUser === null) {
-    //   router.replace("/login");
-    // }
+    const { authUser, setAuthUser } = useContext(AuthContext);
+    if (authUser === null) {
+      router.replace("/login");
+    }
     const [autofillValue, setAutoFillValue] = useState('')
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -25,7 +25,7 @@ const createProfile = () => {
       const onSubmit = async (data) => {
         setProfile(data)
             .then((res) => {
-                router.replace("/home");
+                router.replace("/register/profilePicture");
             })
             .catch((err) => {
                 console.log(err);

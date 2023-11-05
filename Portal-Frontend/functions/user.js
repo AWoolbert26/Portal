@@ -167,7 +167,6 @@ export const getPosts = async (category) => {
 export const getUserPosts = async () => {
   try {
     const posts = await axios.get(`${backendUrl}/getUserPosts`);
-    console.log(posts.data)
     return posts.data;
   } catch (err) {
     console.log(err);
@@ -277,3 +276,12 @@ export const unlikeComment = async (commentId) => {
     console.log(err);
   }
 };
+
+export const getProfilePicture = async () => {
+  try {
+    const res = await axios.get(`${backendUrl}/getProfilePicture`);
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}

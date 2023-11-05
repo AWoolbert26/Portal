@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, SafeAreaView } from "react-native";
+import { View, SafeAreaView, Text } from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -9,8 +9,10 @@ import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
 import { getPosts } from "../../functions/user";
 import SinglePost from "../../components/singlePost";
+import { Dimensions } from "react-native";
 
 const Home = () => {
+  const ScreenHeight = Dimensions.get("window").height;
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const statusBarBGColor = useRef("white");
   const [currentCategory, setCurrentCategory] = useState("Home");
@@ -108,7 +110,7 @@ const Home = () => {
           })}
       </View> */}
       {/* posts */}
-      {!categoryMenuOpen && posts && (
+      {!categoryMenuOpen && posts && posts.length > 0 ? (
         <FlatList
           style={{ marginBottom: 47 }}
           data={posts}
@@ -125,6 +127,10 @@ const Home = () => {
           removeClippedSubviews
           viewabilityConfig={{ itemVisiblePercentThreshold: 75 }}
         />
+      ) : (
+        <View style={{ flex: 1, justifyContent: "start", alignItems: "center" }}>
+          <Text style={{marginTop: ScreenHeight / 3 }}>Follow users to see videos!</Text>
+        </View>
       )}
       {/* footer */}
       <Footer />

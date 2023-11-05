@@ -27,8 +27,19 @@ const CreatePost = () => {
   // const [categories, setCategories] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({});
 
-  const categories = { 0: "Law", 1: "Computer Science", 2: "Business" };
-  // should we limit what categories each creator can post to?
+  const categories = { 
+    0: "Law", 
+    1: "Computer Science", 
+    2: "Business", 
+    3: "Politics", 
+    4: "Mechanical Engineering", 
+    5: "Art",
+    6: "Retail",
+    7: "Agriculture",
+    8: "Sales",
+    9: "Healthcare",
+    10: "Media and Entertainment"
+  };  // should we limit what categories each creator can post to?
   // const getUsercategories = async () => {
   //   try {
   //     const gotCategories = await getCategories();
@@ -159,7 +170,16 @@ const CreatePost = () => {
         </TouchableOpacity>
 
         {/* selectable categories */}
-        <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+          <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            marginTop: 20,
+            flexWrap: "wrap",
+            justifyContent: "center"
+          }}
+        >
           {categories &&
             Object.entries(categories).map(([id, name]) => {
               return (

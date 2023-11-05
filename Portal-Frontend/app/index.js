@@ -23,6 +23,10 @@ const Home = () => {
     }
   });
 
+  const goToProfilePicture = () => {
+    router.replace("/register/categories");
+  };
+
   const developerQuickLogin = () => {
     login("a@gmail.com", "a")
       .then((res) => {
@@ -60,6 +64,7 @@ const Home = () => {
       >
         <Text style={{ padding: 10 }}>Developer Quick Login</Text>
       </TouchableOpacity>
+
       <View
         style={{
           flex: 1,

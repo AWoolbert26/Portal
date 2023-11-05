@@ -387,6 +387,23 @@ app.get("/getProfilePicture", async (req, res) => {
   }
 })
 
+app.get("/getOtherProfilePicture/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const profilePicture = await prisma.user.findUnique({
+      where: {
+        id: parseInt(userId),
+      },
+      select: {
+        profilePicture: true,
+      },
+    });
+    res.send(profilePicture)
+  } catch (e) {
+    throw e
+  }
+})
+
 app.post("/setProfileInformation", async (req, res) => {
   try {
     const tokenUser = getUserFromToken(req.headers.authorization);

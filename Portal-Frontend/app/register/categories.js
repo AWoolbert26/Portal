@@ -12,7 +12,19 @@ const categories = () => {
     router.replace("/login");
   }
 
-  const allcategories = { 0: "Law", 1: "Computer Science", 2: "Business" };
+  const allcategories = { 
+    0: "Law", 
+    1: "Computer Science", 
+    2: "Business", 
+    3: "Politics", 
+    4: "Mechanical Engineering", 
+    5: "Art",
+    6: "Retail",
+    7: "Agriculture",
+    8: "Sales",
+    9: "Healthcare",
+    10: "Media and Entertainment"
+  };
 
   const [selectedCategories, setSelectedCategories] = useState({});
 
@@ -30,7 +42,6 @@ const categories = () => {
       selected.current--;
       setSelectedCategories((current) => {
         delete current[key];
-
         return { ...current };
       });
     }
@@ -75,7 +86,7 @@ const categories = () => {
         {/* bro hardcoding -- wrap this cuh */}
         {/* will change when we put in more */}
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
-          Select at most three of your
+          Select your favorite
         </Text>
         <Text style={{ fontWeight: "bold", fontSize: 25 }}>
           professional and academic
@@ -109,8 +120,10 @@ const categories = () => {
         style={{
           flexDirection: "row",
           gap: 10,
-          alignSelf: "center",
-          marginTop: 20,
+          alignItems: "center",
+          marginTop: 30,
+          flexWrap: "wrap",
+          justifyContent: "center"
         }}
       >
         {Object.entries(allcategories).map(([key, value]) => {

@@ -285,3 +285,12 @@ export const getProfilePicture = async () => {
     console.log(err)
   }
 }
+
+export const getOtherProfilePicture = async (userId) => {
+  try {
+    const res = await axios.get(`${backendUrl}/getOtherProfilePicture/${userId}`);
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}

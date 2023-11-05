@@ -10,6 +10,7 @@ import {
 import { getOtherProfile } from "../../functions/user";
 import { toggleFollow, checkFollowing } from "../../functions/user";
 import { Stack } from "expo-router";
+import { getOtherProfilePicture } from "../../functions/user";
 
 const Profile = () => {
   const { userId } = useLocalSearchParams();
@@ -19,8 +20,10 @@ const Profile = () => {
   const [followingColor, setFollowingColor] = useState("transparent")
   const [followingTextColor, setFollowingTextColor] = useState("black")
   const [followingText, setFollowingText] = useState("Follow")
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
   const getProfileInfo = async () => {
+    
     const receivedProfile = await getOtherProfile(userId);
     setProfile(receivedProfile);
     
@@ -29,6 +32,18 @@ const Profile = () => {
   };
   useEffect(() => {
     getProfileInfo();
+  }, []);
+
+  useEffect(() => {
+    async function fetchProfilePicture() {
+      try {
+        const url = await getOtherProfilePicture(userId);
+        setProfilePictureUrl(url.profilePicture);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchProfilePicture();
   }, []);
 
   const handleFollowToggle = async () => {
@@ -71,7 +86,7 @@ const Profile = () => {
               borderWidth: 3,
             }}
             source={{
-              uri: "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+              uri: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
             }}
           />
           <Text>Name: {profile.name}</Text>

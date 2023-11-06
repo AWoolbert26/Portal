@@ -18,9 +18,9 @@ const ProfilePictureUploader = () => {
   const profilePictureRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const { authUser, setAuthUser } = useContext(AuthContext);
-  // if (authUser === null) {
-  //   router.replace("/login");
-  // }
+  if (authUser === null) {
+    router.replace("/login");
+  }
   
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

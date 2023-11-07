@@ -11,24 +11,24 @@ import { getOtherProfile } from "../../functions/user";
 import { toggleFollow, checkFollowing } from "../../functions/user";
 import { Stack } from "expo-router";
 import { getOtherProfilePicture } from "../../functions/user";
+import { router } from "expo-router";
 
 const Profile = () => {
   const { userId } = useLocalSearchParams();
   const [profile, setProfile] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [followingBorderColor, setFollowingBorderColor] = useState("black")
-  const [followingColor, setFollowingColor] = useState("transparent")
-  const [followingTextColor, setFollowingTextColor] = useState("black")
-  const [followingText, setFollowingText] = useState("Follow")
+  const [followingBorderColor, setFollowingBorderColor] = useState("black");
+  const [followingColor, setFollowingColor] = useState("transparent");
+  const [followingTextColor, setFollowingTextColor] = useState("black");
+  const [followingText, setFollowingText] = useState("Follow");
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
   const getProfileInfo = async () => {
-    
     const receivedProfile = await getOtherProfile(userId);
     setProfile(receivedProfile);
-    
+
     const check = await checkFollowing(userId);
-    setIsFollowing(check)
+    setIsFollowing(check);
   };
   useEffect(() => {
     getProfileInfo();
@@ -65,6 +65,10 @@ const Profile = () => {
     }
   }, [isFollowing]);
 
+  const message = () => {
+    router.push(`message/${userId}`);
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, alignItems: "center", gap: 20, marginTop: 15 }}
@@ -72,8 +76,8 @@ const Profile = () => {
       <Stack.Screen
         options={{
           title: "",
-          headerStyle: { backgroundColor: 'transparent'},
-          headerTransparent: true
+          headerStyle: { backgroundColor: "transparent" },
+          headerTransparent: true,
         }}
       />
       {profile && (
@@ -86,7 +90,9 @@ const Profile = () => {
               borderWidth: 3,
             }}
             source={{
-              uri: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+              uri:
+                profilePictureUrl ||
+                "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
             }}
           />
           <Text>Name: {profile.name}</Text>
@@ -102,7 +108,20 @@ const Profile = () => {
             }}
             onPress={handleFollowToggle}
           >
-            <Text style={{ padding: 10, color: followingTextColor }}>{followingText}</Text>
+            <Text style={{ padding: 10, color: followingTextColor }}>
+              {followingText}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "black",
+              backgroundColor: "white",
+            }}
+            onPress={message}
+          >
+            <Text style={{ padding: 10, color: "black" }}>Message</Text>
           </TouchableOpacity>
         </>
       )}

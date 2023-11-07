@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import socket from "../utils/socket";
 
 //put an env file instead
 const backendUrl = "http://10.232.157.157:3000";
@@ -12,6 +13,12 @@ export const login = async (email, password) => {
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
+
+    const id = result.data.user.id;
+    socket.auth = { id };
+    socket.connect();
+    console.log("socket connected");
+
     return result.data.user; //returns user object
   } catch (err) {
     throw err;
@@ -20,6 +27,7 @@ export const login = async (email, password) => {
 
 export const deleteAuthUser = async () => {
   try {
+    socket.disconnect();
     await SecureStore.deleteItemAsync("authToken");
   } catch (err) {
     throw err;
@@ -59,6 +67,11 @@ export const register = async ({ email, password, username }) => {
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
+
+    const id = result.data.user.id;
+    socket.auth = { id };
+    socket.connect();
+    console.log("socket connected");
 
     return result.data.user;
   } catch (err) {

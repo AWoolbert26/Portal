@@ -6,6 +6,9 @@ import jsonwebtoken from "jsonwebtoken";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import fileUpload from "express-fileupload";
 import cors from "cors";
+import { S3Client } from "@aws-sdk/client-s3";
+import { connect } from "http2";
+import * as http from "http";
 
 const app = express();
 const port = 3000;
@@ -17,9 +20,6 @@ app.use(
   })
 );
 app.use(cors());
-
-import { S3Client } from "@aws-sdk/client-s3";
-import { connect } from "http2";
 
 // const globalForS3 = globalThis
 
@@ -124,6 +124,7 @@ app.post("/register", async (req, res) => {
         bio: "Not Set",
         location: "Not Set",
         occupation: "Not Set",
+        id: newUser.id,
         userId: newUser.id,
       },
     });
@@ -248,6 +249,13 @@ app.get("/getOtherProfile/:userId", async (req, res) => {
     const userId = req.params.userId;
     const profile = await prisma.profile.findFirst({
       where: { userId: parseInt(userId) },
+      include: {
+        user: {
+          select: {
+            profilePicture: true,
+          },
+        },
+      },
     });
     res.send(profile);
   } catch (err) {
@@ -384,7 +392,7 @@ app.get("/getProfilePicture", async (req, res) => {
     });
     res.send(profilePicture);
   } catch (e) {
-    throw e;
+    res.send(e);
   }
 });
 
@@ -611,7 +619,6 @@ app.get("/getUserPosts", async (req, res) => {
 });
 
 app.get("/searchUsers", async (req, res) => {
-  console.log("Query: " + req.query.username);
   const currentUser = getUserFromToken(req.headers.authorization);
   try {
     const users = await prisma.user.findMany({
@@ -626,7 +633,6 @@ app.get("/searchUsers", async (req, res) => {
         username: true,
       },
     });
-    console.log(users);
     res.send(users);
   } catch (err) {
     res.send(err);
@@ -640,7 +646,6 @@ const getFollows = async (followerId, followeeId) => {
       followerId: followerId,
     },
   });
-  console.log(follows);
   return follows ? true : false;
 };
 
@@ -648,10 +653,9 @@ app.get("/checkFollowing/:userId", async (req, res) => {
   try {
     const user = await getUserFromToken(req.headers.authorization);
     const follows = await getFollows(user.id, parseInt(req.params.userId));
-    console.log("Follows" + follows);
     res.send(follows);
   } catch (err) {
-    throw err;
+    res.send(err);
   }
 });
 
@@ -896,6 +900,99 @@ app.get("/getTopUsers", async (req, res) => {
   }
 });
 
+app.get("/messages/:userId", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const messages = await prisma.message.findMany({
+      where: {
+        OR: [
+          {
+            senderId: user.id,
+            receiverId: parseInt(req.params.userId),
+          },
+          {
+            receiverId: user.id,
+            senderId: parseInt(req.params.userId),
+          },
+        ],
+      },
+    });
+    res.send(messages);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+});
+
+//SOCKET
+import { Server } from "socket.io";
+const socketPort = 3001;
+const socketApp = express();
+// socketApp.use(express.urlencoded({ extended: true }));
+socketApp.use(express.json());
+socketApp.use(cors());
+const server = http.createServer(socketApp);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+server.listen(socketPort, () => {
+  console.log(`Server listening on ${socketPort}`);
+});
+
+//for authorizing socket user by id
+io.use((socket, next) => {
+  console.log("authorized");
+  const id = socket.handshake.auth.id;
+  if (!id) {
+    return next(new Error("invalid id"));
+  }
+  socket.id = id;
+  next();
+});
+
+io.on("connection", (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`);
+
+  // after a user connects, it will listen for messages
+  socket.on("private message", async ({ content, to }) => {
+    //create message in DB
+    const newMsg = await prisma.message.create({
+      data: {
+        senderId: socket.id,
+        receiverId: parseInt(to),
+        text: content,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    //sending response back to sender
+    socket.emit("private message", {
+      senderId: socket.id,
+      text: content,
+      id: newMsg.id,
+      createdAt: newMsg.createdAt,
+    });
+    //send response to receiver
+    socket.to(parseInt(to)).emit("private message", {
+      senderId: socket.id,
+      id: newMsg.id,
+      text: content,
+      createdAt: newMsg.createdAt,
+    });
+  });
+
+  socket.on("disconnect", () => {
+    socket.disconnect();
+    console.log("🔥: A user disconnected");
+  });
 });

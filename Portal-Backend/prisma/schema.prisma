@@ -11,16 +11,16 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement()) // decided to use int instead of uuid
-  email      String     @unique
-  password   String
-  username   String     @unique
-  type       Int        @default(0) // 0 for user, 1 for creator, 2 for company, 3 for not sure
-  categories Category[]
-  profile    Profile?
-  posts      Post[]
+  id             Int        @id @default(autoincrement()) // decided to use int instead of uuid
+  email          String     @unique
+  password       String
+  username       String     @unique
+  type           Int        @default(0) // 0 for user, 1 for creator, 2 for company, 3 for not sure
+  categories     Category[]
+  profile        Profile?
+  posts          Post[]
   profilePicture String?
-  createdAt DateTime @default(now())
+  createdAt      DateTime   @default(now())
 
   //user followers is all the people following the user
   //it's getting every one where the current user is the "following"
@@ -29,9 +29,11 @@ model User {
   //it's getting every follow where the current user is the "follower" 
   following Follow[] @relation("followers")
 
-  likedPosts    Like[]
-  Comments      Comment[]
-  likedComments CommentLike[]
+  likedPosts       Like[]
+  Comments         Comment[]
+  likedComments    CommentLike[]
+  sentMessages     Message[]     @relation("sentMessages")
+  receivedMessages Message[]     @relation("receivedMessages")
 }
 
 model Category {
@@ -123,4 +125,14 @@ model Follow {
   createdAt  DateTime @default(now())
 
   @@id([followerId, followeeId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation(name: "sentMessages", fields: [senderId], references: [id])
+  receiver   User     @relation(name: "receivedMessages", fields: [receiverId], references: [id])
+  text       String
+  senderId   Int
+  receiverId Int
+  createdAt  DateTime @default(now())
 }

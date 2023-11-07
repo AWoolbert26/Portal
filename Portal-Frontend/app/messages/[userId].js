@@ -62,7 +62,7 @@ const Message = () => {
       <Stack.Screen
         options={{
           //for customizing header to make it a link to their profile
-
+          title: "Message",
           headerTitle: (props) => (
             <Link href={`/user/${userId}`} style={{}}>
               <View>
@@ -88,9 +88,7 @@ const Message = () => {
           style={{
             marginHorizontal: 5,
             marginVertical: 5,
-            height: "100%",
           }}
-          automaticallyAdjustKeyboardInsets={true}
           ref={scrollRef}
           onContentSizeChange={() => scrollRef.current.scrollToEnd()}
         >
@@ -157,6 +155,10 @@ const Message = () => {
             multiline
             value={text}
             onChangeText={(newText) => setText(newText)}
+            //scroll the scroll view up when you click
+            onPressOut={() => {
+              setTimeout(() => scrollRef.current.scrollToEnd(), 50);
+            }}
           />
           <TouchableOpacity
             style={{

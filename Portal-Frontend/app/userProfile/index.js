@@ -27,6 +27,7 @@ import MiniPost from "../../components/miniPost";
 import SinglePost from "../../components/singlePost";
 import { X } from "lucide-react-native";
 import { getProfilePicture } from "../../functions/user";
+import { router } from "expo-router";
 
 const userProfile = () => {
   const {
@@ -55,7 +56,7 @@ const userProfile = () => {
   const show = () => setEditScreenVisible(true);
   const [followers, setFollowers] = useState(0);
   const [userPosts, setUserPosts] = useState([]);
-  const numColumns = 3
+  const numColumns = 3;
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
@@ -126,7 +127,6 @@ const userProfile = () => {
       });
   }, []);
 
-
   const onSubmit = async (data) => {
     try {
       await setProfile(data);
@@ -158,7 +158,9 @@ const userProfile = () => {
           >
             <Text style={{ fontSize: 23 }}>{username}</Text>
             <Text style={{ fontSize: 18 }}>{email}</Text>
-            <Text style={{fontSize: 20, marginTop: 20}}>Followers: {followers}</Text>
+            <Text style={{ fontSize: 20, marginTop: 20 }}>
+              Followers: {followers}
+            </Text>
           </View>
           <Image
             style={{
@@ -167,8 +169,12 @@ const userProfile = () => {
               marginRight: 20,
               borderRadius: 100,
             }}
-            source={{ url: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80" }}
-            resizeMode={'cover'}
+            source={{
+              url:
+                profilePictureUrl ||
+                "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+            }}
+            resizeMode={"cover"}
           />
         </View>
         <View
@@ -203,66 +209,72 @@ const userProfile = () => {
             </Text>
           </Text>
 
-          <View style={{ flexDirection: 'row', marginTop: 15, justifyContent: "center" }}>
-          {/* //message button */}
-          <TouchableOpacity
+          <View
             style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1,
-              height: 33,
-              width: 100,
-              backgroundColor: "black",
-              marginRight: 6,
-              borderColor: "black",
-              borderStyle: "solid",
-              borderWidth: 1,
+              flexDirection: "row",
               marginTop: 15,
+              justifyContent: "center",
             }}
-            //onPress={show}
           >
-            <Text style={{ color: "white" }}>Messages</Text>
-          </TouchableOpacity>
+            {/* //message button */}
+            <TouchableOpacity
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                height: 33,
+                width: 100,
+                backgroundColor: "black",
+                marginRight: 6,
+                borderColor: "black",
+                borderStyle: "solid",
+                borderWidth: 1,
+                marginTop: 15,
+              }}
+              onPress={() => router.push("/messages")}
+            >
+              <Text style={{ color: "white" }}>Messages</Text>
+            </TouchableOpacity>
 
-          {/* //following button */}
-          <TouchableOpacity
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1,
-              height: 33,
-              width: 100,
-              backgroundColor: "black",
-              marginRight: 6,
-              borderColor: "black",
-              borderStyle: "solid",
-              borderWidth: 1,
-              marginTop: 15,
-            }}
-            //onPress={show}
-          >
-            <Text style={{ color: "white" }}>Following</Text>
-          </TouchableOpacity>
+            {/* //following button */}
+            <TouchableOpacity
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                height: 33,
+                width: 100,
+                backgroundColor: "black",
+                marginRight: 6,
+                borderColor: "black",
+                borderStyle: "solid",
+                borderWidth: 1,
+                marginTop: 15,
+              }}
+              //onPress={show}
+            >
+              <Text style={{ color: "white" }}>Following</Text>
+            </TouchableOpacity>
 
-          {/* //edit button */}
-          <TouchableOpacity
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              flex: 1,
-              height: 33,
-              width: 100,
-              backgroundColor: "black",
-              marginRight: 6,
-              borderColor: "black",
-              borderStyle: "solid",
-              borderWidth: 1,
-              marginTop: 15,
-            }}
-            onPress={show}
-          >
-            <Text style={{ color: "white" }}>Edit</Text>
-          </TouchableOpacity>
+            {/* //edit button */}
+            <TouchableOpacity
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                height: 33,
+                width: 100,
+                backgroundColor: "black",
+                marginRight: 6,
+                borderColor: "black",
+                borderStyle: "solid",
+                borderWidth: 1,
+                marginTop: 15,
+              }}
+              onPress={show}
+            >
+              <Text style={{ color: "white" }}>Edit</Text>
+            </TouchableOpacity>
           </View>
           <Modal
             animationType="fade"
@@ -295,8 +307,12 @@ const userProfile = () => {
                     marginTop: 60,
                     borderRadius: 100,
                   }}
-                  source={{ url: profilePictureUrl || "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80" }}
-                  resizeMode={'cover'}
+                  source={{
+                    url:
+                      profilePictureUrl ||
+                      "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+                  }}
+                  resizeMode={"cover"}
                 />
                 <View
                   style={{
@@ -406,34 +422,49 @@ const userProfile = () => {
           }}
         />
 
-          {/* posts */}
+        {/* posts */}
 
-      <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', padding: 4 }}>
-        {userPosts.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            onPress={() => {
-              setSelectedPost(item);
-              setModalVisible(true);
-            }}
-          >
-          <MiniPost post={item} />
-         </TouchableOpacity>
-        ))}
-        
-        <Modal 
-          visible={modalVisible} 
-          animationType="slide"
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            padding: 4,
+          }}
         >
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:'black'}}>
-            <SinglePost post={selectedPost}/>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={{marginTop: 20}}><X color="white"/></TouchableOpacity>
-          </View>
-        </Modal>
+          {userPosts.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => {
+                setSelectedPost(item);
+                setModalVisible(true);
+              }}
+            >
+              <MiniPost post={item} />
+            </TouchableOpacity>
+          ))}
 
-      </View>
+          <Modal visible={modalVisible} animationType="slide">
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "black",
+              }}
+            >
+              <SinglePost post={selectedPost} />
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{ marginTop: 20 }}
+              >
+                <X color="white" />
+              </TouchableOpacity>
+            </View>
+          </Modal>
+        </View>
       </ScrollView>
-      <Footer/>
+      <Footer />
     </SafeAreaView>
   );
 };

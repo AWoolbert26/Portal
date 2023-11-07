@@ -1,8 +1,9 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import socket from "../utils/socket";
 
 //put an env file instead
-const backendUrl = "http://10.232.206.65:3000";
+const backendUrl = "http://192.168.12.165:3000";
 
 export const login = async (email, password) => {
   try {
@@ -12,6 +13,12 @@ export const login = async (email, password) => {
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
+
+    const id = result.data.user.id;
+    socket.auth = { id };
+    socket.connect();
+    console.log("socket connected");
+
     return result.data.user; //returns user object
   } catch (err) {
     throw err;
@@ -20,6 +27,7 @@ export const login = async (email, password) => {
 
 export const deleteAuthUser = async () => {
   try {
+    socket.disconnect();
     await SecureStore.deleteItemAsync("authToken");
   } catch (err) {
     throw err;
@@ -59,6 +67,11 @@ export const register = async ({ email, password, username }) => {
     });
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
+
+    const id = result.data.user.id;
+    socket.auth = { id };
+    socket.connect();
+    console.log("socket connected");
 
     return result.data.user;
   } catch (err) {
@@ -197,7 +210,7 @@ export const toggleFollow = async (userId) => {
 export const checkFollowing = async (userId) => {
   try {
     const response = await axios.get(`${backendUrl}/checkFollowing/${userId}`);
-    print("Data: " + response.data)
+    print("Data: " + response.data);
     return response.data;
   } catch (err) {
     console.log(err);
@@ -280,17 +293,19 @@ export const unlikeComment = async (commentId) => {
 export const getProfilePicture = async () => {
   try {
     const res = await axios.get(`${backendUrl}/getProfilePicture`);
-    return res.data
+    return res.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
 
 export const getOtherProfilePicture = async (userId) => {
   try {
-    const res = await axios.get(`${backendUrl}/getOtherProfilePicture/${userId}`);
-    return res.data
+    const res = await axios.get(
+      `${backendUrl}/getOtherProfilePicture/${userId}`
+    );
+    return res.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};

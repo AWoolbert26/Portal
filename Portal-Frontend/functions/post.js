@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import { router } from "expo-router";
 
-const backendUrl = "http://10.232.206.65:3000";
+const backendUrl = "http://192.168.12.165:3000";
 
 export const post = async (body) => {
   try {
@@ -20,29 +20,26 @@ export const post = async (body) => {
 
 export const postProfilePicture = async (formData) => {
   try {
-    const response = await axios.post(`${backendUrl}/uploadProfilePicture`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Accept: 'application/json',
-      },
-    });
-    router.replace("/home")
+    const response = await axios.post(
+      `${backendUrl}/uploadProfilePicture`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      }
+    );
+    router.replace("/home");
   } catch (error) {
-    console.error('Error uploading profile picture:', error);
+    console.error("Error uploading profile picture:", error);
     throw error;
   }
 };
 
 export const getProfilePicture = async () => {
-  try { 
-    
+  try {
   } catch (e) {
-    throw e
+    throw e;
   }
-}
-
-
-
-
-
-
+};

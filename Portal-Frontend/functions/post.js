@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import { router } from "expo-router";
 
-const backendUrl = "http://10.232.157.157:3000";
+const backendUrl = "http://10.232.205.167:3000";
 
 export const post = async (body) => {
   try {

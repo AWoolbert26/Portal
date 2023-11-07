@@ -1,5 +1,5 @@
 import socket from "../utils/socket";
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "http://10.232.205.167:3000";
 import axios from "axios";
 
 export const message = (userId, content) => {
@@ -10,8 +10,6 @@ export const message = (userId, content) => {
 };
 
 export const getMessages = async (receiverId) => {
-  //   return [];
   const response = await axios.get(`${backendUrl}/messages/${receiverId}`);
-
   return response.data;
 };

@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import socket from "../utils/socket";
 
 //put an env file instead
-const backendUrl = "http://10.232.157.157:3000";
+const backendUrl = "http://10.232.205.167:3000";
 
 export const login = async (email, password) => {
   try {
@@ -316,5 +316,36 @@ export const getTopUsers = async () => {
     return res.data;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const rateCategory = async(category, rating) => {
+  try {
+    const res = await axios.post(`${backendUrl}/rateCategory`, {
+      category: category,
+      rating: rating
+    });
+    console.log(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const getAverageCategoryRating = async(category) => {
+  try {
+    const res = await axios.get(`${backendUrl}/getAverageCategoryRating/${category}`);
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+      console.log(err)
+  }
+}
+export const getUserRating = async (category) => {
+  try {
+    const res = await axios.get(`${backendUrl}/getUserRating/${category}`);
+    return res.data.rating;
+  } catch (error) {
+    console.log(error);
+    return 0;
   }
 };

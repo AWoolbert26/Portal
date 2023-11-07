@@ -924,6 +924,113 @@ app.get("/messages/:userId", async (req, res) => {
   }
 });
 
+app.post("/rateCategory", async (req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const { category, rating } = req.body;
+    
+    const categoryId = await prisma.category.findFirst({
+      where: {
+        name: category,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // Check if the user has already rated the category
+    const existingUserRating = await prisma.userRating.findFirst({
+      where: {
+        userId: user.id,
+        categoryId: categoryId.id,
+      },
+    });
+
+    if (existingUserRating) {
+      // If an existing rating is found, update the rating
+      const updatedUserRating = await prisma.userRating.update({
+        where: { id: existingUserRating.id },
+        data: {
+          rating: rating,
+        },
+      });
+      res.send(updatedUserRating);
+    } else {
+      // If no existing rating is found, create a new rating
+      const userRating = await prisma.userRating.create({
+        data: {
+          userId: user.id,
+          categoryId: categoryId.id,
+          rating: rating,
+        },
+      });
+      res.send(userRating);
+    }
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+app.get("/getAverageCategoryRating/:category", async(req, res) => {
+  try {
+    const categoryName = req.params.category;
+    const categoryId = await prisma.category.findFirst({
+      where: {
+        name: categoryName,
+      },
+      select: {
+        id: true,
+      },
+    });
+    const averageRating = await prisma.userRating.aggregate({
+      where: {
+        categoryId: categoryId.id,
+      },
+      _avg: {
+        rating: true,
+      },
+    });
+
+    res.send(averageRating._avg.rating.toString());
+  } catch (err) {
+    console.log(err)
+  }
+});
+
+app.get("/getUserRating/:category", async(req, res) => {
+  try {
+    const user = getUserFromToken(req.headers.authorization);
+    const categoryName = req.params.category;
+
+    const categoryId = await prisma.category.findFirst({
+      where: {
+        name: categoryName,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const userRating = await prisma.userRating.findFirst({
+      where: {
+        userId: user.id,
+        categoryId: categoryId.id,
+      },
+      select: {
+        rating: true,
+      },
+    });
+
+    if (!userRating) {
+      res.status(404).send("User rating not found")
+    } else {
+      res.send(userRating)
+    }
+  } catch (err) {
+    console.log(err)
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

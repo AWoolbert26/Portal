@@ -66,7 +66,7 @@ const Profile = () => {
   }, [isFollowing]);
 
   const message = () => {
-    router.push(`message/${userId}`);
+    router.push(`messages/${userId}`);
   };
 
   return (

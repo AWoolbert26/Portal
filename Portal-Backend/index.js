@@ -924,6 +924,46 @@ app.get("/messages/:userId", async (req, res) => {
   }
 });
 
+app.get("/messagedUsers", async (req, res) => {
+  try {
+    const authUser = getUserFromToken(req.headers.authorization);
+    const usersMessaged = await prisma.user.findMany({
+      where: {
+        OR: [
+          {
+            receivedMessages: {
+              some: {
+                senderId: authUser.id,
+              },
+            },
+          },
+          {
+            sentMessages: {
+              some: {
+                receiverId: authUser.id,
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        username: true,
+        profilePicture: true,
+        profile: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+    res.send(usersMessaged);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 app.post("/rateCategory", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);

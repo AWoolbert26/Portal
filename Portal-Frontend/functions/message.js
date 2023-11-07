@@ -1,5 +1,5 @@
 import socket from "../utils/socket";
-const backendUrl = "http://192.168.12.165:3000";
+import { backendUrl } from "../utils/backendUrl";
 import axios from "axios";
 
 export const message = (userId, content) => {

@@ -1,9 +1,7 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import socket from "../utils/socket";
-
-//put an env file instead
-const backendUrl = "http://192.168.12.165:3000";
+import { backendUrl } from "../utils/backendUrl";
 
 export const login = async (email, password) => {
   try {
@@ -313,6 +311,15 @@ export const getOtherProfilePicture = async (userId) => {
 export const getTopUsers = async () => {
   try {
     const res = await axios.get(`${backendUrl}/getTopUsers`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUserWithPosts = async (userId) => {
+  try {
+    const res = await axios.get(`${backendUrl}/getUserWithPosts/${userId}`);
     return res.data;
   } catch (err) {
     console.log(err);

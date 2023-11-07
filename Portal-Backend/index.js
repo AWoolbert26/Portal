@@ -964,6 +964,45 @@ app.get("/messagedUsers", async (req, res) => {
   }
 });
 
+app.get("/getUserWithPosts/:userId", async (req, res) => {
+  try {
+    const authUser = getUserFromToken(req.headers.authorization);
+    const profileWithPosts = await prisma.user.findUnique({
+      where: {
+        id: parseInt(req.params.userId),
+      },
+      select: {
+        createdAt: true,
+        id: true,
+        posts: {
+          include: {
+            user: {
+              select: {
+                profilePicture: true,
+                username: true,
+                profile: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: { followers: true },
+        },
+        profile: true,
+        profilePicture: true,
+        type: true,
+        username: true,
+        categories: true,
+      },
+    });
+    console.log(profileWithPosts);
+    res.send(profileWithPosts);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

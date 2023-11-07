@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
-const backendUrl = "http://192.168.12.165:3001";
-const socket = io(backendUrl, { autoConnect: false });
+import { socketUrl } from "./backendUrl";
+
+const socket = io(socketUrl, { autoConnect: false });
 export default socket;
 
 // socket.onAny((event, ...args) => {

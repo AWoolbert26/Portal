@@ -130,7 +130,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
       >
         <TouchableWithoutFeedback
           style={{ flexDirection: "row", alignItems: "center" }}
-          onPress={() => router.push(`/user/${post.user.id}`)}
+          onPress={() => router.push(`/user/${post.userId}`)}
         >
           <Image
             source={{

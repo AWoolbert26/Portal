@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, SafeAreaView, Text } from "react-native";
+import { View, SafeAreaView, Text, Image } from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -7,16 +7,18 @@ import { Link, router } from "expo-router";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
-import { getPosts } from "../../functions/user";
+import { getPosts, getTopUsers } from "../../functions/user";
 import SinglePost from "../../components/singlePost";
 import { Dimensions } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Home = () => {
   const ScreenHeight = Dimensions.get("window").height;
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
   const statusBarBGColor = useRef("white");
   const [currentCategory, setCurrentCategory] = useState("Home");
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState({});
+  const [topUsers, setTopUsers] = useState({});
 
   const goToDescription = () => {
     router.push("/home/categorySummary");
@@ -35,9 +37,26 @@ const Home = () => {
     setPosts(await getPosts(currentCategory));
   };
 
+  const gettingTopUsers = async () => {
+    setTopUsers(await getTopUsers());
+  };
+
   useEffect(() => {
     settingPosts();
   }, [currentCategory]);
+
+  // is this the best way of doing this? (getting page to rerender on focus)
+  useFocusEffect(
+    React.useCallback(() => {
+      settingPosts();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (!posts || posts.length == 0) {
+      gettingTopUsers();
+    }
+  }, [posts]);
 
   const postRefs = useRef([]);
   const onViewableItemsChanged = useRef(({ changed }) => {
@@ -128,8 +147,54 @@ const Home = () => {
           viewabilityConfig={{ itemVisiblePercentThreshold: 75 }}
         />
       ) : (
-        <View style={{ flex: 1, justifyContent: "start", alignItems: "center" }}>
-          <Text style={{marginTop: ScreenHeight / 3 }}>Follow users to see videos!</Text>
+        <View
+          style={{ flex: 1, justifyContent: "start", alignItems: "center" }}
+        >
+          <Text style={{ marginTop: ScreenHeight / 3 }}>
+            Follow users to see videos!
+          </Text>
+          {topUsers.length > 0 && (
+            <View>
+              <Text>Here Are Our Top Users:</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 10,
+                  justifyContent: "space-between",
+                }}
+              >
+                {topUsers.map((user) => (
+                  <TouchableOpacity
+                    key={user.id}
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      // backgroundColor: "black",
+                    }}
+                    onPress={() => router.push(`/user/${user.id}`)}
+                  >
+                    <Image
+                      source={{
+                        uri: user.profilePicture,
+                      }}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        borderWidth: 1,
+                        borderColor: "black",
+                        backgroundColor: "white",
+                        marginLeft: 10,
+                      }}
+                    />
+                    <Text style={{ marginLeft: 10, fontSize: 25 }}>
+                      {user.username}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
       )}
       {/* footer */}

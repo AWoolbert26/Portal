@@ -121,7 +121,6 @@ const SinglePost = forwardRef(({ post }, ref) => {
         style={{
           position: "absolute",
           flexDirection: "row",
-          alignItems: "center",
           paddingLeft: 7,
           marginTop: 7,
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -129,22 +128,27 @@ const SinglePost = forwardRef(({ post }, ref) => {
           zIndex: 2,
         }}
       >
-        <Image
-          source={{
-            uri: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
-          }}
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 15,
-            borderWidth: 1,
-            borderColor: "black",
-            backgroundColor: "white",
-          }}
-        />
-        <Text style={{ marginLeft: 7, color: "white" }}>
-          {post.user.username}
-        </Text>
+        <TouchableWithoutFeedback
+          style={{ flexDirection: "row", alignItems: "center" }}
+          onPress={() => router.push(`/user/${post.user.id}`)}
+        >
+          <Image
+            source={{
+              uri: post.user.profilePicture,
+            }}
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: "black",
+              backgroundColor: "white",
+            }}
+          />
+          <Text style={{ marginLeft: 7, color: "white" }}>
+            {post.user.username}
+          </Text>
+        </TouchableWithoutFeedback>
       </View>
       <TouchableWithoutFeedback onPress={toggleCaption}>
         {/* background video */}

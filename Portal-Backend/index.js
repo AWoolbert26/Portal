@@ -336,43 +336,44 @@ app.post("/post", async (req, res) => {
   }
 });
 
-
-app.post('/uploadProfilePicture', async (req, res) => {
+app.post("/uploadProfilePicture", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
     const image = req.files.profilePicture;
-    
+
     if (image !== null) {
       const imageBuffer = Buffer.from(await image.data);
-      const fileExtension = 'jpg'; // Change this to match the actual file extension
+      const fileExtension = "jpg"; // Change this to match the actual file extension
 
       const commandParams = {
         Key: `profilePictures/${user.id}.${fileExtension}`, // Unique key for the image
-        Bucket: 'portal-437',
+        Bucket: "portal-437",
         Body: imageBuffer,
         Metadata: {
-          'Cache-Control': 'max-age=60',
+          "Cache-Control": "max-age=60",
         },
       };
-      const s3Response = await s3Client.send(new PutObjectCommand(commandParams));
+      const s3Response = await s3Client.send(
+        new PutObjectCommand(commandParams)
+      );
       const imageUrl = `${process.env.S3_DOMAIN}/profilePictures/${user.id}.${fileExtension}`;
       await prisma.user.update({
         where: { id: user.id },
         data: { profilePicture: imageUrl },
       });
 
-      console.log('Profile picture uploaded successfully');
-      res.send('Success');
-    } 
+      console.log("Profile picture uploaded successfully");
+      res.send("Success");
+    }
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-})
+});
 
 app.get("/getProfilePicture", async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-    const userId = user.id
+    const userId = user.id;
     const profilePicture = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -381,11 +382,11 @@ app.get("/getProfilePicture", async (req, res) => {
         profilePicture: true,
       },
     });
-    res.send(profilePicture)
+    res.send(profilePicture);
   } catch (e) {
-    throw e
+    throw e;
   }
-})
+});
 
 app.get("/getOtherProfilePicture/:userId", async (req, res) => {
   try {
@@ -398,11 +399,11 @@ app.get("/getOtherProfilePicture/:userId", async (req, res) => {
         profilePicture: true,
       },
     });
-    res.send(profilePicture)
+    res.send(profilePicture);
   } catch (e) {
-    throw e
+    throw e;
   }
-})
+});
 
 app.post("/setProfileInformation", async (req, res) => {
   try {
@@ -460,7 +461,7 @@ app.get("/getProfileInformation", async (req, res) => {
         userId: user.id,
       },
     });
-    
+
     // //send whether they follow in this
     // const follows = await getFollows(user, profile.userId);
     // profile["follows"] = follows ? true : false;
@@ -529,6 +530,8 @@ app.get("/getPosts", async (req, res) => {
           user: {
             select: {
               username: true,
+              profilePicture: true,
+              id: true,
             },
           },
         },
@@ -607,9 +610,8 @@ app.get("/getUserPosts", async (req, res) => {
   }
 });
 
-
 app.get("/searchUsers", async (req, res) => {
-  console.log("Query: " + req.query.username)
+  console.log("Query: " + req.query.username);
   const currentUser = getUserFromToken(req.headers.authorization);
   try {
     const users = await prisma.user.findMany({
@@ -642,16 +644,16 @@ const getFollows = async (followerId, followeeId) => {
   return follows ? true : false;
 };
 
-app.get("/checkFollowing/:userId", async(req, res) => {
+app.get("/checkFollowing/:userId", async (req, res) => {
   try {
     const user = await getUserFromToken(req.headers.authorization);
     const follows = await getFollows(user.id, parseInt(req.params.userId));
-    console.log("Follows" + follows)
-    res.send(follows)
+    console.log("Follows" + follows);
+    res.send(follows);
   } catch (err) {
-    throw err
+    throw err;
   }
-})
+});
 
 app.get("/toggleFollow/:userId", async (req, res) => {
   try {
@@ -797,6 +799,7 @@ app.post("/getComments/:postId", async (req, res) => {
         User: {
           select: {
             username: true,
+            profilePicture: true,
           },
         },
       },
@@ -820,6 +823,7 @@ app.post("/getComments/:postId", async (req, res) => {
         isLiked: userLiked !== null,
       };
     }
+    console.log(commentsInfo);
     res.send(commentsInfo);
   } catch (err) {
     console.log(err);
@@ -853,6 +857,39 @@ app.delete("/unlikeComment/:commentId", async (req, res) => {
       where: { userId_commentId: { userId: userId, commentId: commentId } },
     });
     deleted ? res.send(false) : res.send(true);
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+app.get("/getTopUsers", async (req, res) => {
+  try {
+    const userId = getUserFromToken(req.headers.authorization).id;
+
+    // to make more efficient we should have a post count variable i think
+    const usersWithPosts = await prisma.user.findMany({
+      where: {
+        posts: {
+          some: {},
+        },
+        NOT: {
+          id: userId,
+        },
+      },
+      select: {
+        id: true,
+        username: true,
+        profilePicture: true,
+        posts: true,
+      },
+    });
+
+    usersWithPosts.sort((a, b) => b.posts.length - a.posts.length);
+
+    const topUsers = usersWithPosts.splice(0, 3);
+
+    res.send(topUsers);
   } catch (err) {
     console.log(err);
     res.send(err);

@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 //put an env file instead
-const backendUrl = "http://10.232.206.65:3000";
+const backendUrl = "http://10.232.157.157:3000";
 
 export const login = async (email, password) => {
   try {
@@ -197,7 +197,7 @@ export const toggleFollow = async (userId) => {
 export const checkFollowing = async (userId) => {
   try {
     const response = await axios.get(`${backendUrl}/checkFollowing/${userId}`);
-    print("Data: " + response.data)
+    print("Data: " + response.data);
     return response.data;
   } catch (err) {
     console.log(err);
@@ -280,17 +280,28 @@ export const unlikeComment = async (commentId) => {
 export const getProfilePicture = async () => {
   try {
     const res = await axios.get(`${backendUrl}/getProfilePicture`);
-    return res.data
+    return res.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
 
 export const getOtherProfilePicture = async (userId) => {
   try {
-    const res = await axios.get(`${backendUrl}/getOtherProfilePicture/${userId}`);
-    return res.data
+    const res = await axios.get(
+      `${backendUrl}/getOtherProfilePicture/${userId}`
+    );
+    return res.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
-}
+};
+
+export const getTopUsers = async () => {
+  try {
+    const res = await axios.get(`${backendUrl}/getTopUsers`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+};

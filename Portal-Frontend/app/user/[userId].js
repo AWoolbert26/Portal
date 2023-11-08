@@ -173,8 +173,8 @@ const Profile = () => {
             flex: 1,
             flexDirection: "row",
             flexWrap: "wrap",
-            gap: 2,
-            justifyContent: "space-between",
+            gap: 3,
+            // justifyContent: "space-between",
             padding: 4,
             width: "100%",
           }}

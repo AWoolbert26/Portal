@@ -151,7 +151,7 @@ const Message = () => {
               fontSize: 16,
               flex: 10,
             }}
-            placeholder={`Message user ${userId}`}
+            placeholder={`Message user`}
             multiline
             value={text}
             onChangeText={(newText) => setText(newText)}

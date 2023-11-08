@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   const developerQuickLogin = () => {
-    login("a@gmail.com", "a")
+    login("b@gmail.com", "b")
       .then((res) => {
         // console.log(res.data);
         setAuthUser(res);

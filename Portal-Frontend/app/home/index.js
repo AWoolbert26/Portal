@@ -11,6 +11,7 @@ import { getPosts, getTopUsers } from "../../functions/user";
 import SinglePost from "../../components/singlePost";
 import { Dimensions } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import {Colors, Hint, Button, Assets, Incubator} from 'react-native-ui-lib';
 
 const Home = () => {
   const ScreenHeight = Dimensions.get("window").height;
@@ -19,6 +20,7 @@ const Home = () => {
   const [currentCategory, setCurrentCategory] = useState("Home");
   const [posts, setPosts] = useState({});
   const [topUsers, setTopUsers] = useState({});
+  const [isVisible, setIsVisible] = useState("true");
 
   const goToDescription = () => {
     router.push("/home/categorySummary");
@@ -34,6 +36,7 @@ const Home = () => {
   };
 
   const settingPosts = async () => {
+    console.log(currentCategory);
     setPosts(await getPosts(currentCategory));
   };
 
@@ -49,7 +52,7 @@ const Home = () => {
   useFocusEffect(
     React.useCallback(() => {
       settingPosts();
-    }, [])
+    }, [currentCategory])
   );
 
   useEffect(() => {
@@ -77,6 +80,7 @@ const Home = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: statusBarBGColor.current }}
     >
+
       {categoryMenuOpen && (
         <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
       )}
@@ -150,11 +154,8 @@ const Home = () => {
         <View
           style={{ flex: 1, justifyContent: "start", alignItems: "center" }}
         >
-          <Text style={{ marginTop: ScreenHeight / 3 }}>
-            Follow users to see videos!
-          </Text>
           {topUsers.length > 0 && (
-            <View>
+            <View style={{ marginTop: ScreenHeight / 3 }}>
               <Text>Here Are Our Top Users:</Text>
               <View
                 style={{

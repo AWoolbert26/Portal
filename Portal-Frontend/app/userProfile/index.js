@@ -72,7 +72,6 @@ const userProfile = () => {
       style={{
         flex: 1,
         alignItems: "center",
-        marginTop: 15,
         width: "100%",
         gap: 10,
       }}
@@ -97,9 +96,8 @@ const userProfile = () => {
             <View
               style={{
                 flex: 1,
-                paddingTop: 0,
                 flexDirection: "column",
-                marginHorizontal: 25,
+                marginLeft: 25,
               }}
             >
               <Text style={{ fontSize: 28, fontWeight: "700" }}>
@@ -129,7 +127,6 @@ const userProfile = () => {
             style={{
               alignContent: "flex-start",
               flexDirection: "column",
-              marginHorizontal: 20,
             }}
           >
             <Text style={{ fontSize: 15, fontWeight: "bold" }}>
@@ -180,14 +177,14 @@ const userProfile = () => {
                 >
                   <View
                     style={{
-                      margin: 20,
+                      margin: 10,
                       borderRadius: 20,
                       padding: 35,
                       alignItems: "center",
                       elevation: 5,
                     }}
                   >
-                    <Text style={{ fontSize: 30 }}>Edit your profile</Text>
+                    <Text style={{ fontSize: 25 }}>Edit your profile</Text>
                     <Image
                       style={{
                         width: 150,
@@ -206,13 +203,12 @@ const userProfile = () => {
                       style={{
                         flex: 1,
                         justifyContent: "flex-start",
-                        paddingTop: 50,
+                        paddingTop: 30,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 15,
-                          fontWeight: "bold",
                           paddingVertical: 15,
                         }}
                       >
@@ -222,7 +218,7 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1 }}
+                            style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
                             value={value}
                             onChangeText={onChange}
                           />
@@ -232,7 +228,6 @@ const userProfile = () => {
                       <Text
                         style={{
                           fontSize: 15,
-                          fontWeight: "bold",
                           paddingVertical: 15,
                         }}
                       >
@@ -242,8 +237,8 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1 }}
-                            value={value}
+                          style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
+                          value={value}
                             onChangeText={onChange}
                           />
                         )}
@@ -252,7 +247,6 @@ const userProfile = () => {
                       <Text
                         style={{
                           fontSize: 15,
-                          fontWeight: "bold",
                           paddingVertical: 15,
                         }}
                       >
@@ -262,7 +256,7 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1 }}
+                            style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
                             value={value}
                             onChangeText={onChange}
                           />
@@ -272,7 +266,6 @@ const userProfile = () => {
                       <Text
                         style={{
                           fontSize: 15,
-                          fontWeight: "bold",
                           marginVertical: 15,
                         }}
                       >
@@ -282,8 +275,8 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1 }}
-                            value={value}
+                          style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
+                          value={value}
                             onChangeText={onChange}
                           />
                         )}
@@ -306,6 +299,7 @@ const userProfile = () => {
             style={{
               flexDirection: "row",
               marginTop: 15,
+              marginBottom: 15,
               justifyContent: "center",
               alignSelf: "center",
               columnGap: 5,
@@ -327,7 +321,7 @@ const userProfile = () => {
               <Text style={{ color: "white" }}>Messages</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 justifyContent: "center",
                 alignItems: "center",
@@ -342,7 +336,7 @@ const userProfile = () => {
               //onPress={show}
             >
               <Text style={{ color: "white" }}>Following</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               style={{
@@ -361,6 +355,7 @@ const userProfile = () => {
               <Text style={{ color: "white" }}>Edit</Text>
             </TouchableOpacity>
           </View>
+          <View style={{ width: ScreenWidth, color:"black", borderWidth: 1}}></View>
         </>
       )}
 
@@ -378,7 +373,7 @@ const userProfile = () => {
             flexDirection: "row",
             flexWrap: "wrap",
             gap: 2,
-            justifyContent: "space-between",
+            // justifyContent: "space-between",
             padding: 4,
             width: "100%",
           }}

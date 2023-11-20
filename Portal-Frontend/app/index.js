@@ -28,7 +28,7 @@ const Home = () => {
   };
 
   const developerQuickLogin = () => {
-    login("b@gmail.com", "b")
+    login("a@gmail.com", "a")
       .then((res) => {
         // console.log(res.data);
         setAuthUser(res);
@@ -87,7 +87,6 @@ const Home = () => {
             marginLeft: 6,
           }}
         >
-          
           <Text style={{}}>LOG IN</Text>
         </TouchableOpacity>
         <TouchableOpacity

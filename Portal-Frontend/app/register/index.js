@@ -140,6 +140,7 @@ const Register = () => {
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             autoCapitalize="none"
+            autoComplete="off"
             placeholder="Username"
             placeholderTextColor="lightgrey"
             style={{

@@ -71,6 +71,7 @@ export const register = async ({ email, password, username }) => {
     socket.connect();
     console.log("socket connected");
 
+    console.log(result.data.user);
     return result.data.user;
   } catch (err) {
     console.log(err);

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +34,7 @@ const Footer = () => {
     router.push("/createPost");
   };
 
-  if (authUser === null) {
+  if (!authUser) {
     // Handle the case when there's no authenticated user
     return null; // Render nothing when there's no user
   }

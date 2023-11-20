@@ -11,14 +11,9 @@ export const AuthProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState(null); //should we decode the token before putting it?
 
   useEffect(() => {
-    const loadAuthUser = async () => {
-      // const authUser = await SecureStore.getItemAsync("authUser");
-
-      if (authUser) {
-        setAuthUser(authUser);
-      }
-    };
-    loadAuthUser();
+    if (authUser) {
+      setAuthUser(authUser);
+    }
   }, []);
 
   return (

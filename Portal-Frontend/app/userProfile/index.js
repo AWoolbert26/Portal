@@ -118,7 +118,7 @@ const userProfile = () => {
               source={{
                 url:
                   user.profilePicture ||
-                  "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+                  "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
               }}
               resizeMode={"cover"}
             />
@@ -195,7 +195,7 @@ const userProfile = () => {
                       source={{
                         url:
                           user.profilePicture ||
-                          "https://images.unsplash.com/photo-1695664551266-ccbe1b2d9285?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80",
+                          "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
                       }}
                       resizeMode={"cover"}
                     />
@@ -218,7 +218,14 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
+                            style={{
+                              marginVertical: 1,
+                              borderBottomWidth: 1,
+                              borderWidth: 1,
+                              width: 200,
+                              height: 45,
+                              borderRadius: 10,
+                            }}
                             value={value}
                             onChangeText={onChange}
                           />
@@ -237,8 +244,15 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                          style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
-                          value={value}
+                            style={{
+                              marginVertical: 1,
+                              borderBottomWidth: 1,
+                              borderWidth: 1,
+                              width: 200,
+                              height: 45,
+                              borderRadius: 10,
+                            }}
+                            value={value}
                             onChangeText={onChange}
                           />
                         )}
@@ -256,7 +270,14 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                            style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
+                            style={{
+                              marginVertical: 1,
+                              borderBottomWidth: 1,
+                              borderWidth: 1,
+                              width: 200,
+                              height: 45,
+                              borderRadius: 10,
+                            }}
                             value={value}
                             onChangeText={onChange}
                           />
@@ -275,8 +296,15 @@ const userProfile = () => {
                         control={control}
                         render={({ field: { onChange, value } }) => (
                           <TextInput
-                          style={{ marginVertical: 1, borderBottomWidth: 1, borderWidth: 1, width: 200, height: 45, borderRadius: 10 }}
-                          value={value}
+                            style={{
+                              marginVertical: 1,
+                              borderBottomWidth: 1,
+                              borderWidth: 1,
+                              width: 200,
+                              height: 45,
+                              borderRadius: 10,
+                            }}
+                            value={value}
                             onChangeText={onChange}
                           />
                         )}
@@ -355,7 +383,9 @@ const userProfile = () => {
               <Text style={{ color: "white" }}>Edit</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ width: ScreenWidth, color:"black", borderWidth: 1}}></View>
+          <View
+            style={{ width: ScreenWidth, color: "black", borderWidth: 1 }}
+          ></View>
         </>
       )}
 

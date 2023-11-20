@@ -12,18 +12,18 @@ const categories = () => {
     router.replace("/login");
   }
 
-  const allcategories = { 
-    0: "Law", 
-    1: "Computer Science", 
-    2: "Business", 
-    3: "Politics", 
-    4: "Mechanical Engineering", 
+  const allcategories = {
+    0: "Law",
+    1: "Computer Science",
+    2: "Business",
+    3: "Politics",
+    4: "Mechanical Engineering",
     5: "Art",
     6: "Retail",
     7: "Agriculture",
     8: "Sales",
     9: "Healthcare",
-    10: "Media and Entertainment"
+    10: "Media and Entertainment",
   };
 
   const [selectedCategories, setSelectedCategories] = useState({});
@@ -123,7 +123,7 @@ const categories = () => {
           alignItems: "center",
           marginTop: 30,
           flexWrap: "wrap",
-          justifyContent: "center"
+          justifyContent: "center",
         }}
       >
         {Object.entries(allcategories).map(([key, value]) => {

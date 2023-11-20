@@ -19,6 +19,7 @@ model User {
   categories     Category[]
   profile        Profile?
   posts          Post[]
+  //profile picture should be part of profile
   profilePicture String?
   createdAt      DateTime   @default(now())
 
@@ -30,11 +31,11 @@ model User {
   following Follow[] @relation("followers")
 
   likedPosts       Like[]
-  Comments         Comment[]
+  comments         Comment[]
   likedComments    CommentLike[]
   sentMessages     Message[]     @relation("sentMessages")
   receivedMessages Message[]     @relation("receivedMessages")
-  ratings UserRating[]
+  ratings          UserRating[]
 }
 
 model Category {
@@ -42,7 +43,7 @@ model Category {
   name    String
   users   User[]
   summary CategorySummary?
-  Posts   Post[]
+  posts   Post[]
   ratings UserRating[]
 }
 
@@ -53,6 +54,7 @@ model UserRating {
   user       User     @relation(fields: [userId], references: [id])
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
+
   @@unique([userId, categoryId])
 }
 
@@ -94,9 +96,9 @@ model Post {
 }
 
 model Like {
-  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
-  Post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
 
   @@id([userId, postId])
@@ -106,15 +108,15 @@ model Comment {
   id      Int           @id @default(autoincrement())
   User    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId  Int
-  Post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId  Int
   comment String
   likes   CommentLike[] @relation(fields: [], references: [])
 }
 
 model CommentLike {
-  Comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   commentId Int
 
@@ -134,13 +136,14 @@ model Follow {
   followee   User     @relation("following", fields: [followeeId], references: [id], onDelete: Cascade)
   followeeId Int
   createdAt  DateTime @default(now())
+
   @@id([followerId, followeeId])
 }
 
 model Message {
   id         Int      @id @default(autoincrement())
-  sender     User     @relation(name: "sentMessages", fields: [senderId], references: [id])
-  receiver   User     @relation(name: "receivedMessages", fields: [receiverId], references: [id])
+  sender     User     @relation(name: "sentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation(name: "receivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
   text       String
   senderId   Int
   receiverId Int

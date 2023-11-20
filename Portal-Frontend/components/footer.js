@@ -34,7 +34,7 @@ const Footer = () => {
     router.push("/createPost");
   };
 
-  if (authUser === null) {
+  if (!authUser) {
     // Handle the case when there's no authenticated user
     return null; // Render nothing when there's no user
   }

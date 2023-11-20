@@ -7,7 +7,7 @@ import { updateUserType } from "../../functions/user";
 
 const initProfile = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
-  if (authUser === null) {
+  if (!authUser) {
     router.replace("/login");
   }
 

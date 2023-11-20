@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { AuthContext } from "./auth/AuthContext";
 import { login } from "../functions/user";
+import Splash from "../components/splashscreen";
 
 const Home = () => {
   const goToLoginPage = () => {
@@ -47,6 +48,7 @@ const Home = () => {
           headerShown: false,
         }}
       />
+      <Splash/>
       <View style={{ flex: 9, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontWeight: "700", fontSize: 75 }}>P O R T A L</Text>
         <Text style={{ fontSize: 20, color: "grey" }}>
@@ -64,7 +66,7 @@ const Home = () => {
       >
         <Text style={{ padding: 10 }}>Developer Quick Login</Text>
       </TouchableOpacity>
-
+  
       <View
         style={{
           flex: 1,

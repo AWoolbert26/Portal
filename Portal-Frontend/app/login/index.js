@@ -5,6 +5,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  View
 } from "react-native";
 
 import { Stack } from "expo-router/stack";
@@ -14,6 +15,9 @@ import { login } from "../../functions/user";
 import { useForm, Controller } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
+import { ArrowRight } from "lucide-react-native";
+import { ArrowLeft } from "lucide-react-native";
+import LottieView from "lottie-react-native"
 
 const Login = () => {
   const {
@@ -27,6 +31,10 @@ const Login = () => {
       password: "",
     },
   });
+
+  const logout = () => {
+    router.replace("/");
+  };
 
   const { authUser, setAuthUser } = useContext(AuthContext);
 
@@ -55,12 +63,15 @@ const Login = () => {
     <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
       <Stack.Screen
         options={{
+          headerShown: false,
           headerTitle: "",
           headerBackTitle: "Home",
           headerStyle: { backgroundColor: "white" },
         }}
       />
-      <Text style={{ fontSize: 50, margin: "2%" }}>Login</Text>
+
+      <Text style={{ fontSize: 40, margin: "3%", marginTop:30 }}>Login</Text>
+      <View style={{marginTop: 10}}>
       <Controller
         control={control}
         rules={{
@@ -69,18 +80,21 @@ const Login = () => {
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             autoCapitalize="none"
-            placeholder="Email"
+            placeholder="name@example.com"
             autoComplete="email"
-            placeholderTextColor="lightgrey"
+            placeholderTextColor="darkgray"
             style={{
               width: "96%",
               marginHorizontal: "2%",
               borderWidth: 1,
               borderStyle: "solid",
-              borderColor: "black",
-              fontSize: 20,
+              borderColor: "transparent",
+              borderRadius: 15,
+              backgroundColor: 'whitesmoke',
+              fontSize: 18,
+              borderRadius: 20,
               padding: 10,
-              fontWeight: "200",
+              fontWeight: "400",
             }}
             value={value}
             onChangeText={(value) => onChange(value)}
@@ -104,17 +118,19 @@ const Login = () => {
             autoComplete="new-password"
             secureTextEntry={true}
             placeholder="Password"
-            placeholderTextColor="lightgrey"
+            placeholderTextColor="darkgray"
             style={{
               width: "96%",
               marginHorizontal: "2%",
               borderWidth: 1,
               borderStyle: "solid",
-              borderColor: "black",
-              fontSize: 20,
+              borderColor: "transparent",
+              borderRadius: 15,
+              backgroundColor: 'whitesmoke',
+              fontSize: 18,
               padding: 10,
               marginTop: "2%",
-              fontWeight: "200",
+              fontWeight: '400',
             }}
             value={value}
             onChangeText={(value) => onChange(value)}
@@ -131,19 +147,56 @@ const Login = () => {
       {errors.root && (
         <Text style={{ marginHorizontal: "2%" }}>{errors.root.message}</Text>
       )}
+      </View>
 
+      <View style={{flex: 1, marginBottom: 100}}>
+      <LottieView 
+        autoPlay
+        loop
+        source={require('/Users/victordurojaiye/portal/Portal-Frontend/assets/loginanimation.json')}
+        />
+      </View>
+      
+      <View style={{ 
+        justifyContent:'center', 
+        flexDirection:'row', 
+        alignItems:'center', 
+        }}>
+        <TouchableOpacity onPress={logout}
+          style={{
+            justifyContent:'center',
+            alignItems:'center',
+            height: 50,
+            width: 50,
+            borderRadius: 100,
+            backgroundColor:'lightgray',
+            position:'absolute', 
+            left: 20, 
+            bottom: 20
+          }}>
+          <ArrowLeft color="black" size={30}/>
+        </TouchableOpacity>
       <TouchableOpacity
         style={{
           justifyContent: "center",
           alignItems: "center",
-          height: 50,
+          height: 40,
+          width: 100,
           backgroundColor: "black",
           margin: "2%",
+          borderRadius: 100,
+          position:'absolute', 
+          bottom: 10, 
+          right: 10
         }}
         onPress={handleSubmit(onSubmit)}
       >
-        <Text style={{ color: "white" }}>NEXT</Text>
+        <View style={{flex: 1, justifyContent: 'center', flexDirection:'row', alignItems:'center'}}>
+          <Text style={{ color: "white" }}>NEXT</Text>
+          <ArrowRight color="white"/>  
+        </View>
       </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };

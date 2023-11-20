@@ -1,22 +1,30 @@
 import React from "react";
-import { TouchableOpacity, View, Text } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { View, Text } from "react-native";
+import { ChevronDown } from "lucide-react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Header = ({ openCategoryMenu, currentCategory }) => {
   return (
-    <TouchableOpacity style={{}} onPress={openCategoryMenu}>
+    <TouchableOpacity onPress={openCategoryMenu}
+      style={{
+        zIndex: 1,
+        justifyContent: 'flex-end',
+        right: 30,
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
       <View
         style={{
-          alignSelf: "center",
-          marginBottom: 10,
           flexDirection: "row",
           alignItems: "center",
         }}
       >
+        <View style={{marginTop: 5, marginHorizontal: 10}}>
+          <ChevronDown color="black" size={30}/>
+        </View>
         <Text style={{ fontSize: 30 }}>{currentCategory}</Text>
-        <FontAwesomeIcon icon={faCaretDown} />
+        
       </View>
     </TouchableOpacity>
   );

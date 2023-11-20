@@ -27,6 +27,7 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
 
   const selectCurrentCategory = (name) => {
     setCurrentCategory(name);
+    close();
     console.log(name);
   };
 
@@ -65,18 +66,6 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
             );
           })}
       </View>
-      <TouchableOpacity onPress={close} style={{ marginTop: "auto" }}>
-        <Text
-          style={{
-            fontSize: 48,
-            fontWeight: "700",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          Confirm
-        </Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };

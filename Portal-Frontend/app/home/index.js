@@ -80,7 +80,6 @@ const Home = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: statusBarBGColor.current }}
     >
-
       {categoryMenuOpen && (
         <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
       )}

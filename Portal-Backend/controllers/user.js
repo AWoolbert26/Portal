@@ -4,6 +4,7 @@ This code can consist of several lines that’s
 why we separate it from routes files. */
 
 import { prisma } from "../index.js";
+import nodemailer from "nodemailer";
 import jsonwebtoken from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
@@ -104,9 +105,133 @@ export const login = async (req, res) => {
   }
 };
 
+export const resendVerificationEmail = async (req, res) => {
+  try {
+    const userId = parseInt(req.query.id);
+    const redirectUrl = req.query.redirectUrl;
+
+    console.log(redirectUrl, userId);
+    // return;
+    const { email } = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        email: true,
+      },
+    });
+
+    const serverIp = `${req.protocol}://${req.headers.host}`;
+
+    sendVerificationEmail(userId, email, serverIp, redirectUrl);
+
+    //generates jwt -- postponed to when they verify email
+    res.status(200);
+    res.send("Success!");
+  } catch (err) {
+    res.status(500);
+    res.send(err);
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    //handle case where token is expired
+    const verifyToken = await req.params.token;
+    const { id, redirectUrl } = jsonwebtoken.verify(verifyToken, "secret").data;
+    console.log(id, redirectUrl);
+
+    const user = await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        verified: true,
+      },
+    });
+
+    // creates auth token
+    if (user != null) {
+      const authToken = jsonwebtoken.sign(
+        {
+          exp: Math.floor(Date.now() / 1000) + 60 * 60,
+          data: {
+            id: user.id,
+            type: user.type,
+            email: user.email,
+            username: user.username,
+            verified: user.verified,
+          },
+        },
+        "secret"
+      );
+
+      //currently, the app is running at the same ip as the backend, but we will have to change this when we deploy
+      res.redirect(`${redirectUrl}/${user.id}`);
+    }
+    // res.send({ msg: "Verification successful", redirectUrl: clientIp });
+  } catch (err) {
+    //redirect to failure page
+    res.status(500);
+    res.send(err);
+  }
+};
+
+export const authenticate = async (req, res) => {
+  try {
+    //get user id
+    const id = await req.params.id;
+    const userId = parseInt(req.params.id);
+    //get user
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        type: true,
+      },
+    });
+
+    //send authtoken and user if user exists
+    if (user != null) {
+      const token = jsonwebtoken.sign(
+        {
+          data: {
+            id: user.id,
+            type: user.type,
+            email: user.email,
+            username: user.username,
+          },
+        },
+        "secret",
+        { expiresIn: "60m" }
+      );
+
+      res.send({
+        authToken: token,
+        user: { id: user.id, type: user.type },
+      });
+
+      console.log("authorization complete");
+    } else {
+      console.log("auth broken");
+      res.status(500);
+      res.send("Couldn't authenticate");
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    res.send(err);
+  }
+};
+
 export const register = async (req, res) => {
   try {
-    const { email, password, username } = req.body;
+    const { email, password, redirectUrl, username } = await req.body;
+
+    //first send email with auth token, which will confirm account creation and direct them to
+    // profile initialization page
 
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -132,27 +257,14 @@ export const register = async (req, res) => {
           },
         });
 
-        //generates jwt
-        if (newUser != null) {
-          const token = jsonwebtoken.sign(
-            {
-              exp: Math.floor(Date.now() / 1000) + 60 * 60,
-              data: {
-                id: newUser.id,
-                type: newUser.type,
-                email: newUser.email,
-                username: newUser.username,
-              },
-            },
-            "secret"
-          );
+        const serverIp = `${req.protocol}://${req.headers.host}`;
 
-          //sends response
-          res.send({
-            authToken: token,
-            user: { id: newUser.id, type: newUser.type },
-          });
-        }
+        //verification email send
+        sendVerificationEmail(newUser.id, email, serverIp, redirectUrl);
+
+        //generates jwt -- postponed to when they verify email
+        res.status(200);
+        res.send({ userId: newUser.id });
       });
     });
 
@@ -379,5 +491,68 @@ export const getUserWithPosts = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.send(err);
+  }
+};
+
+//helpers
+const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp-relay.brevo.com",
+      port: 587,
+      secure: false, // upgrade later with STARTTLS
+      auth: {
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+
+    //creates token that encodes id and redirectUrl
+    const verificationToken = jsonwebtoken.sign(
+      {
+        data: {
+          id: userId,
+          redirectUrl: redirectUrl,
+        },
+      },
+      "secret",
+      { expiresIn: "10m" }
+    );
+
+    const mailConfigurations = {
+      from: "437portal@gmail.com",
+      to: email,
+      subject: "Portal - Email Verification",
+      text: `Hi there! Please verify your email to continue using Portal! Here is the link for verification: ${serverIp}/verify/${verificationToken}.`,
+      // html: {make html for the email}
+    };
+
+    transporter.sendMail(mailConfigurations, function (error, info) {
+      if (error) throw Error(error);
+      console.log("Email Sent Successfully");
+      console.log(info);
+    });
+  } catch (err) {
+    console.log(err);
+    throw err; // caught in register function
+  }
+};
+
+//implement
+const userIsVerified = (id) => {
+  try {
+    const user = prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        verified: true,
+      },
+    });
+
+    return user.verified;
+  } catch (err) {
+    //catch this error in functions that call
+    throw err;
   }
 };

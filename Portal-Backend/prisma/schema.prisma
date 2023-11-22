@@ -36,6 +36,7 @@ model User {
   sentMessages     Message[]     @relation("sentMessages")
   receivedMessages Message[]     @relation("receivedMessages")
   ratings          UserRating[]
+  verified         Boolean       @default(false)
 }
 
 model Category {

@@ -48,7 +48,7 @@ const Home = () => {
           headerShown: false,
         }}
       />
-      <Splash/>
+      <Splash />
       <View style={{ flex: 9, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ fontWeight: "700", fontSize: 75 }}>P O R T A L</Text>
         <Text style={{ fontSize: 20, color: "grey" }}>
@@ -66,7 +66,7 @@ const Home = () => {
       >
         <Text style={{ padding: 10 }}>Developer Quick Login</Text>
       </TouchableOpacity>
-  
+
       <View
         style={{
           flex: 1,

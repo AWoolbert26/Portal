@@ -27,16 +27,24 @@ ALTER TABLE `Message` ADD CONSTRAINT `Message_senderId_fkey` FOREIGN KEY (`sende
 -- AddForeignKey
 ALTER TABLE `Message` ADD CONSTRAINT `Message_receiverId_fkey` FOREIGN KEY (`receiverId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-INSERT INTO category (id, name)
+
+-- Delete all entries from the category table
+DELETE FROM category;
+
+-- Reset the auto-increment to 0
+ALTER TABLE category AUTO_INCREMENT = 0;
+
+-- Insert new data without specifying values for the auto-incremented id column
+INSERT INTO category (name)
   VALUES 
-  (0, 'Law'),
-  (1, 'Computer Science'),
-  (2, 'Business'),
-  (3, 'Politics'),
-  (4, 'Mechanical Engineering'),
-  (5, 'Art'),
-  (6, 'Retail'),
-  (7, 'Agriculture'),
-  (8, 'Sales'),
-  (9, 'Healthcare'),
-  (10, 'Media and Entertainment');
+  ('Law'),
+  ('Computer Science'),
+  ('Business'),
+  ('Politics'),
+  ('Mechanical Engineering'),
+  ('Art'),
+  ('Retail'),
+  ('Agriculture'),
+  ('Sales'),
+  ('Healthcare'),
+  ('Media and Entertainment');

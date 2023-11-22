@@ -14,6 +14,9 @@ import {
   getTopUsers,
   getMessagedUsers,
   getUserWithPosts,
+  verifyEmail,
+  authenticate,
+  resendVerificationEmail,
 } from "../controllers/user.js";
 
 //creates modular, mini-routers that can be plugged into the main Express app using app.use() in index.js
@@ -32,3 +35,6 @@ userRoutes.get("/toggleFollow/:userId", toggleFollowUser);
 userRoutes.get("/getTopUsers", getTopUsers);
 userRoutes.get("/messagedUsers", getMessagedUsers);
 userRoutes.get("/getUserWithPosts/:userId", getUserWithPosts);
+userRoutes.get("/verify/:token", verifyEmail);
+userRoutes.get("/authenticate/:id", authenticate);
+userRoutes.get("/resendVerificationEmail", resendVerificationEmail);

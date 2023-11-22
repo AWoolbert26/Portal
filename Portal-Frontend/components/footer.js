@@ -5,7 +5,13 @@ import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../app/auth/AuthContext";
 import { router } from "expo-router";
 import { deleteAuthUser } from "../functions/user";
-import { UserCircle2, Home, Search, LogOut, PlusCircle } from "lucide-react-native";
+import {
+  UserCircle2,
+  Home,
+  Search,
+  LogOut,
+  PlusCircle,
+} from "lucide-react-native";
 
 const Footer = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
@@ -17,15 +23,15 @@ const Footer = () => {
   };
 
   const goToHome = () => {
-    router.push("/home");
+    router.replace("/home");
   };
 
   const goToSearch = () => {
-    router.push("/search");
+    router.replace("/search");
   };
 
   const goToProfile = () => {
-    router.push("/userProfile");
+    router.replace("/userProfile");
   };
 
   const goToCreatePost = () => {
@@ -66,56 +72,69 @@ const Footer = () => {
           gap: 35,
         }}
       >
-        <TouchableOpacity onPress={goToSearch}
+        <TouchableOpacity
+          onPress={goToSearch}
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
-          <Search color="darkslategray" size={30} style={{marginBottom: 5}}/>
+          <Search color="darkslategray" size={30} style={{ marginBottom: 5 }} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={goToHome}
+        <TouchableOpacity
+          onPress={goToHome}
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
-          <Home color="darkslategray" size={30} style={{marginBottom: 5}}/>
+          <Home color="darkslategray" size={30} style={{ marginBottom: 5 }} />
         </TouchableOpacity>
 
         {authUser.type === 1 && (
-          <TouchableOpacity onPress={goToCreatePost}
+          <TouchableOpacity
+            onPress={goToCreatePost}
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
+              justifyContent: "center",
+              alignItems: "center",
               marginBottom: 20,
             }}
           >
-            <PlusCircle color="darkslategray" size={30} style={{marginBottom: 5}}/>
+            <PlusCircle
+              color="darkslategray"
+              size={30}
+              style={{ marginBottom: 5 }}
+            />
           </TouchableOpacity>
         )}
 
-        <TouchableOpacity onPress={goToProfile}
+        <TouchableOpacity
+          onPress={goToProfile}
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginBottom: 20,
           }}
-          >
-          <UserCircle2 color="darkslategray" size={30} style={{marginBottom: 5}}/>
+        >
+          <UserCircle2
+            color="darkslategray"
+            size={30}
+            style={{ marginBottom: 5 }}
+          />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={logout}
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 20,
-            }}
-          >
-          <LogOut color="darkslategray" size={30} style={{marginBottom: 5}}/>
+        <TouchableOpacity
+          onPress={logout}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <LogOut color="darkslategray" size={30} style={{ marginBottom: 5 }} />
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => router.push("/user/10")}>
           <LogOut color="#000" size={35} />

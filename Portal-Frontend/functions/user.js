@@ -56,26 +56,52 @@ export const checkUniqueUsername = async (username) => {
   }
 };
 
-export const register = async ({ email, password, username }) => {
+export const register = async ({ email, password, username, redirectUrl }) => {
   try {
     const result = await axios.post(`${backendUrl}/register`, {
       email: email,
       password: password,
       username: username,
+      redirectUrl: redirectUrl,
     });
+    console.log(result.data);
+    return result.data.userId;
+  } catch (err) {
+    console.log(err);
+    return { err: "User couldn't be created." };
+  }
+};
+
+export const resendVerificationEmail = async (userId, redirectUrl) => {
+  try {
+    const result = await axios.get(`${backendUrl}/resendVerificationEmail`, {
+      params: {
+        id: userId,
+        redirectUrl: redirectUrl,
+      },
+    });
+    return "Success";
+  } catch (err) {
+    console.log(err);
+    return { err: "Resend unsuccessful." };
+  }
+};
+
+export const authenticate = async (id) => {
+  try {
+    console.log(id);
+    const result = await axios.get(`${backendUrl}/authenticate/${id}`);
+
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
 
-    const id = result.data.user.id;
     socket.auth = { id };
     socket.connect();
     console.log("socket connected");
 
-    console.log(result.data.user);
     return result.data.user;
   } catch (err) {
-    console.log(err);
-    return { err: "User couldn't be created." };
+    throw err;
   }
 };
 

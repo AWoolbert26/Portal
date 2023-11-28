@@ -24,15 +24,14 @@ import { router } from "expo-router";
 import { getUserWithPosts } from "../../functions/user";
 import { AuthContext } from "../auth/AuthContext";
 import { setProfile } from "../../functions/user";
-import { Pencil  } from "lucide-react-native";
+import { Pencil } from "lucide-react-native";
 import { Card, Divider } from "@ui-kitten/components";
 
 const ScreenWidth = Dimensions.get("window").width;
-const gap = 12
-const vidsPerRow = 3
+const gap = 12;
+const vidsPerRow = 3;
 const totalGapSize = (vidsPerRow - 1) * gap;
 const childWidth = (ScreenWidth - totalGapSize) / vidsPerRow;
-
 
 const userProfile = () => {
   const {
@@ -99,7 +98,7 @@ const userProfile = () => {
         alignItems: "center",
         width: "100%",
         gap: 10,
-        backgroundColor:'white'
+        backgroundColor: "white",
       }}
     >
       <Stack.Screen
@@ -110,30 +109,36 @@ const userProfile = () => {
         }}
       />
 
-      <ScrollView>
-      {user && (
-        <>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 30,
-              justifyContent:'space-between',
-              alignItems: "center",
-            }}
-          >
-            <Image
+      <ScrollView
+        style={
+          {
+            //  margin: 1
+          }
+        }
+      >
+        {user && (
+          <>
+            <View
               style={{
-                width: 100,
-                height: 100,
-                borderRadius: 100,
+                flexDirection: "row",
+                marginTop: 30,
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              source={{
-                url:
-                  user.profilePicture ||
-                  "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
-              }}
-              resizeMode={"cover"}
-            />
+            >
+              <Image
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 100,
+                }}
+                source={{
+                  url:
+                    user.profilePicture ||
+                    "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
+                }}
+                resizeMode={"cover"}
+              />
 
               <View
                 style={{
@@ -142,244 +147,250 @@ const userProfile = () => {
                   marginLeft: 25,
                 }}
               >
-              <Text style={{ fontSize: 28, fontWeight: "700" }}>
-                {user.username}
-              </Text>
-              <Text style={{ fontSize: 24 }}>{user.email}</Text>
-              <Text style={{ fontSize: 18 }}>
-                Followers: {user._count.followers}
-              </Text>
+                <Text style={{ fontSize: 28, fontWeight: "700" }}>
+                  {user.username}
+                </Text>
+                <Text style={{ fontSize: 24 }}>{user.email}</Text>
+                <Text style={{ fontSize: 18 }}>
+                  Followers: {user._count.followers}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 40,
+                  width: 100,
+                  backgroundColor: "black",
+                  borderRadius: 50,
+                  borderColor: "black",
+                  borderStyle: "solid",
+                  borderWidth: 1,
+                }}
+                onPress={show}
+              >
+                <Text style={{ color: "white" }}>
+                  EDIT
+                  <Pencil color="white" size={16} style={{ marginLeft: 15 }} />
+                </Text>
+              </TouchableOpacity>
+
+              <Divider />
             </View>
 
-            <TouchableOpacity
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection:'row',
-                height: 40,
-                width: 100,
-                backgroundColor: "black",
-                borderRadius: 50,
-                borderColor: "black",
-                borderStyle: "solid",
-                borderWidth: 1,
-              }}
-              onPress={show}
+            <Card
+              style={{ backgroundColor: "transparent", marginVertical: 20 }}
             >
-              <Text style={{ color: "white"}}>EDIT
-                <Pencil color="white" size={16} style={{marginLeft: 15}}/>
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                About me {"\n"}
+                {""}
+                <Text style={{ fontSize: 15, fontWeight: "400" }}>
+                  {user.profile.bio}
+                </Text>
               </Text>
-            </TouchableOpacity>
-          
-          <Divider />
-          </View>
-
-          <Card style={{backgroundColor:'transparent', marginVertical: 20}}>
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            About me {"\n"}{""}
-              <Text style={{ fontSize: 15, fontWeight: "400" }}>
-                {user.profile.bio}
-              </Text>
-            </Text>
-          <View
-            style={{
-              alignContent: "flex-start",
-              flexDirection: "column",
-              marginTop: 20,
-            }}
-          >
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              Name:{" "}
-              <Text style={{ fontSize: 15, fontWeight: "400" }}>
-                {user.profile.name}
-              </Text>
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              Location:{" "}
-              <Text style={{ fontSize: 15, fontWeight: "400" }}>
-                {user.profile.location}
-              </Text>
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              Occupation:{" "}
-              <Text style={{ fontSize: 15, fontWeight: "400" }}>
-                {user.profile.occupation}
-              </Text>
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-              Interests:{" "}
-              <Text style={{ fontSize: 15, fontWeight: "400" }}>
-                {user.categories.map((item) => item.name).join(", ")}
-              </Text>
-            </Text>
-
-            {editScreenVisible && (
-              <Modal
-                animationType="slide"
-                visible={editScreenVisible}
-                transparent={true}
+              <View
                 style={{
+                  alignContent: "flex-start",
+                  flexDirection: "column",
+                  marginTop: 20,
                 }}
               >
-                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "column",
-                      alignItems: "center",
-                      backgroundColor: 'black',
-                      height: "100%",
-                      width: "60%"
-                    }}
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Name:{" "}
+                  <Text style={{ fontSize: 15, fontWeight: "400" }}>
+                    {user.profile.name}
+                  </Text>
+                </Text>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Location:{" "}
+                  <Text style={{ fontSize: 15, fontWeight: "400" }}>
+                    {user.profile.location}
+                  </Text>
+                </Text>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Occupation:{" "}
+                  <Text style={{ fontSize: 15, fontWeight: "400" }}>
+                    {user.profile.occupation}
+                  </Text>
+                </Text>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                  Interests:{" "}
+                  <Text style={{ fontSize: 15, fontWeight: "400" }}>
+                    {user.categories.map((item) => item.name).join(", ")}
+                  </Text>
+                </Text>
+
+                {editScreenVisible && (
+                  <Modal
+                    animationType="slide"
+                    visible={editScreenVisible}
+                    transparent={true}
+                    style={{}}
                   >
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems:'center',
-                        paddingTop: 20,
-                      }}
+                    <TouchableWithoutFeedback
+                      onPress={() => Keyboard.dismiss()}
                     >
-                      <Text
+                      <View
                         style={{
-                          fontSize: 15,
-                          paddingVertical: 15,
-                          color: "white"
+                          flex: 1,
+                          flexDirection: "column",
+                          alignItems: "center",
+                          backgroundColor: "black",
+                          height: "100%",
+                          width: "60%",
                         }}
                       >
-                        Name:
-                      </Text>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <TextInput
+                        <View
+                          style={{
+                            flex: 1,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            paddingTop: 20,
+                          }}
+                        >
+                          <Text
                             style={{
-                              marginVertical: 1,
-                              borderBottomWidth: 1,
-                              borderWidth: 1,
-                              width: 200,
-                              height: 45,
-                              borderColor:'white',
-                              color: 'white'
+                              fontSize: 15,
+                              paddingVertical: 15,
+                              color: "white",
                             }}
-                            value={value}
-                            onChangeText={onChange}
+                          >
+                            Name:
+                          </Text>
+                          <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <TextInput
+                                style={{
+                                  marginVertical: 1,
+                                  borderBottomWidth: 1,
+                                  borderWidth: 1,
+                                  width: 200,
+                                  height: 45,
+                                  borderColor: "white",
+                                  color: "white",
+                                }}
+                                value={value}
+                                onChangeText={onChange}
+                              />
+                            )}
+                            name="name"
                           />
-                        )}
-                        name="name"
-                      />
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          paddingVertical: 15,
-                          color: "white"
-                        }}
-                      >
-                        Location:
-                      </Text>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <TextInput
+                          <Text
                             style={{
-                              marginVertical: 1,
-                              borderBottomWidth: 1,
-                              borderWidth: 1,
-                              width: 200,
-                              height: 45,
-                              borderColor:'white',
-                              color: 'white'
+                              fontSize: 15,
+                              paddingVertical: 15,
+                              color: "white",
                             }}
-                            value={value}
-                            onChangeText={onChange}
+                          >
+                            Location:
+                          </Text>
+                          <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <TextInput
+                                style={{
+                                  marginVertical: 1,
+                                  borderBottomWidth: 1,
+                                  borderWidth: 1,
+                                  width: 200,
+                                  height: 45,
+                                  borderColor: "white",
+                                  color: "white",
+                                }}
+                                value={value}
+                                onChangeText={onChange}
+                              />
+                            )}
+                            name="location"
                           />
-                        )}
-                        name="location"
-                      />
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          paddingVertical: 15,
-                          color: "white"
-                        }}
-                      >
-                        Occupation:
-                      </Text>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <TextInput
+                          <Text
                             style={{
-                              marginVertical: 1,
-                              borderBottomWidth: 1,
-                              borderWidth: 1,
-                              width: 200,
-                              height: 45,
-                              borderColor:'white',
-                              color: 'white'
+                              fontSize: 15,
+                              paddingVertical: 15,
+                              color: "white",
                             }}
-                            value={value}
-                            onChangeText={onChange}
+                          >
+                            Occupation:
+                          </Text>
+                          <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <TextInput
+                                style={{
+                                  marginVertical: 1,
+                                  borderBottomWidth: 1,
+                                  borderWidth: 1,
+                                  width: 200,
+                                  height: 45,
+                                  borderColor: "white",
+                                  color: "white",
+                                }}
+                                value={value}
+                                onChangeText={onChange}
+                              />
+                            )}
+                            name="occupation"
                           />
-                        )}
-                        name="occupation"
-                      />
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          marginVertical: 15,
-                          color:'white'
-                        }}
-                      >
-                        Bio:
-                      </Text>
-                      <Controller
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <TextInput
+                          <Text
                             style={{
-                              marginVertical: 1,
-                              borderBottomWidth: 1,
-                              borderWidth: 1,
-                              width: 200,
-                              height: 45,
-                              borderColor:'white',
-                              color: 'white'
+                              fontSize: 15,
+                              marginVertical: 15,
+                              color: "white",
                             }}
-                            value={value}
-                            onChangeText={onChange}
+                          >
+                            Bio:
+                          </Text>
+                          <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                              <TextInput
+                                style={{
+                                  marginVertical: 1,
+                                  borderBottomWidth: 1,
+                                  borderWidth: 1,
+                                  width: 200,
+                                  height: 45,
+                                  borderColor: "white",
+                                  color: "white",
+                                }}
+                                value={value}
+                                onChangeText={onChange}
+                              />
+                            )}
+                            name="bio"
                           />
-                        )}
-                        name="bio"
-                      />
-                      <View style={{ marginTop: 30 }}>
-                        <Button
-                          title="Save"
-                          color="white"
-                          onPress={handleSubmit(onSubmit)}
-                        ></Button>
+                          <View style={{ marginTop: 30 }}>
+                            <Button
+                              title="Save"
+                              color="white"
+                              onPress={handleSubmit(onSubmit)}
+                            ></Button>
+                          </View>
+                        </View>
                       </View>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              </Modal>
-            )}
-          </View>
-          </Card>
-        </>
-      )}
-      <Divider style={{paddingBottom: 2}}/>
-      {/* posts */}
+                    </TouchableWithoutFeedback>
+                  </Modal>
+                )}
+              </View>
+            </Card>
+          </>
+        )}
+        <Divider style={{ paddingBottom: 2 }} />
+        {/* posts */}
         <View
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent:'center',
-            alignItems:'center',
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: 20,
             marginVertical: -(gap / 2),
-            marginHorizontal: -(gap / 2)
+            marginHorizontal: -(gap / 2),
+            gap: 1,
           }}
         >
           {user &&
@@ -387,7 +398,6 @@ const userProfile = () => {
               <TouchableOpacity
                 key={item.id}
                 style={{
-                  marginHorizontal: gap / 2,
                   minWidth: childWidth,
                   maxWidth: childWidth,
                 }}

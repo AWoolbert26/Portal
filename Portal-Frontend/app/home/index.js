@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, SafeAreaView, Text, Image, ActivityIndicator } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -34,32 +40,6 @@ const Home = () => {
     setCategoryMenuOpen(false);
   };
 
-  // const settingPosts = async () => {
-  //   console.log("cur cat:" + currentCategory);
-  //   setPosts(await getPosts(currentCategory));
-  // };
-
-  // const gettingTopUsers = async () => {
-  //   setTopUsers(await getTopUsers());
-  // };
-
-  // useEffect(() => {
-  //   settingPosts();
-  // }, [currentCategory]);
-
-  // // is this the best way of doing this? (getting page to rerender on focus)
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     settingPosts();
-  //   }, [currentCategory])
-  // );
-
-  // useEffect(() => {
-  //   if (!posts || posts.length == 0) {
-  //     gettingTopUsers();
-  //   }
-  // }, [posts]);
-
   useEffect(() => {
     const fetchData = async () => {
       // Fetch posts and top users
@@ -90,29 +70,27 @@ const Home = () => {
 
   if (loading) {
     return (
-      <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white"}}
-    >
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <LottieView 
-          autoPlay
-          loop
-          source={require("../../assets/loadinganimation.json")}
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
         />
-      </View>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <LottieView
+            autoPlay
+            loop
+            source={require("../../assets/loadinganimation.json")}
+          />
+        </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white"}}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {/* {categoryMenuOpen && (
         <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
       )} */}
@@ -143,10 +121,27 @@ const Home = () => {
           onRequestClose={() => setCategoryMenuOpen(false)}
         >
           <TouchableWithoutFeedback onPress={close}>
-            <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <TouchableWithoutFeedback>
-                <View style={{ width: "80%", height: "60%", backgroundColor: "white", borderRadius: 10, borderWidth: 1 }}>
-                  <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
+                <View
+                  style={{
+                    width: "80%",
+                    height: "60%",
+                    backgroundColor: "white",
+                    borderRadius: 10,
+                    borderWidth: 1,
+                  }}
+                >
+                  <CategoryMenu
+                    close={close}
+                    setCurrentCategory={setCurrentCategory}
+                  />
                 </View>
               </TouchableWithoutFeedback>
             </View>

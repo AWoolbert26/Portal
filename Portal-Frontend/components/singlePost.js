@@ -8,7 +8,7 @@ import React, {
 import { Video } from "expo-av";
 import { Text, View, Image, Touchable } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { Heart, MessageCircle, Tags } from "lucide-react-native";
+import { Heart, MessageSquare, Minus } from "lucide-react-native";
 import {
   likePost,
   unlikePost,
@@ -17,11 +17,12 @@ import {
 } from "../functions/user";
 import { router } from "expo-router";
 import FollowButton from "./FollowButton";
-import { Card } from "@ui-kitten/components";
+import { Dimensions } from "react-native";
 
 const SinglePost = forwardRef(({ post }, ref) => {
   const [captionOpen, setCaptionOpen] = useState(false);
   const [postInfo, setPostInfo] = useState(null);
+  const windowHeight = Dimensions.get("window").height;
 
   const toggleCaption = async () => {
     setCaptionOpen(!captionOpen);
@@ -123,139 +124,64 @@ const SinglePost = forwardRef(({ post }, ref) => {
     }
   };
 
-  const Header = () => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          paddingLeft: 7,
-          backgroundColor: "transparent",
-          width: "100%",
-          zIndex: 2,
-          paddingVertical: 10,
-        }}
-      >      
-      <TouchableWithoutFeedback
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          gap: 7,
-        }}
-        onPress={() => router.push(`/user/${post.userId}`)}
-      >
-      <Image
-        source={{
-          uri: post.user.profilePicture,
-        }}
-        style={{
-          width: 30,
-          height: 30,
-          borderRadius: 15,
-          borderWidth: 1,
-          borderColor: "black",
-          backgroundColor: "white",
-        }}
-      />
-        <Text
-          style={{
-            color: "black",
-            fontWeight: 700,
-            fontSize: 24,
-          }}
-        >
-          {post.user.username}
-        </Text>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-          }}
-        >
-          {post.user.profile.name}
-        </Text>
-      </TouchableWithoutFeedback>
-    </View>
-    )
-  }
-
-  const Footer = () => {
-    return (
-      <View
-        style={{
-          backgroundColor: "transparent",
-          width: "100%",
-          paddingVertical: 20,
-          justifyContent:'space-between',
-          flexDirection:'row'
-        }}
-      >
-        {!captionOpen || !postInfo ? (
-            <Text
-              style={{
-                color: "white",
-                marginLeft: 10,
-                fontSize: 16
-              }}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {post.description}
-            </Text>
-          ) : (
-          <View>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              {post.description}
-            </Text>
-          </View>
-        )}
-        {postInfo && (
-          <View
-            style={{
-              backgroundColor: 'black',
-              width: 120,
-              height: 45,
-              columnGap: 20,
-              alignItems: 'center',
-              padding: 15,
-              borderRadius: 50,
-              right: 20,
-              flexDirection:'row',
-            }}
-          >
-            <TouchableWithoutFeedback
-              style={{ alignItems: "center", flexDirection:'row', columnGap:10}}
-              onPress={openComments}
-            >
-              <MessageCircle color="white" fill="white" size={23}></MessageCircle>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback
-              style={{ alignItems: "center", flexDirection:'row', columnGap:10}}
-              onPress={pressedLike}
-            >
-              {postInfo.isLiked ? (
-                <Heart color="rgba(0, 0, 0, 0)" size={23} fill="#ff0000" />
-              ) : (
-                <Heart color="white" fill="white" size={23} />
-              )}
-              <Text style={{ color: "white", fontWeight:'bold' }}>{postInfo.likeCount}</Text>
-            </TouchableWithoutFeedback>
-          </View>
-        )}
-        </View>
-    )
-  }
   return (
     <View key={post.id} style={{}}>
       {/* user stuff at top */}
-      <Card header={Header} footer={Footer}>
+      <View
+        style={{
+          position: "absolute",
+          flexDirection: "row",
+          paddingLeft: 7,
+          marginTop: 7,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          width: "100%",
+          zIndex: 2,
+          padding: 10,
+        }}
+      >
+        <TouchableWithoutFeedback
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 7,
+          }}
+          onPress={() => router.push(`/user/${post.userId}`)}
+        >
+          <Image
+            source={{
+              uri: post.user.profilePicture,
+            }}
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: "black",
+              backgroundColor: "white",
+            }}
+          />
+          <Text
+            style={{
+              color: "white",
+              fontWeight: 700,
+              fontSize: 24,
+            }}
+          >
+            {post.user.username}
+          </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 20,
+            }}
+          >
+            {post.user.profile.name}
+          </Text>
+        </TouchableWithoutFeedback>
         {/* <FollowButton id={post.user.id} follows={true} /> */}
+      </View>
       <TouchableWithoutFeedback
-        style={{ position: "relative" }}
+        style={{ position: "relative", height: windowHeight - 199 }}
         onPress={toggleCaption}
       >
         {/* background video */}
@@ -265,20 +191,83 @@ const SinglePost = forwardRef(({ post }, ref) => {
             uri: post.url,
           }}
           style={{
-            width: 400,
-            marginVertical: 10,
-            height: 400,
-            borderRadius: 10,
-            alignSelf:'center',
-            aspectRatio:1/1,
+            width: "100%",
+            // Without height undefined it won't work
+            height: undefined,
+            // figure out your image aspect ratio
+            aspectRatio: 3 / 5,
           }}
           shouldPlay={false}
           isLooping={true}
           resizeMode="cover"
         />
+        {/* caption */}
+        <View
+          style={{
+            position: "absolute",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            width: "100%",
+            bottom: 20,
+          }}
+        >
+          {!captionOpen || !postInfo ? (
+            <Text
+              style={{
+                color: "white",
+              }}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {post.description}
+            </Text>
+          ) : (
+            <View>
+              <Text
+                style={{
+                  color: "white",
+                }}
+              >
+                {post.description}
+              </Text>
+            </View>
+          )}
+        </View>
         {/* post like bar and comment bar on side */}
+        {postInfo && (
+          <View
+            style={{
+              position: "absolute",
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              rowGap: 20,
+              alignItems: "center",
+              top: "40%",
+              padding: 15,
+              borderRadius: 50,
+              right: 5,
+            }}
+          >
+            <TouchableWithoutFeedback
+              style={{ alignItems: "center" }}
+              onPress={pressedLike}
+            >
+              {postInfo.isLiked ? (
+                <Heart color="rgba(0, 0, 0, 0)" size={35} fill="#ff0000" />
+              ) : (
+                <Heart color="#fff" size={35} />
+              )}
+              <Text style={{ color: "white" }}>{postInfo.likeCount}</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              style={{ alignItems: "center" }}
+              onPress={openComments}
+            >
+              <MessageSquare color="#fff" size={35}></MessageSquare>
+              <Text style={{ color: "white" }}>{postInfo.commentCount}</Text>
+            </TouchableWithoutFeedback>
+          </View>
+        )}
       </TouchableWithoutFeedback>
-      </Card>
     </View>
   );
 });

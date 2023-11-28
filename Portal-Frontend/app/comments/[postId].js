@@ -67,7 +67,7 @@ const Comments = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           title: "Comments",
@@ -106,11 +106,11 @@ const Comments = () => {
                     marginLeft: 10,
                   }}
                 />
-                <Text style={{ color: "white", marginLeft: 10, fontSize: 25 }}>
+                <Text style={{ color: "black", marginLeft: 10, fontSize: 25 }}>
                   {item.user.username}
                 </Text>
               </TouchableOpacity>
-              <Text style={{ color: "white", marginLeft: 30 }}>
+              <Text style={{ color: "black", marginLeft: 30 }}>
                 {item.comment}
               </Text>
               <TouchableWithoutFeedback
@@ -122,11 +122,16 @@ const Comments = () => {
                 onPress={() => pressedLike(item)}
               >
                 {item.isLiked ? (
-                  <Heart color="rgba(0, 0, 0, 0)" size={15} fill="#ff0000" />
+                  <Heart
+                    color="rgba(0, 0, 0, 0)"
+                    stroke="black"
+                    size={15}
+                    fill="#ff0000"
+                  />
                 ) : (
-                  <Heart color="#fff" size={15} fill="#ffff" />
+                  <Heart color="#fff" stroke="black" size={15} fill="#ffff" />
                 )}
-                <Text style={{ color: "white", marginLeft: 10 }}>
+                <Text style={{ color: "black", marginLeft: 10 }}>
                   {item.likeCount > 0 ? item.likeCount : "Like"}
                 </Text>
               </TouchableWithoutFeedback>

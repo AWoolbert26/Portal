@@ -11,6 +11,7 @@ import {
   Search,
   LogOut,
   PlusCircle,
+  Inbox
 } from "lucide-react-native";
 
 const Footer = () => {
@@ -34,6 +35,10 @@ const Footer = () => {
     router.replace("/userProfile");
   };
 
+  const goToMessages = () => {
+      router.push("/messages");
+  }
+
   const goToCreatePost = () => {
     console.log("Going to create post page");
     console.log(authUser);
@@ -52,10 +57,8 @@ const Footer = () => {
         position: "absolute",
         left: 20,
         right: 30,
-        height: 70,
-        bottom: 30,
-        borderRadius: 30,
-        backgroundColor: "gainsboro",
+        height:60,
+        bottom: 0,
       }}
     >
       {/* <View
@@ -68,7 +71,6 @@ const Footer = () => {
         style={{
           alignSelf: "center",
           flexDirection: "row",
-          marginTop: 20,
           gap: 35,
         }}
       >
@@ -77,10 +79,9 @@ const Footer = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: 20,
           }}
         >
-          <Search color="darkslategray" size={30} style={{ marginBottom: 5 }} />
+          <Search color="black" size={30}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -88,10 +89,9 @@ const Footer = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: 20,
           }}
         >
-          <Home color="darkslategray" size={30} style={{ marginBottom: 5 }} />
+          <Home color="black" size={30}/>
         </TouchableOpacity>
 
         {authUser.type === 1 && (
@@ -100,13 +100,11 @@ const Footer = () => {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: 20,
             }}
           >
             <PlusCircle
-              color="darkslategray"
+              color="black"
               size={30}
-              style={{ marginBottom: 5 }}
             />
           </TouchableOpacity>
         )}
@@ -116,29 +114,36 @@ const Footer = () => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: 20,
           }}
         >
           <UserCircle2
-            color="darkslategray"
+            color="black"
             size={30}
-            style={{ marginBottom: 5 }}
           />
         </TouchableOpacity>
+        
+        <TouchableOpacity
+            onPress={goToMessages}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Inbox
+              color="black"
+              size={30}
+            />
+          </TouchableOpacity>
 
         <TouchableOpacity
           onPress={logout}
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginBottom: 20,
           }}
         >
-          <LogOut color="darkslategray" size={30} style={{ marginBottom: 5 }} />
+          <LogOut color="black" size={30} />
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={() => router.push("/user/10")}>
-          <LogOut color="#000" size={35} />
-        </TouchableOpacity> */}
       </View>
     </View>
   );

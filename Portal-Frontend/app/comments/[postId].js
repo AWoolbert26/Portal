@@ -67,12 +67,11 @@ const Comments = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "black" }}>
+    <SafeAreaView style={{ flex: 1}}>
       <Stack.Screen
         options={{
           title: "Comments",
-          headerStyle: { backgroundColor: "black" },
-          headerTintColor: "white",
+          headerTintColor: "black",
         }}
       />
       {comments && (

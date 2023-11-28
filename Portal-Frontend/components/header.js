@@ -1,9 +1,25 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import { ChevronDown } from "lucide-react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Colors, Hint, Button, Assets, Incubator } from "react-native-ui-lib";
 
 const Header = ({ openCategoryMenu, currentCategory }) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [visible, setVisible] = useState(false);
+
+  const onItemSelect = (index) => {
+    setSelectedIndex(index);
+    setVisible(false);
+  };
+  
+  const renderToggleButton = () => (
+    <Button onPress={() => setVisible(true)}>
+      TOGGLE MENU
+    </Button>
+  );
+
   return (
     <TouchableOpacity onPress={openCategoryMenu}
       style={{
@@ -18,13 +34,10 @@ const Header = ({ openCategoryMenu, currentCategory }) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
+          paddingBottom: 15,
         }}
       >
-        <View style={{marginTop: 5, marginHorizontal: 10}}>
-          <ChevronDown color="black" size={30}/>
-        </View>
         <Text style={{ fontSize: 30 }}>{currentCategory}</Text>
-        
       </View>
     </TouchableOpacity>
   );

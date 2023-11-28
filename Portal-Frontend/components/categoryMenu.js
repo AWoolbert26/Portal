@@ -2,7 +2,6 @@ import { Stack } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, Text } from "react-native";
 import { useWindowDimensions } from "react-native";
-import { StatusBar, setStatusBarStyle } from "expo-status-bar";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getCategories } from "../functions/user";
 
@@ -31,19 +30,14 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
     close();
     console.log(name);
   };
-
-  setStatusBarStyle("light");
   return (
     <SafeAreaView
       style={{
-        flex: 1,
-        height: height,
-        width: width,
-        justifyContent: "flex-start",
+        flex: 1
       }}
     >
       <View
-        style={{ flex: 9, gap: 10, marginTop: 10, justifyContent: "center" }}
+        style={{ flex: 1, rowGap: 20, justifyContent: "center", alignItems:'center'}}
       >
         {categories != null &&
           categories.categories.map((category) => {
@@ -56,9 +50,8 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
                 <Text
                   style={{
                     textAlign: "center",
-                    color: "white",
                     fontSize: 24,
-                    fontWeight: "600",
+                    fontWeight: "400",
                   }}
                 >
                   {category.name}

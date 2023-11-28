@@ -52,7 +52,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, alignItems: "center", marginTop: 15, width: "100%" }}
+      style={{ flex: 1, marginTop: 15 }}
     >
       <Stack.Screen
         options={{
@@ -64,17 +64,17 @@ const Profile = () => {
       {user && (
         <View
           style={{
-            margin: "2.5%",
-            minWidth: "95%",
-            gap: 5,
+            justifyContent:'center', marginVertical: 20
           }}
         >
           <View
             style={{
               flexDirection: "row",
-              width: "100%",
-              gap: 10,
+              justifyContent:'flex-start',
               alignItems: "center",
+              left: 20,
+              marginVertical: 20,
+              columnGap:20
             }}
           >
             <Image
@@ -92,8 +92,8 @@ const Profile = () => {
             />
             <View
               style={{
-                gap: 2,
-                justifyContent: "center",
+                rowGap: 2,
+                justifyContent: "center"
               }}
             >
               <Text style={{ fontSize: 24, fontWeight: "700" }}>
@@ -127,7 +127,8 @@ const Profile = () => {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "flex-start",
+              justifyContent: "center",
+              columnGap: 10,
               gap: 10,
             }}
           >

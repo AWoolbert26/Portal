@@ -8,8 +8,8 @@ export const comment = async (req, res) => {
 
     const comment = await prisma.comment.create({
       data: {
-        User: { connect: { id: userId } },
-        Post: { connect: { id: postId } },
+        user: { connect: { id: userId } },
+        post: { connect: { id: postId } },
         comment: newComment,
       },
     });
@@ -25,7 +25,7 @@ export const comment = async (req, res) => {
 
     res.send({
       ...comment,
-      User: username,
+      user: username,
       isLiked: false,
       likeCount: 0,
     });
@@ -47,7 +47,7 @@ export const getComments = async (req, res) => {
         postId: postId,
       },
       include: {
-        User: {
+        user: {
           select: {
             username: true,
             profilePicture: true,
@@ -88,8 +88,8 @@ export const likeComment = async (req, res) => {
     const commentId = parseInt(req.params.commentId);
     const liked = await prisma.commentLike.create({
       data: {
-        User: { connect: { id: userId } },
-        Comment: { connect: { id: commentId } },
+        user: { connect: { id: userId } },
+        comment: { connect: { id: commentId } },
       },
     });
     liked ? res.send(true) : res.send(false);

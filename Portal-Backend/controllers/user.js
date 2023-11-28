@@ -91,7 +91,7 @@ export const login = async (req, res) => {
           );
           res.send({
             authToken: token,
-            user: { id: user.id, type: user.type },
+            user: { id: user.id, type: user.type, verified: user.verified },
           });
         }
       } else {

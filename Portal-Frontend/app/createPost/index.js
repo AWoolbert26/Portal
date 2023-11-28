@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Text,
   View,
+  TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { post } from "../../functions/post";
@@ -15,6 +17,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { Stack } from "expo-router";
 import { getCategories } from "../../functions/user";
+import { Picker } from "@react-native-picker/picker";
 
 //error check for null description and fix case where no video was uploaded
 const CreatePost = () => {
@@ -27,19 +30,19 @@ const CreatePost = () => {
   // const [categories, setCategories] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({});
 
-  const categories = { 
-    0: "Law", 
-    1: "Computer Science", 
-    2: "Business", 
-    3: "Politics", 
-    4: "Mechanical Engineering", 
-    5: "Art",
-    6: "Retail",
-    7: "Agriculture",
-    8: "Sales",
-    9: "Healthcare",
-    10: "Media and Entertainment"
-  };  // should we limit what categories each creator can post to?
+  const categories = {
+    1: "Law",
+    2: "Computer Science",
+    3: "Business",
+    4: "Politics",
+    5: "Mechanical Engineering",
+    6: "Art",
+    7: "Retail",
+    8: "Agriculture",
+    9: "Sales",
+    10: "Healthcare",
+    11: "Media and Entertainment",
+  }; // should we limit what categories each creator can post to?
   // const getUsercategories = async () => {
   //   try {
   //     const gotCategories = await getCategories();
@@ -128,155 +131,172 @@ const CreatePost = () => {
           headerBackTitle: "Home",
         }}
       />
-      <View
-        style={{
-          margin: 10,
-          width: "95%",
-          alignItems: "center",
-          flex: 1.3,
-        }}
-      >
-        <TextInput
-          multiline={true}
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            borderColor: "black",
-            borderWidth: 1,
-            padding: 10,
-            flex: 1,
-            alignItems: "flex-start",
-            maxHeight: 150,
-          }}
-          placeholder="Description"
-          onChangeText={(text) => setDescription(text)}
-          value={description}
-        />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "black",
-            padding: 8,
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
-            alignSelf: "flex-end",
-          }}
-          onPress={hideKeyboard}
-        >
-          <FontAwesomeIcon
-            size={32}
-            style={{ color: "white" }}
-            icon={faKeyboard}
-          />
-        </TouchableOpacity>
-
-        {/* selectable categories */}
+      <TouchableWithoutFeedback onPress={hideKeyboard}>
+        <View style={{ flex: 1, alignItems: "center", width: "100%" }}>
           <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            alignItems: "center",
-            marginTop: 20,
-            flexWrap: "wrap",
-            justifyContent: "center"
-          }}
-        >
-          {categories &&
-            Object.entries(categories).map(([id, name]) => {
-              return (
-                <TouchableOpacity
-                  key={id}
-                  onPress={() => pressed(id)}
+            style={{
+              margin: 10,
+              width: "95%",
+              alignItems: "center",
+              flex: 1,
+            }}
+          >
+            <TextInput
+              multiline={true}
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                borderColor: "black",
+                borderWidth: 1,
+                padding: 10,
+                flex: 1,
+                alignItems: "flex-start",
+                maxHeight: 150,
+              }}
+              placeholder="Description"
+              onChangeText={(text) => setDescription(text)}
+              value={description}
+            />
+
+            <ScrollView
+              horizontal={true}
+              style={{
+                flex: 1,
+                maxHeight: 30,
+                width: "100%",
+                backgroundColor: "black",
+              }}
+            >
+              {/* wrapper view allows scroll view to work because touchable without feedback wrapper usually prevents it */}
+              <View onStartShouldSetResponder={() => true}>
+                <Text
                   style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: 10,
-                    borderColor: getColor(id),
-                    borderStyle: "solid",
-                    borderWidth: 1,
+                    color: "white",
+                    marginHorizontal: 5,
+                    marginVertical: 5,
                   }}
                 >
-                  <Text
-                    style={{
-                      color: getColor(id),
-                    }}
-                  >
-                    {name}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+                  {selectedCategories
+                    ? Object.values(selectedCategories).join(", ")
+                    : "Select categories below..."}
+                </Text>
+              </View>
+            </ScrollView>
+
+            {/* selectable categories */}
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                alignItems: "center",
+                marginTop: 10,
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <ScrollView horizontal={true} style={{ paddingBottom: 10 }}>
+                {categories &&
+                  Object.entries(categories).map(([id, name]) => {
+                    return (
+                      <TouchableOpacity
+                        key={id}
+                        onPress={() => pressed(id)}
+                        style={{
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 10,
+                          borderColor: getColor(id),
+                          borderStyle: "solid",
+                          borderWidth: 1,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: getColor(id),
+                          }}
+                        >
+                          {name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+              </ScrollView>
+            </View>
+          </View>
+
+          {/* audio only plays if phone not on silent */}
+          {video && (
+            <Video
+              ref={videoRef}
+              style={{
+                width: "95%",
+                flex: 3,
+                margin: 3,
+              }}
+              source={{
+                uri: video.uri,
+              }}
+              useNativeControls
+              ignoreSilentSwitch
+              // resizeMode={ResizeMode.CONTAIN}
+              isLooping
+              onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+            />
+          )}
+
+          <TouchableOpacity
+            onPress={pickImage}
+            style={{
+              width: "95%",
+              alignItems: "center",
+              borderStyle: "solid",
+              borderWidth: 1,
+              borderColor: "black",
+              marginTop: "auto",
+            }}
+          >
+            <Text
+              style={{ fontSize: 24, fontWeight: "300", paddingVertical: 6 }}
+            >
+              Upload Video
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            disabled={
+              video === null ||
+              description === "" ||
+              Object.keys(selectedCategories).length === 0
+                ? true
+                : false
+            }
+            onPress={submit}
+            style={{
+              width: "95%",
+              alignItems: "center",
+              backgroundColor: "black",
+              marginTop: 5,
+              opacity:
+                loading ||
+                video === null ||
+                description === "" ||
+                Object.keys(selectedCategories).length === 0
+                  ? 0.2
+                  : 1.0,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 48,
+                color: "white",
+                fontWeight: "300",
+                paddingVertical: 6,
+              }}
+            >
+              {loading ? "Posting..." : "Post"}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </View>
-
-      {/* audio only plays if phone not on silent */}
-      {video && (
-        <Video
-          ref={videoRef}
-          style={{
-            width: "95%",
-            flex: 3,
-            margin: 3,
-          }}
-          source={{
-            uri: video.uri,
-          }}
-          useNativeControls
-          ignoreSilentSwitch
-          // resizeMode={ResizeMode.CONTAIN}
-          isLooping
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-        />
-      )}
-
-      <TouchableOpacity
-        onPress={pickImage}
-        style={{
-          width: "95%",
-          alignItems: "center",
-          borderStyle: "solid",
-          borderWidth: 1,
-          borderColor: "black",
-          marginTop: "auto",
-        }}
-      >
-        <Text style={{ fontSize: 24, fontWeight: "300", paddingVertical: 6 }}>
-          Upload Video
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        disabled={
-          video === null ||
-          description === "" ||
-          Object.keys(selectedCategories).length === 0
-            ? true
-            : false
-        }
-        onPress={submit}
-        style={{
-          width: "95%",
-          alignItems: "center",
-          backgroundColor: "black",
-          marginTop: 5,
-          opacity:
-            loading ||
-            video === null ||
-            description === "" ||
-            Object.keys(selectedCategories).length === 0
-              ? 0.2
-              : 1.0,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 48,
-            color: "white",
-            fontWeight: "300",
-            paddingVertical: 6,
-          }}
-        >
-          {loading ? "Posting..." : "Post"}
-        </Text>
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 };

@@ -13,17 +13,17 @@ const categories = () => {
   }
 
   const allcategories = {
-    0: "Law",
-    1: "Computer Science",
-    2: "Business",
-    3: "Politics",
-    4: "Mechanical Engineering",
-    5: "Art",
-    6: "Retail",
-    7: "Agriculture",
-    8: "Sales",
-    9: "Healthcare",
-    10: "Media and Entertainment",
+    1: "Law",
+    2: "Computer Science",
+    3: "Business",
+    4: "Politics",
+    5: "Mechanical Engineering",
+    6: "Art",
+    7: "Retail",
+    8: "Agriculture",
+    9: "Sales",
+    10: "Healthcare",
+    11: "Media and Entertainment",
   };
 
   const [selectedCategories, setSelectedCategories] = useState({});

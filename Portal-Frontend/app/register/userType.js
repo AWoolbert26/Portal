@@ -5,7 +5,7 @@ import { AuthContext } from "../auth/AuthContext";
 import { router } from "expo-router";
 import { updateUserType } from "../../functions/user";
 
-const initProfile = () => {
+const UserType = () => {
   const { authUser, setAuthUser } = useContext(AuthContext);
   if (!authUser) {
     router.replace("/login");
@@ -182,4 +182,4 @@ const initProfile = () => {
   );
 };
 
-export default initProfile;
+export default UserType;

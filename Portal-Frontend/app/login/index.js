@@ -47,7 +47,13 @@ const Login = () => {
   const onSubmit = async ({ email, password }) => {
     login(email, password)
       .then((res) => {
+        //res is user
         // console.log(res.data);
+        if (!res.verified) {
+          router.replace(`/register/verificationMessage/${res.id}`);
+          console.log("user not verified");
+          return;
+        }
         setAuthUser(res);
         router.replace("/home");
       })

@@ -16,6 +16,7 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
       const gotCategories = await getCategories();
       gotCategories.categories.unshift({ id: -1, name: "Home" });
       setCategories(gotCategories);
+      console.log(gotCategories);
     } catch (err) {
       console.log(err);
     }
@@ -48,7 +49,7 @@ const CategoryMenu = ({ close, setCurrentCategory }) => {
           categories.categories.map((category) => {
             return (
               <TouchableOpacity
-                key={category.name}
+                key={category.id}
                 id={category.name}
                 onPress={() => selectCurrentCategory(category.name)}
               >

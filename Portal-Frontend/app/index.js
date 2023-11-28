@@ -7,6 +7,8 @@ import { useContext } from "react";
 import { AuthContext } from "./auth/AuthContext";
 import { login } from "../functions/user";
 import Splash from "../components/splashscreen";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const goToLoginPage = () => {
@@ -19,6 +21,7 @@ const Home = () => {
 
   const { authUser, setAuthUser } = useContext(AuthContext);
   useEffect(() => {
+    // this prevents user initialization
     if (authUser) {
       router.replace("/home");
     }
@@ -29,7 +32,7 @@ const Home = () => {
   };
 
   const developerQuickLogin = () => {
-    login("a@gmail.com", "a")
+    login("evanwashington2020@gmail.com", "e")
       .then((res) => {
         // console.log(res.data);
         setAuthUser(res);
@@ -60,11 +63,17 @@ const Home = () => {
         style={{
           backgroundColor: "lightgrey",
           marginBottom: 10,
+          marginRight: 6,
+          alignSelf: "flex-end",
           alignItems: "center",
+          padding: 10,
+          borderRadius: 5,
+          rowGap: 5,
         }}
         onPress={developerQuickLogin}
       >
-        <Text style={{ padding: 10 }}>Developer Quick Login</Text>
+        <Text>Quick Login</Text>
+        <FontAwesomeIcon icon={faArrowRight} />
       </TouchableOpacity>
 
       <View

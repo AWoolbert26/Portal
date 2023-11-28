@@ -1,7 +1,7 @@
 import { prisma } from "../index.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { getUserFromToken } from "./user.js";
 import { s3Client } from "../index.js";
+import { getUserFromToken, getUser } from "./user.js";
 
 export const myProfile = async (req, res) => {
   try {
@@ -104,6 +104,7 @@ export const getOtherProfilePictureFromId = async (req, res) => {
 
 export const setProfileInformation = async (req, res) => {
   try {
+    console.log("hit");
     const tokenUser = getUserFromToken(req.headers.authorization);
     const user = await getUser(tokenUser.id);
 
@@ -112,6 +113,8 @@ export const setProfileInformation = async (req, res) => {
         userId: user.id,
       },
     });
+
+    console.log(profileAlreadyExists);
 
     if (profileAlreadyExists) {
       try {

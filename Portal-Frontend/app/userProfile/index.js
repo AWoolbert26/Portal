@@ -9,6 +9,8 @@ import {
   Modal,
   Dimensions,
   Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Stack } from "expo-router";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -22,6 +24,7 @@ import { X } from "lucide-react-native";
 import { router } from "expo-router";
 import { getUserWithPosts } from "../../functions/user";
 import { AuthContext } from "../auth/AuthContext";
+import { setProfile } from "../../functions/user";
 
 const userProfile = () => {
   const {
@@ -60,6 +63,7 @@ const userProfile = () => {
   const onSubmit = async (data) => {
     try {
       //refetch user info
+      setProfile(data);
       initUserWithPosts();
       setEditScreenVisible(!editScreenVisible);
     } catch (err) {
@@ -165,32 +169,32 @@ const userProfile = () => {
                 animationType="fade"
                 visible={editScreenVisible}
                 transparent={false}
+                style={{}}
               >
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "column",
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    marginTop: 60,
-                  }}
-                >
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                   <View
                     style={{
-                      margin: 10,
-                      borderRadius: 20,
-                      padding: 35,
+                      flex: 1,
+                      flexDirection: "column",
+                      justifyContent: "center",
                       alignItems: "center",
-                      elevation: 5,
+                      marginTop: 60,
                     }}
                   >
-                    <Text style={{ fontSize: 25 }}>Edit your profile</Text>
+                    <Text
+                      style={{
+                        fontSize: 25,
+                        fontWeight: 300,
+                      }}
+                    >
+                      Edit your profile
+                    </Text>
                     <Image
                       style={{
-                        width: 150,
                         height: 150,
-                        marginTop: 60,
-                        borderRadius: 100,
+                        aspectRatio: 1,
+                        marginTop: 20,
+                        borderRadius: 250,
                       }}
                       source={{
                         url:
@@ -203,7 +207,7 @@ const userProfile = () => {
                       style={{
                         flex: 1,
                         justifyContent: "flex-start",
-                        paddingTop: 30,
+                        paddingTop: 20,
                       }}
                     >
                       <Text
@@ -310,7 +314,7 @@ const userProfile = () => {
                         )}
                         name="bio"
                       />
-                      <View style={{ marginTop: 60 }}>
+                      <View style={{ marginTop: 30 }}>
                         <Button
                           title="Save"
                           color="black"
@@ -319,7 +323,7 @@ const userProfile = () => {
                       </View>
                     </View>
                   </View>
-                </View>
+                </TouchableWithoutFeedback>
               </Modal>
             )}
           </View>

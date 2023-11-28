@@ -11,7 +11,8 @@ import { getPosts, getTopUsers } from "../../functions/user";
 import SinglePost from "../../components/singlePost";
 import { Dimensions } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import {Colors, Hint, Button, Assets, Incubator} from 'react-native-ui-lib';
+import { Colors, Hint, Button, Assets, Incubator } from "react-native-ui-lib";
+import { StatusBar } from "react-native";
 
 const Home = () => {
   const ScreenHeight = Dimensions.get("window").height;
@@ -36,7 +37,8 @@ const Home = () => {
   };
 
   const settingPosts = async () => {
-    console.log(currentCategory);
+    console.log("cur cat:" + currentCategory);
+
     setPosts(await getPosts(currentCategory));
   };
 
@@ -80,6 +82,11 @@ const Home = () => {
     <SafeAreaView
       style={{ flex: 1, backgroundColor: statusBarBGColor.current }}
     >
+      <StatusBar
+        backgroundColor={"transparent"}
+        translucent={true}
+        animated={true}
+      />
       {categoryMenuOpen && (
         <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
       )}

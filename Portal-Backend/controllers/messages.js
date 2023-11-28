@@ -1,6 +1,6 @@
 import { prisma } from "../index.js";
 
-import { getUserFromToken } from "./user.js";
+import { getUserFromToken, getUser, getFollows } from "./user.js";
 
 export const getConversation = async (req, res) => {
   try {

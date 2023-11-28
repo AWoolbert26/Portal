@@ -1,7 +1,7 @@
 import { prisma } from "../index.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { getUserFromToken } from "./user.js";
 import { s3Client } from "../index.js";
+import { getUserFromToken, getUser, getFollows } from "./user.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -34,6 +34,11 @@ export const getPosts = async (req, res) => {
               username: true,
               profilePicture: true,
               id: true,
+              profile: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -71,6 +76,13 @@ export const getPosts = async (req, res) => {
           user: {
             select: {
               username: true,
+              profilePicture: true,
+              id: true,
+              profile: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -162,6 +174,13 @@ export const getUserPosts = async (req, res) => {
         user: {
           select: {
             username: true,
+            profilePicture: true,
+            id: true,
+            profile: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -211,8 +230,8 @@ export const likePost = async (req, res) => {
     const postId = parseInt(req.params.postId);
     const liked = await prisma.like.create({
       data: {
-        User: { connect: { id: userId } },
-        Post: { connect: { id: postId } },
+        user: { connect: { id: userId } },
+        post: { connect: { id: postId } },
       },
     });
     liked ? res.send(true) : res.send(false);

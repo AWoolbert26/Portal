@@ -1,5 +1,5 @@
 import { prisma } from "../index.js";
-import { getUserFromToken } from "./user.js";
+import { getUserFromToken, getUser } from "./user.js";
 
 export const getCategories = async (req, res) => {
   try {

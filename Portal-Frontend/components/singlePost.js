@@ -6,11 +6,17 @@ import React, {
   useRef,
 } from "react";
 import { Video } from "expo-av";
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, Touchable } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Heart, MessageSquare, Minus } from "lucide-react-native";
-import { likePost, unlikePost, getPostInfo } from "../functions/user";
+import {
+  likePost,
+  unlikePost,
+  getPostInfo,
+  toggleFollow,
+} from "../functions/user";
 import { router } from "expo-router";
+import FollowButton from "./FollowButton";
 
 const SinglePost = forwardRef(({ post }, ref) => {
   const [captionOpen, setCaptionOpen] = useState(false);
@@ -70,6 +76,8 @@ const SinglePost = forwardRef(({ post }, ref) => {
   }, [captionOpen]);
 
   useEffect(() => {
+    //fetch like info on load
+    loadInfo();
     return () => unload();
   }, []);
 
@@ -126,10 +134,15 @@ const SinglePost = forwardRef(({ post }, ref) => {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           width: "100%",
           zIndex: 2,
+          padding: 10,
         }}
       >
         <TouchableWithoutFeedback
-          style={{ flexDirection: "row", alignItems: "center" }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 7,
+          }}
           onPress={() => router.push(`/user/${post.userId}`)}
         >
           <Image
@@ -145,12 +158,30 @@ const SinglePost = forwardRef(({ post }, ref) => {
               backgroundColor: "white",
             }}
           />
-          <Text style={{ marginLeft: 7, color: "white" }}>
+          <Text
+            style={{
+              color: "white",
+              fontWeight: 700,
+              fontSize: 24,
+            }}
+          >
             {post.user.username}
           </Text>
+          <Text
+            style={{
+              color: "white",
+              fontSize: 20,
+            }}
+          >
+            {post.user.profile.name}
+          </Text>
         </TouchableWithoutFeedback>
+        {/* <FollowButton id={post.user.id} follows={true} /> */}
       </View>
-      <TouchableWithoutFeedback onPress={toggleCaption}>
+      <TouchableWithoutFeedback
+        style={{ position: "relative" }}
+        onPress={toggleCaption}
+      >
         {/* background video */}
         <Video
           ref={video}
@@ -164,7 +195,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
             // figure out your image aspect ratio
             aspectRatio: 3 / 5,
           }}
-          shouldPlay={true}
+          shouldPlay={false}
           isLooping={true}
           resizeMode="cover"
         />
@@ -174,7 +205,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
             position: "absolute",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             width: "100%",
-            bottom: 5,
+            bottom: 20,
           }}
         >
           {!captionOpen || !postInfo ? (
@@ -192,52 +223,48 @@ const SinglePost = forwardRef(({ post }, ref) => {
               <Text
                 style={{
                   color: "white",
-                  marginBottom: 30,
                 }}
               >
                 {post.description}
               </Text>
-              {/* should I make the buttons easier to click? */}
-              {/* also spacing seems off */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 50,
-                  marginBottom: 10,
-                }}
-              >
-                <TouchableWithoutFeedback
-                  style={{ alignItems: "center", marginRight: 35 }}
-                  onPress={pressedLike}
-                >
-                  {postInfo.isLiked ? (
-                    <Heart color="rgba(0, 0, 0, 0)" size={35} fill="#ff0000" />
-                  ) : (
-                    <Heart color="#fff" size={35} />
-                  )}
-                  <Text style={{ color: "white" }}>
-                    {postInfo.likeCount} Likes
-                  </Text>
-                </TouchableWithoutFeedback>
-                <Minus
-                  style={{ transform: [{ rotate: "90deg" }] }}
-                  color="#fff"
-                  size={35}
-                ></Minus>
-                <TouchableWithoutFeedback
-                  style={{ alignItems: "center" }}
-                  onPress={openComments}
-                >
-                  <MessageSquare color="#fff" size={35}></MessageSquare>
-                  <Text style={{ color: "white" }}>
-                    {postInfo.commentCount} Comments
-                  </Text>
-                </TouchableWithoutFeedback>
-              </View>
             </View>
           )}
         </View>
+        {/* post like bar and comment bar on side */}
+        {postInfo && (
+          <View
+            style={{
+              position: "absolute",
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              rowGap: 20,
+              alignItems: "center",
+              top: "40%",
+              padding: 15,
+              borderRadius: 50,
+              right: 5,
+            }}
+          >
+            <TouchableWithoutFeedback
+              style={{ alignItems: "center" }}
+              onPress={pressedLike}
+            >
+              {postInfo.isLiked ? (
+                <Heart color="rgba(0, 0, 0, 0)" size={35} fill="#ff0000" />
+              ) : (
+                <Heart color="#fff" size={35} />
+              )}
+              <Text style={{ color: "white" }}>{postInfo.likeCount}</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              style={{ alignItems: "center" }}
+              onPress={openComments}
+            >
+              <MessageSquare color="#fff" size={35}></MessageSquare>
+              <Text style={{ color: "white" }}>{postInfo.commentCount}</Text>
+            </TouchableWithoutFeedback>
+          </View>
+        )}
       </TouchableWithoutFeedback>
     </View>
   );

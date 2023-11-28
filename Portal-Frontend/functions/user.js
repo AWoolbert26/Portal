@@ -9,6 +9,10 @@ export const login = async (email, password) => {
       email: email,
       password: password,
     });
+    console.log(result.data.user.verified);
+    if (!result.data.user.verified) {
+      return result.data.user;
+    }
     await SecureStore.setItemAsync("authToken", result.data.authToken);
     axios.defaults.headers.common["Authorization"] = result.data.authToken;
 
@@ -156,6 +160,7 @@ export const getCategories = async () => {
 
 export const setProfile = async ({ name, location, occupation, bio }) => {
   try {
+    console.log(name, location, occupation, bio);
     const profile = await axios.post(`${backendUrl}/setProfileInformation`, {
       name: name,
       location: location,

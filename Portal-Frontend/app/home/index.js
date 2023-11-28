@@ -197,14 +197,18 @@ const Home = () => {
         />
       ) : (
         <View
-          style={{ flex: 1, justifyContent: "start", alignItems: "center" }}
+          style={{justifyContent: "center", alignItems: "center" }}
         >
+           <LottieView
+            autoPlay
+            loop
+            source={require("../../assets/novideosanimation.json")}
+            />
           {topUsers.length > 0 && (
-            <View style={{ marginTop: ScreenHeight / 3 }}>
-              <Text>Here Are Our Top Users:</Text>
-              <View
+            <View style={{ marginTop: 500}}>
+            <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: "column",
                   marginTop: 10,
                   justifyContent: "space-between",
                 }}
@@ -214,6 +218,7 @@ const Home = () => {
                     key={user.id}
                     style={{
                       flexDirection: "row",
+                      justifyContent:'center',
                       alignItems: "center",
                       // backgroundColor: "black",
                     }}
@@ -229,8 +234,6 @@ const Home = () => {
                         borderRadius: 20,
                         borderWidth: 1,
                         borderColor: "black",
-                        backgroundColor: "white",
-                        marginLeft: 10,
                       }}
                     />
                     <Text style={{ marginLeft: 10, fontSize: 25 }}>
@@ -239,6 +242,16 @@ const Home = () => {
                   </TouchableOpacity>
                 ))}
               </View>
+              <TouchableOpacity
+                style={{
+                  marginVertical: 20,
+                  padding: 10,
+                  backgroundColor: "black",
+                  borderRadius: 5,
+              }}
+              >
+              <Text style={{ color: "white" }}>Follow more users to see videos.</Text>
+              </TouchableOpacity>
             </View>
           )}
         </View>

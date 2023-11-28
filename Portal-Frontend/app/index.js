@@ -32,7 +32,7 @@ const Home = () => {
   };
 
   const developerQuickLogin = () => {
-    login("evanwashington2020@gmail.com", "e")
+    login("aaronblane9182@gmail.com", "a")
       .then((res) => {
         // console.log(res.data);
         setAuthUser(res);

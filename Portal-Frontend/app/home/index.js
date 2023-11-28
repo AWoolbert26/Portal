@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, SafeAreaView, Text, Image } from "react-native";
+import { View, SafeAreaView, Text, Image, ActivityIndicator } from "react-native";
 import { Stack } from "expo-router/stack";
 import { Info } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -9,19 +9,18 @@ import Header from "../../components/header";
 import CategoryMenu from "../../components/categoryMenu";
 import { getPosts, getTopUsers } from "../../functions/user";
 import SinglePost from "../../components/singlePost";
-import { Dimensions } from "react-native";
+import { Dimensions, Modal, TouchableWithoutFeedback } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { Colors, Hint, Button, Assets, Incubator } from "react-native-ui-lib";
-import { StatusBar } from "react-native";
+import LottieView from "lottie-react-native";
 
 const Home = () => {
   const ScreenHeight = Dimensions.get("window").height;
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
-  const statusBarBGColor = useRef("white");
   const [currentCategory, setCurrentCategory] = useState("Home");
   const [posts, setPosts] = useState({});
   const [topUsers, setTopUsers] = useState({});
   const [isVisible, setIsVisible] = useState("true");
+  const [loading, setLoading] = useState(true);
 
   const goToDescription = () => {
     router.push("/home/categorySummary");
@@ -29,39 +28,51 @@ const Home = () => {
 
   const openCategoryMenu = () => {
     setCategoryMenuOpen(true);
-    statusBarBGColor.current = "black";
   };
+
   const close = () => {
     setCategoryMenuOpen(false);
-    statusBarBGColor.current = "white";
   };
 
-  const settingPosts = async () => {
-    console.log("cur cat:" + currentCategory);
+  // const settingPosts = async () => {
+  //   console.log("cur cat:" + currentCategory);
+  //   setPosts(await getPosts(currentCategory));
+  // };
 
-    setPosts(await getPosts(currentCategory));
-  };
+  // const gettingTopUsers = async () => {
+  //   setTopUsers(await getTopUsers());
+  // };
 
-  const gettingTopUsers = async () => {
-    setTopUsers(await getTopUsers());
-  };
+  // useEffect(() => {
+  //   settingPosts();
+  // }, [currentCategory]);
+
+  // // is this the best way of doing this? (getting page to rerender on focus)
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     settingPosts();
+  //   }, [currentCategory])
+  // );
+
+  // useEffect(() => {
+  //   if (!posts || posts.length == 0) {
+  //     gettingTopUsers();
+  //   }
+  // }, [posts]);
 
   useEffect(() => {
-    settingPosts();
+    const fetchData = async () => {
+      // Fetch posts and top users
+      const fetchedPosts = await getPosts(currentCategory);
+      const fetchedTopUsers = await getTopUsers();
+      setTimeout(() => {
+        setPosts(fetchedPosts);
+        setTopUsers(fetchedTopUsers);
+        setLoading(false);
+      }, 1000);
+    };
+    fetchData();
   }, [currentCategory]);
-
-  // is this the best way of doing this? (getting page to rerender on focus)
-  useFocusEffect(
-    React.useCallback(() => {
-      settingPosts();
-    }, [currentCategory])
-  );
-
-  useEffect(() => {
-    if (!posts || posts.length == 0) {
-      gettingTopUsers();
-    }
-  }, [posts]);
 
   const postRefs = useRef([]);
   const onViewableItemsChanged = useRef(({ changed }) => {
@@ -77,19 +88,34 @@ const Home = () => {
     });
   });
 
-  // need to change status bar
+  if (loading) {
+    return (
+      <SafeAreaView
+      style={{ flex: 1, backgroundColor: "white"}}
+    >
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <LottieView 
+          autoPlay
+          loop
+          source={require("../../assets/loadinganimation.json")}
+        />
+      </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: statusBarBGColor.current }}
+      style={{ flex: 1, backgroundColor: "white"}}
     >
-      <StatusBar
-        backgroundColor={"transparent"}
-        translucent={true}
-        animated={true}
-      />
-      {categoryMenuOpen && (
+      {/* {categoryMenuOpen && (
         <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
-      )}
+      )} */}
       <Stack.Screen
         options={{
           headerShown: false,
@@ -109,6 +135,24 @@ const Home = () => {
             currentCategory={currentCategory}
           />
         </View>
+
+        <Modal
+          visible={categoryMenuOpen}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setCategoryMenuOpen(false)}
+        >
+          <TouchableWithoutFeedback onPress={close}>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
+              <TouchableWithoutFeedback>
+                <View style={{ width: "80%", height: "60%", backgroundColor: "white", borderRadius: 10, borderWidth: 1 }}>
+                  <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
         {/* shouldnt this be in the header component */}
         {currentCategory != "Home" && (
           <View style={{ marginRight: 10 }}>

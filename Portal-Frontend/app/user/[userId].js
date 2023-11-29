@@ -117,8 +117,10 @@ const Profile = () => {
           </View>
           <View
             style={{
-              flexDirection: "column",
-              justifyContent: "flex-start",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems:'center',
+              marginVertical: 20,
               width: "100%",
             }}
           >
@@ -164,38 +166,59 @@ const Profile = () => {
 
       {/* posts */}
       <ScrollView
-        style={{
-          padding: 4,
-          width: "100%",
-        }}
-      >
+      style={{
+        padding: 4,
+        width: "100%",
+      }}
+    >
+      {user && user.posts && user.posts.length > 0 ? (
         <View
           style={{
             flex: 1,
             flexDirection: "row",
             flexWrap: "wrap",
             gap: 3,
-            // justifyContent: "space-between",
             padding: 4,
             width: "100%",
           }}
         >
-          {user &&
-            user.posts.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={{
-                  width: "32%",
-                }}
-                onPress={() => {
-                  setSelectedPost(item);
-                  setModalVisible(true);
-                }}
-              >
-                <MiniPost post={item} />
-              </TouchableOpacity>
-            ))}
+          {user.posts.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={{
+                width: "32%",
+              }}
+              onPress={() => {
+                setSelectedPost(item);
+                setModalVisible(true);
+              }}
+            >
+              <MiniPost post={item} />
+            </TouchableOpacity>
+          ))}
         </View>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 50,
+          }}
+        >
+          <Text>No videos available</Text>
+          <TouchableOpacity
+            style={{
+              marginTop: 10,
+              padding: 10,
+              backgroundColor: "black",
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ color: "white" }}>This user hasn't uploaded any videos.</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
         <Modal visible={modalVisible} animationType="slide">
           <View

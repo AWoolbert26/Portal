@@ -92,7 +92,9 @@ const Comments = () => {
               >
                 <Image
                   source={{
-                    uri: item.User.profilePicture,
+                    uri:
+                      item.user.profilePicture ||
+                      "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
                   }}
                   style={{
                     width: 40,
@@ -105,7 +107,7 @@ const Comments = () => {
                   }}
                 />
                 <Text style={{ color: "white", marginLeft: 10, fontSize: 25 }}>
-                  {item.User.username}
+                  {item.user.username}
                 </Text>
               </TouchableOpacity>
               <Text style={{ color: "white", marginLeft: 30 }}>

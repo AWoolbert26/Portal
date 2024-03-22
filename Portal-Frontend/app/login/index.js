@@ -47,7 +47,7 @@ const Login = () => {
   const onSubmit = async ({ email, password }) => {
     login(email, password)
       .then((res) => {
-        //res is user
+        // res is user
         // console.log(res.data);
         if (!res.verified) {
           router.replace(`/register/verificationMessage/${res.id}`);

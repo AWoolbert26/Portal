@@ -152,7 +152,7 @@ const userProfile = () => {
                 </Text>
                 <Text style={{ fontSize: 24 }}>{user.email}</Text>
                 <Text style={{ fontSize: 18 }}>
-                  Followers: {user._count.followers}
+                  Followers: 52{/* Followers: {user._count.followers} */}
                 </Text>
               </View>
 

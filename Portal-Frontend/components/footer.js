@@ -94,7 +94,6 @@ const Footer = () => {
           <Home color="black" size={30}/>
         </TouchableOpacity>
 
-        {authUser.type === 1 && (
           <TouchableOpacity
             onPress={goToCreatePost}
             style={{
@@ -107,7 +106,7 @@ const Footer = () => {
               size={30}
             />
           </TouchableOpacity>
-        )}
+        
 
         <TouchableOpacity
           onPress={goToProfile}

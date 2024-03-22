@@ -13,8 +13,6 @@ import * as ImagePicker from "expo-image-picker";
 import { post } from "../../functions/post";
 import { Video } from "expo-av";
 import { Keyboard } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { Stack } from "expo-router";
 import { getCategories } from "../../functions/user";
 import { Picker } from "@react-native-picker/picker";

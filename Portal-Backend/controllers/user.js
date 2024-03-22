@@ -123,6 +123,7 @@ export const resendVerificationEmail = async (req, res) => {
 
     const serverIp = `${req.protocol}://${req.headers.host}`;
 
+    console.log("Made IT!")
     sendVerificationEmail(userId, email, serverIp, redirectUrl);
 
     //generates jwt -- postponed to when they verify email
@@ -497,16 +498,18 @@ export const getUserWithPosts = async (req, res) => {
 //helpers
 const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
   try {
+    console.log("Made IT 2")
     const transporter = nodemailer.createTransport({
-      host: "smtp-relay.brevo.com",
-      port: 587,
-      secure: false, // upgrade later with STARTTLS
+      host: "smtp.gmail.com",
+      port: 465, // SMTP port (465 for SSL)
+      secure: true,
       auth: {
-        user: process.env.SMTP_EMAIL,
-        pass: process.env.SMTP_PASSWORD,
+        user: "andrew.s.woolbert@gmail.com",
+        pass: "xzic ppsm dato racw"
       },
     });
 
+    console.log("Made IT 3")
     //creates token that encodes id and redirectUrl
     const verificationToken = jsonwebtoken.sign(
       {
@@ -519,14 +522,16 @@ const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
       { expiresIn: "10m" }
     );
 
+    console.log("Made IT 4")
     const mailConfigurations = {
-      from: "437portal@gmail.com",
+      from: "andrew.s.woolbert@gmail.com",
       to: email,
       subject: "Portal - Email Verification",
       text: `Hi there! Please verify your email to continue using Portal! Here is the link for verification: ${serverIp}/verify/${verificationToken}.`,
       // html: {make html for the email}
     };
 
+    console.log("Made IT 5")
     transporter.sendMail(mailConfigurations, function (error, info) {
       if (error) throw Error(error);
       console.log("Email Sent Successfully");

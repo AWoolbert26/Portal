@@ -40,7 +40,7 @@ const VerificationConfirmation = () => {
     >
       <Stack.Screen options={{ headerShown: false }} />
       {/* snoop animation */}
-      <View
+      {/* <View
         style={{
           width: "100%",
           height: "100%",
@@ -56,7 +56,7 @@ const VerificationConfirmation = () => {
           loop
           source={require("../../../assets/SnoopAnimation.json")}
         />
-      </View>
+      </View> */}
 
       {/* celebrate animation */}
       <View
@@ -106,6 +106,7 @@ const VerificationConfirmation = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+    // <Text>Hello World!</Text>
   );
 };
 

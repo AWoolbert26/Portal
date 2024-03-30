@@ -32,7 +32,7 @@ const Footer = () => {
   };
 
   const goToProfile = () => {
-    router.replace("/userProfile");
+    router.push("/userProfile");
   };
 
   const goToMessages = () => {
@@ -92,6 +92,7 @@ const Footer = () => {
           }}
         >
           <Home color="black" size={30}/>
+
         </TouchableOpacity>
 
           <TouchableOpacity

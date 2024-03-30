@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View, TouchableOpacity, Text } from "react-native";
+import { SafeAreaView, View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { Stack } from "expo-router/stack";
 import { useEffect } from "react";
@@ -31,18 +31,6 @@ const Home = () => {
     router.replace("/register/categories");
   };
 
-  const developerQuickLogin = () => {
-    login("evanwashington2020@gmail.com", "e")
-      .then((res) => {
-        // console.log(res.data);
-        setAuthUser(res);
-        router.replace("/home");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }} backgroundColor="white">
       <Stack.Screen
@@ -51,30 +39,34 @@ const Home = () => {
           headerShown: false,
         }}
       />
-      <Splash />
-      <View style={{ flex: 9, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontWeight: "700", fontSize: 75 }}>P O R T A L</Text>
-        <Text style={{ fontSize: 20, color: "grey" }}>
-          Discover your future career
-        </Text>
-      </View>
-      {/* login and register */}
-      <TouchableOpacity
+
+
+      <View 
         style={{
-          backgroundColor: "lightgrey",
-          marginBottom: 10,
-          marginRight: 6,
-          alignSelf: "flex-end",
-          alignItems: "center",
-          padding: 10,
-          borderRadius: 5,
-          rowGap: 5,
-        }}
-        onPress={developerQuickLogin}
-      >
-        <Text>Quick Login</Text>
-        <FontAwesomeIcon icon={faArrowRight} />
-      </TouchableOpacity>
+        flex: 9, 
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fff'
+        }}>
+
+        <Image
+          source={require('../images/PortalLogo.png')} 
+          style={{width:'100%', height:'90%'}}
+          resizeMode="contain" 
+        />
+
+        {/* Optional splash effect. I don't really like this */}
+        {/* <View 
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1,
+          }}>
+          <Splash />
+        </View> */}
+
+      </View>
 
       <View
         style={{

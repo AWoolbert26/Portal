@@ -101,11 +101,23 @@ const userProfile = () => {
         backgroundColor: "white",
       }}
     >
-      <Stack.Screen
+
+      {/* 
+          I'm not sure why the stack screen at this location ends up going to the home screen
+          debugging is required. 
+      */}
+      {/* <Stack.Screen
         options={{
           headerStyle: { backgroundColor: "transparent" },
           headerTransparent: true,
           title: "My Profile",
+        }}
+      /> */}
+
+      <Stack.Screen
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Home",
         }}
       />
 
@@ -152,7 +164,7 @@ const userProfile = () => {
                 </Text>
                 <Text style={{ fontSize: 24 }}>{user.email}</Text>
                 <Text style={{ fontSize: 18 }}>
-                  Followers: 52{/* Followers: {user._count.followers} */}
+                  Followers: {user._count.followers}
                 </Text>
               </View>
 

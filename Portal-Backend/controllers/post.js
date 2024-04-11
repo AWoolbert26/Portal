@@ -127,7 +127,7 @@ export const post = async (req, res) => {
       //upload videoBlob to s3 to the videos folder
       const commandParams = {
         Key: `videos/${post.id}.${fileExtension}`, //for other video types, adjust by sending proper type to backend
-        Bucket: "portal-437",
+        Bucket: "portal-posts",
         Body: videoBuffer,
         //setting cache to 1 minute
         Metadata: {
@@ -142,7 +142,7 @@ export const post = async (req, res) => {
       await prisma.post.update({
         where: { id: post.id },
         data: {
-          url: `${process.env.S3_DOMAIN}/videos/${post.id}.${fileExtension}`,
+          url: `http://portal-posts.s3.us-east-2.amazonaws.com/videos/${post.id}.${fileExtension}`,
         },
       });
 

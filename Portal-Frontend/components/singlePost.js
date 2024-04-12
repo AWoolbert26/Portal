@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { Video } from "expo-av";
-import { Text, View, Image, Touchable } from "react-native";
+import { Text, View, Image, Touchable, StyleSheet } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { Heart, MessageSquare, Minus } from "lucide-react-native";
 import {
@@ -132,8 +132,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
           position: "absolute",
           flexDirection: "row",
           paddingLeft: 7,
-          marginTop: 7,
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(0, 0, 0, 0.0)",
           width: "100%",
           zIndex: 2,
           padding: 10,
@@ -164,7 +163,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
             style={{
               color: "white",
               fontWeight: 700,
-              fontSize: 24,
+              fontSize: 18,
             }}
           >
             {post.user.username}
@@ -207,7 +206,8 @@ const SinglePost = forwardRef(({ post }, ref) => {
             position: "absolute",
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             width: "100%",
-            bottom: 20,
+            bottom: 0,
+            padding: 5
           }}
         >
           {!captionOpen || !postInfo ? (

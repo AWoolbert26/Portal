@@ -18,6 +18,7 @@ import SinglePost from "../../components/singlePost";
 import { Dimensions, Modal, TouchableWithoutFeedback } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
+import { Center } from "@gluestack-ui/config/build/theme";
 
 const Home = () => {
   const ScreenHeight = Dimensions.get("window").height;
@@ -90,10 +91,7 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      {/* {categoryMenuOpen && (
-        <CategoryMenu close={close} setCurrentCategory={setCurrentCategory} />
-      )} */}
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
       <Stack.Screen
         options={{
           headerShown: false,
@@ -104,10 +102,9 @@ const Home = () => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          marginTop: 20,
         }}
       >
-        <View style={{ flex: 1, alignSelf: "center" }}>
+        <View style={{ flex: 1, alignSelf: "center"}}>
           <Header
             openCategoryMenu={openCategoryMenu}
             currentCategory={currentCategory}
@@ -148,9 +145,9 @@ const Home = () => {
           </TouchableWithoutFeedback>
         </Modal>
 
-        {/* shouldnt this be in the header component */}
+        {/* Category Information */}
         {currentCategory != "Home" && (
-          <View style={{ marginRight: 10 }}>
+          <View style={{marginRight:10, marginBottom:12}}>
             <Link
               href={{
                 pathname: "/home/categorySummary",
@@ -159,7 +156,7 @@ const Home = () => {
               asChild
             >
               <TouchableOpacity>
-                <Info size={35} color="#000" />
+                <Info size={30} color="#000" />
               </TouchableOpacity>
             </Link>
           </View>
@@ -180,7 +177,7 @@ const Home = () => {
       {/* posts */}
       {!categoryMenuOpen && posts && posts.length > 0 ? (
         <FlatList
-          style={{ marginBottom: 47 }}
+          style={{ marginBottom: 55 }}
           data={posts}
           renderItem={({ item }) => (
             <SinglePost

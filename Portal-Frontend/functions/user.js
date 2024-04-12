@@ -152,6 +152,7 @@ export const getOtherProfile = async (userId) => {
 export const getCategories = async () => {
   try {
     const result = await axios.get(`${backendUrl}/getCategories`);
+    console.log(result.data)
     return result.data;
   } catch (err) {
     console.log(err);

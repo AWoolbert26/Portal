@@ -27,14 +27,12 @@ app.use(cors());
 
 export const prisma = new PrismaClient();
 
-// const globalForS3 = globalThis
 export const s3Client =
-  //   globalForS3.s3Client ??
   new S3Client({
-    region: "us-east-1",
+    region: "us-east-2",
     credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY,
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+      accessKeyId: 'AKIAXYKJQL3CLF7B576X',
+      secretAccessKey: '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',
     },
   });
 

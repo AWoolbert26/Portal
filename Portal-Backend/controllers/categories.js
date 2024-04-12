@@ -4,15 +4,8 @@ import { getUserFromToken, getUser } from "./user.js";
 export const getCategories = async (req, res) => {
   try {
     const user = getUserFromToken(req.headers.authorization);
-    const result = await prisma.user.findFirst({
-      where: {
-        id: user.id,
-      },
-      select: {
-        categories: true,
-      },
-    });
-    res.send(result);
+    const result = await prisma.category.findMany();
+    res.send({"categories": result});
   } catch (err) {
     console.log(err);
     res.send(err);

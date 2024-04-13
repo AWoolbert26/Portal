@@ -111,10 +111,6 @@ export const post = async (req, res) => {
 
       console.log("Buffer conversion passed");
 
-      console.log(user)
-      console.log(categories)
-      console.log(description)
-
       const post = await prisma.post.create({
         data: {
           userId: user.id,
@@ -161,7 +157,6 @@ export const post = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Error sending post request")
   }
 };
 

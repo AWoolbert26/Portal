@@ -441,16 +441,6 @@ const userProfile = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-
-
-        <View
-          style={{
-            
-          }}
-        >
-          
-        </View>
-
       </ScrollView>
       <Footer />
     </SafeAreaView>

@@ -205,7 +205,10 @@ const CreatePost = () => {
                           padding: 10,
                           borderColor: getColor(id),
                           borderStyle: "solid",
-                          borderWidth: 1,
+                          backgroundColor: '#CCCCCC',
+                          borderRadius: 5,
+                          margin: 2,
+                          borderWidth: 0,
                         }}
                       >
                         <Text

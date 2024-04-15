@@ -150,6 +150,7 @@ const CreatePost = () => {
                 flex: 1,
                 alignItems: "flex-start",
                 maxHeight: 150,
+                borderRadius: 3
               }}
               placeholder="Description"
               onChangeText={(text) => setDescription(text)}
@@ -162,7 +163,6 @@ const CreatePost = () => {
                 flex: 1,
                 maxHeight: 30,
                 width: "100%",
-                backgroundColor: "black",
               }}
             >
               {/* wrapper view allows scroll view to work because touchable without feedback wrapper usually prevents it */}
@@ -172,6 +172,9 @@ const CreatePost = () => {
                     color: "white",
                     marginHorizontal: 5,
                     marginVertical: 5,
+                    color: 'black',
+                    flex: 1,
+                    flexWrap: 'wrap',
                   }}
                 >
                   {selectedCategories
@@ -205,7 +208,10 @@ const CreatePost = () => {
                           padding: 10,
                           borderColor: getColor(id),
                           borderStyle: "solid",
-                          borderWidth: 1,
+                          borderWidth: 0,
+                          backgroundColor: '#CCCCCC',
+                          margin: 3,
+                          borderRadius: 4
                         }}
                       >
                         <Text
@@ -254,7 +260,7 @@ const CreatePost = () => {
             }}
           >
             <Text
-              style={{ fontSize: 24, fontWeight: "300", paddingVertical: 6 }}
+              style={{ fontSize: 24, fontWeight: "500", paddingVertical: 6 }}
             >
               Upload Video
             </Text>

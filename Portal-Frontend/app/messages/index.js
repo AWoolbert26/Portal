@@ -50,7 +50,12 @@ const Messages = () => {
                 >
                   <Image
                     style={{ width: 50, height: 50, borderRadius: "100%" }}
-                    source={user.profilePicture}
+                    source={{
+                      url:
+                        user.profilePicture ||
+                        "https://tr.rbxcdn.com/38c6edcb50633730ff4cf39ac8859840/420/420/Hat/Png",
+                    }}
+                    resizeMode={"cover"}
                   />
                   <View
                     style={{

@@ -19,7 +19,7 @@ import { useState, useRef } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import { getOtherProfile } from "../../functions/user";
 import { Image } from "expo-image";
-
+import { ArrowUp } from "lucide-react-native";
 const Message = () => {
   const { userId } = useLocalSearchParams();
 
@@ -68,11 +68,11 @@ const Message = () => {
               <View>
                 {profile && (
                   <Image
-                    style={{ height: 25, width: 25, borderRadius: "100%" }}
+                    style={{ height: 13, width: 25, borderRadius: "100%" }}
                     source={profile.user.profilePicture}
                   />
                 )}
-                {profile && <Text>{profile.name}</Text>}
+                {profile && <Text style={{fontSize: 20}}>{profile.name}</Text>}
               </View>
             </Link>
           ),
@@ -95,38 +95,42 @@ const Message = () => {
           {/* map thru old messages here */}
           {messages.map(({ id, text, senderId, createdAt }) => {
             return (
-              <View
-                key={id}
-                style={{
-                  alignSelf:
-                    senderId === authUser.id ? "flex-end" : "flex-start",
-                  marginRight: senderId === authUser.id ? 0 : 30,
-                  marginLeft: senderId === authUser.id ? 100 : 0,
-                  backgroundColor:
-                    senderId === authUser.id ? "lightblue" : "lightgrey",
-                  marginVertical: 5,
-                  borderBottomRightRadius: senderId === authUser.id ? 0 : 5,
-                  borderBottomLeftRadius: senderId === authUser.id ? 5 : 0,
-                  borderTopLeftRadius: 5,
-                  borderTopRightRadius: 5,
-                }}
-              >
-                <Text
+              <View>
+                <View
+                  key={id}
                   style={{
-                    marginTop: 10,
-                    marginHorizontal: 15,
-                    fontSize: 16,
-
-                    color: "white",
+                    alignSelf:
+                      senderId === authUser.id ? "flex-end" : "flex-start",
+                    marginRight: senderId === authUser.id ? 0 : 30,
+                    marginLeft: senderId === authUser.id ? 100 : 0,
+                    backgroundColor:
+                      senderId === authUser.id ? "lightblue" : "lightgrey",
+                    marginVertical: 5,
+                    borderBottomRightRadius: senderId === authUser.id ? 0 : 5,
+                    borderBottomLeftRadius: senderId === authUser.id ? 5 : 0,
+                    borderTopLeftRadius: 5,
+                    borderTopRightRadius: 5,
                   }}
                 >
-                  {text}
-                </Text>
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      marginBottom: 10,
+                      marginHorizontal: 15,
+                      fontSize: 16,
+
+                      color: "white",
+                    }}
+                  >
+                    {text}
+                  </Text>
+                  
+                </View>
                 <Text
                   style={{
                     marginVertical: 1,
                     marginHorizontal: 3,
-                    color: "white",
+                    color: "gray",
                     fontSize: 12,
                     alignSelf: "flex-end",
                   }}
@@ -147,11 +151,14 @@ const Message = () => {
               paddingRight: 10,
               borderColor: "black",
               borderStyle: "solid",
-              borderWidth: 1,
+              backgroundColor: "#CCC",
+              borderRadius: 20,
+              borderWidth: 0,
+              marginLeft: 10,
               fontSize: 16,
               flex: 10,
             }}
-            placeholder={`Message user`}
+            placeholder={`Message`}
             multiline
             value={text}
             onChangeText={(newText) => setText(newText)}
@@ -162,9 +169,10 @@ const Message = () => {
           />
           <TouchableOpacity
             style={{
+              paddingLeft: 20,
+              paddingRight: 20,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: text !== "" ? "black" : "lightgrey",
             }}
             disabled={text ? false : true}
             onPress={() => {
@@ -172,15 +180,7 @@ const Message = () => {
               setText("");
             }}
           >
-            <Text
-              style={{
-                color: "white",
-                paddingLeft: 20,
-                paddingRight: 20,
-              }}
-            >
-              Send
-            </Text>
+            <ArrowUp></ArrowUp>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

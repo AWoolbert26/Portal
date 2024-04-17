@@ -94,21 +94,22 @@ const Footer = () => {
           <Home color="black" size={30}/>
 
         </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={goToCreatePost}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PlusCircle
-              color="black"
-              size={30}
-            />
-          </TouchableOpacity>
         
-
+        {/* Post */}
+        {/* <TouchableOpacity
+          onPress={goToCreatePost}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <PlusCircle
+            color="black"
+            size={30}
+          />
+        </TouchableOpacity> */}
+        
+        {/* Profile */}
         <TouchableOpacity
           onPress={goToProfile}
           style={{
@@ -122,6 +123,7 @@ const Footer = () => {
           />
         </TouchableOpacity>
         
+        {/* Messages */}
         <TouchableOpacity
             onPress={goToMessages}
             style={{
@@ -135,6 +137,7 @@ const Footer = () => {
             />
           </TouchableOpacity>
 
+        {/* Logout */}
         <TouchableOpacity
           onPress={logout}
           style={{

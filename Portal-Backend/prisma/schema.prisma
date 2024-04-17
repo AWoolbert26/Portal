@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:H0pkins9742@localhost/Portal_test"
+  url      = "mysql://portal_admin:mypassword@portal.cdyqkcggul2d.us-east-2.rds.amazonaws.com:3306/portal"
 }
 
 model User {
@@ -78,7 +78,6 @@ model CategorySummary {
   education    String
   averagePay   String
   threatOfAI   String
-  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId   Int      @unique
 }
 

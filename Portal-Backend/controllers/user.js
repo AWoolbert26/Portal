@@ -54,7 +54,7 @@ export const checkUniqueUsername = async (req, res) => {
   try {
     const body = req.body;
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.User.findFirst({
       where: { username: body.username },
     });
 

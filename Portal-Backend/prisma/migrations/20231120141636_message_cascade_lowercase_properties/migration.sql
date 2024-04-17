@@ -29,22 +29,22 @@ CREATE TABLE `UserRating` (
 
 
 -- Delete all entries from the category table
-DELETE FROM category;
+DELETE FROM Category;
 
 -- Reset the auto-increment to 0
-ALTER TABLE category AUTO_INCREMENT = 0;
+ALTER TABLE Category AUTO_INCREMENT = 0;
 
 -- Insert new data without specifying values for the auto-incremented id column
-INSERT INTO category (name)
-  VALUES 
-  ('Law'),
-  ('Computer Science'),
-  ('Business'),
-  ('Politics'),
-  ('Mechanical Engineering'),
-  ('Art'),
-  ('Retail'),
-  ('Agriculture'),
-  ('Sales'),
-  ('Healthcare'),
-  ('Media and Entertainment');
+-- INSERT INTO category (name)
+--   VALUES 
+--   ('Law'),
+--   ('Computer Science'),
+--   ('Business'),
+--   ('Politics'),
+--   ('Mechanical Engineering'),
+--   ('Art'),
+--   ('Retail'),
+--   ('Agriculture'),
+--   ('Sales'),
+--   ('Healthcare'),
+--   ('Media and Entertainment');

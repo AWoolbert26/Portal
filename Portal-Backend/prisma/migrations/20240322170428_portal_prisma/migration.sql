@@ -25,13 +25,13 @@
 -- DROP INDEX `UserRating_categoryId_fkey` ON `UserRating`;
 
 -- DropTable
-DROP TABLE `category`;
+DROP TABLE `Category`;
 
 -- DropTable
-DROP TABLE `profile`;
+DROP TABLE `Profile`;
 
 -- DropTable
-DROP TABLE `user`;
+DROP TABLE `User`;
 
 -- CreateTable
 CREATE TABLE `User` (

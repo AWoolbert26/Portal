@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `post` MODIFY `url` VARCHAR(191) NULL;
+ALTER TABLE `Post` MODIFY `url` VARCHAR(191) NULL;

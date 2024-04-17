@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { router } from "expo-router";
 
 const tokenKey = "portal_jwt";
-const backendUrl = "http://192.168.12.165:3000";
+const backendUrl = "mysql://portal_admin:mypassword@portal.cdyqkcggul2d.us-east-2.rds.amazonaws.com:3306/portal";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

@@ -11,7 +11,7 @@
 -- ALTER TABLE `category_user` DROP FOREIGN KEY `Category_User_userId_fkey`;
 
 -- DropTable
-DROP TABLE `category_user`;
+DROP TABLE `Category_User`;
 
 -- CreateTable
 CREATE TABLE `_CategoryToUser` (

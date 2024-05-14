@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = "mysql://portal_admin:mypassword@portal.cdyqkcggul2d.us-east-2.rds.amazonaws.com:3306/portal"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -40,12 +40,13 @@ model User {
 }
 
 model Category {
-  id      Int              @id @default(autoincrement())
-  name    String
-  users   User[]
-  summary CategorySummary?
-  posts   Post[]
-  ratings UserRating[]
+  id                Int              @id @default(autoincrement())
+  name              String
+  users             User[]
+  summary           CategorySummary? @relation(fields: [categorySummaryId], references: [id])
+  posts             Post[]
+  ratings           UserRating[]
+  categorySummaryId Int?
 }
 
 model UserRating {
@@ -71,14 +72,15 @@ model Profile {
 }
 
 model CategorySummary {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   summary      String
   hardSkills   String
   commonTraits String
   education    String
   averagePay   String
   threatOfAI   String
-  categoryId   Int      @unique
+  categoryId   Int        @unique
+  Category     Category[]
 }
 
 model Post {

@@ -95,7 +95,7 @@ const Message = () => {
           {/* map thru old messages here */}
           {messages.map(({ id, text, senderId, createdAt }) => {
             return (
-              <View>
+              <View key={id}>
                 <View
                   key={id}
                   style={{

@@ -30,7 +30,11 @@ const UserSearchDropdown = ({ onUserSelect }) => {
   const screenWidth = Dimensions.get("window").width;
 
   return (
-    <View style={{ width: screenWidth - 35 }}>
+    <View 
+      style={{ 
+        width: screenWidth - 35,
+      }}
+    >
       <View
         style={{
           flexDirection: "row",
@@ -56,41 +60,55 @@ const UserSearchDropdown = ({ onUserSelect }) => {
           style={{ flex: 1 }}
         />
       </View>
-      <ScrollView
+      <Text
         style={{
-          flexDirection: "column",
-          columnGap: 10,
-          overflow: "hidden",
-          marginBottom: 100,
+          marginTop: 10,
+          fontWeight: 400
         }}
       >
-        {isDropdownVisible &&
-          searchResults &&
-          searchResults.map((user, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  flex: 1,
-                  padding: 10,
-                }}
-                onPress={() => router.push(`/user/${user.id}`)}
-              >
-                <Text
+          Search Results
+        </Text>
+      {isDropdownVisible && searchResults.length > 0 && (
+        <ScrollView
+          style={{
+            flexDirection: "column",
+            columnGap: 10,
+            overflow: "hidden",
+            marginBottom: 100,
+            marginTop: 10,
+            borderRadius: 10,
+            //backgroundColor: '#CCC'
+          }}
+        >
+          {searchResults &&
+            searchResults.map((user, index) => {
+              return (
+                //TODO: make these into images. Will be better once the db is shared to everyone. 
+                <TouchableOpacity
+                  key={index}
                   style={{
-                    borderBottomWidth: 1,
-                    borderColor: "#ccc",
-                    fontSize: 20,
-                    marginTop: 30,
-                    marginHorizontal: 10
+                    flex: 1,
+                    padding: 10,
                   }}
+                  onPress={() => router.push(`/user/${user.id}`)}
                 >
-                  {user.username}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-      </ScrollView>
+                  <Text
+                    style={{
+                      borderBottomWidth: 1,
+                      borderColor: "#ccc",
+                      fontSize: 20,
+                      marginTop: 10,
+                      marginBottom: 10,
+                      marginHorizontal: 10
+                    }}
+                  >
+                    {user.username}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+        </ScrollView>
+      )}
     </View>
   );
 };

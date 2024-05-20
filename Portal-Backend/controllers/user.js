@@ -235,45 +235,60 @@ export const register = async (req, res) => {
     // profile initialization page
 
     const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.genSalt(saltRounds, async function (err, salt) {
+      if(err) {
+        console.log(err)
+        res.status(500).send({error: 'Error generating salt'})
+        return
+      }
       bcrypt.hash(password, salt, async (err, hash) => {
+        if (err) {
+          console.log(err);
+          res.status(500).send({ error: 'Error hashing password' });
+          return;
+        }
         // creates user and stores hashed password.
-        const newUser = await prisma.user.create({
-          data: {
-            email: email,
-            password: hash,
-            username: username,
-          },
-        });
-
-        //creates profile
-        await prisma.profile.create({
-          data: {
-            name: "Not Set",
-            bio: "Not Set",
-            location: "Not Set",
-            occupation: "Not Set",
-            id: newUser.id,
-            userId: newUser.id,
-          },
-        });
-
-        const serverIp = `${req.protocol}://${req.headers.host}`;
-
-        //verification email send
-        sendVerificationEmail(newUser.id, email, serverIp, redirectUrl);
-
-        //generates jwt -- postponed to when they verify email
-        res.status(200);
-        res.send({ userId: newUser.id });
+        try {
+          const newUser = await prisma.user.create({
+            data: {
+              email: email,
+              password: hash,
+              username: username,
+            },
+          });
+  
+          //creates profile
+          await prisma.profile.create({
+            data: {
+              name: "Not Set",
+              bio: "Not Set",
+              location: "Not Set",
+              occupation: "Not Set",
+              id: newUser.id,
+              userId: newUser.id,
+            },
+          });
+  
+          const serverIp = `${req.protocol}://${req.headers.host}`;
+  
+          //verification email send
+          sendVerificationEmail(newUser.id, email, serverIp, redirectUrl);
+  
+          //generates jwt -- postponed to when they verify email
+          res.status(200).send({ userId: newUser.id });
+        } catch(prismaError) {
+          console.log(prismaError);
+          res.status(500).send(prismaError);
+        }
+        
       });
     });
 
     // res.status(200); // 200 for success
     // res.send(`New user ${newUser.username} created!`);
   } catch (error) {
-    res.status(500);
-    res.send(error);
+    console.log(error)
+    res.status(500).send(error);
   }
 };
 

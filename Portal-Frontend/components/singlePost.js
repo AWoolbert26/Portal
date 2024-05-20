@@ -23,6 +23,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
   const [captionOpen, setCaptionOpen] = useState(false);
   const [postInfo, setPostInfo] = useState(null);
   const windowHeight = Dimensions.get("window").height;
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const toggleCaption = async () => {
     setCaptionOpen(!captionOpen);
@@ -85,6 +86,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
 
   const play = async () => {
     if (video.current == null) {
+      console.log("No video")
       return;
     }
     const status = await video.current.getStatusAsync();
@@ -196,9 +198,13 @@ const SinglePost = forwardRef(({ post }, ref) => {
             // figure out your image aspect ratio
             aspectRatio: 3 / 5,
           }}
-          shouldPlay={false}
+          shouldPlay={isVideoLoaded}
           isLooping={true}
           resizeMode="cover"
+          onLoad={() => {
+            console.log("loaded")
+            setIsVideoLoaded(true)
+          }}
         />
         {/* caption */}
         <View

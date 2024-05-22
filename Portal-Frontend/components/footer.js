@@ -41,7 +41,7 @@ const Footer = () => {
 
   const goToCreatePost = () => {
     console.log("Going to create post page");
-    console.log(authUser);
+    //console.log(authUser);
     router.push("/createPost");
   };
 
@@ -96,7 +96,7 @@ const Footer = () => {
         </TouchableOpacity>
         
         {/* Post */}
-        {/* <TouchableOpacity
+        { <TouchableOpacity
           onPress={goToCreatePost}
           style={{
             justifyContent: "center",
@@ -107,7 +107,7 @@ const Footer = () => {
             color="black"
             size={30}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity> }
         
         {/* Profile */}
         <TouchableOpacity

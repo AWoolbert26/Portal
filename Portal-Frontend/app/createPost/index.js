@@ -25,36 +25,40 @@ const CreatePost = () => {
   const videoRef = useRef(false);
   const [status, setStatus] = useState({});
 
-  // const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({});
 
-  const categories = {
-    1: "Law",
-    2: "Computer Science",
-    3: "Business",
-    4: "Politics",
-    5: "Mechanical Engineering",
-    6: "Art",
-    7: "Retail",
-    8: "Agriculture",
-    9: "Sales",
-    10: "Healthcare",
-    11: "Media and Entertainment",
-  }; // should we limit what categories each creator can post to?
-  // const getUsercategories = async () => {
-  //   try {
-  //     const gotCategories = await getCategories();
+  //const categories = {
+  //  1: "Law",
+  //  2: "Computer Science",
+  //  3: "Business",
+  //  4: "Politics",
+  //  5: "Mechanical Engineering",
+  //  6: "Art",
+  //  7: "Retail",
+  //  8: "Agriculture",
+  //  9: "Sales",
+  //  10: "Healthcare",
+  //  11: "Media and Entertainment",
+  //}; // should we limit what categories each creator can post to?
+  const getUsercategories = async () => {
+    try {
+      const gotCategories = await getCategories();
 
-  //     const formatedCategories = {};
+      const formatedCategories = {};
 
-  //     gotCategories.categories.forEach((category) => {
-  //       formatedCategories[category.id] = category.name;
-  //     });
-  //     setCategories(formatedCategories);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+      gotCategories.categories.forEach((category) => {
+        formatedCategories[category.id] = category.name;
+      });
+      setCategories(formatedCategories);
+    } catch (err) {
+      console.log("ERROR")
+      console.log(err);
+    }
+  };
+  getUsercategories()
+
+
 
   const pressed = (id) => {
     if (selectedCategories[id] === undefined) {

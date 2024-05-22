@@ -66,6 +66,7 @@ const SearchPage = () => {
           paddingTop: 20
         }}
       >
+        {/*
         <ScrollView>
           {categories &&
             Object.entries(categories).map(([id, name]) => {
@@ -111,7 +112,7 @@ const SearchPage = () => {
 
                         }}
                       >
-                        {/*{name}*/}
+                        
                       </Text>
                     </TouchableOpacity>
 
@@ -123,6 +124,7 @@ const SearchPage = () => {
 
           }
         </ScrollView>
+        */}
       </View>
       <Footer />
     </SafeAreaView>

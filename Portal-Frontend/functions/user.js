@@ -91,6 +91,22 @@ export const resendVerificationEmail = async (userId, redirectUrl) => {
   }
 };
 
+export const sendReportEmail = async (reporter, reportedUser, reportedPost) => {
+  try {
+    const result = await axios.get(`${backendUrl}/sendReportEmail`, {
+      params: {
+        reporter: reporter,
+        reportedUser: reportedUser,
+        reportedPost, reportedPost
+      },
+    });
+    return "Success";
+  } catch (err) {
+    console.log(err);
+    return { err: "Resend unsuccessful." };
+  }
+};
+
 export const authenticate = async (id) => {
   try {
     console.log(id);

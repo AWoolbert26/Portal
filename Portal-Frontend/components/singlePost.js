@@ -1,32 +1,107 @@
 import React, {
   useState,
+  useContext,
   forwardRef,
   useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
 import { Video } from "expo-av";
-import { Text, View, Image, Touchable, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  TextInput,
+  Button,
+  Dimensions,
+  Clipboard,
+  StyleSheet,
+} from "react-native";
+import { AuthContext } from "../app/auth/AuthContext";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { Heart, MessageSquare, Minus } from "lucide-react-native";
+import { Heart, MessageSquare, Minus, Share, Flag } from "lucide-react-native";
 import {
   likePost,
   unlikePost,
   getPostInfo,
   toggleFollow,
+  sendReportEmail,
+  getUserWithPosts
 } from "../functions/user";
 import { router } from "expo-router";
 import FollowButton from "./FollowButton";
-import { Dimensions } from "react-native";
 
 const SinglePost = forwardRef(({ post }, ref) => {
+  const [user, setUser] = useState(null);
+  const { authUser } = useContext(AuthContext);
   const [captionOpen, setCaptionOpen] = useState(false);
   const [postInfo, setPostInfo] = useState(null);
+  const [showShareBox, setShowShareBox] = useState(false);
+  const [showReportBox, setShowReportBox] = useState(false);
+  const [email, setEmail] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [shareCap, setShareCap] = useState("SHARE")
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch user data
+        const userWithPosts = await getUserWithPosts(authUser.id);
+        setUser(userWithPosts);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+      }
+    };
+    if (authUser) {
+      fetchData(); // Call the data fetching function
+    }
+  }, [authUser]);
+
   const windowHeight = Dimensions.get("window").height;
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const toggleCaption = async () => {
     setCaptionOpen(!captionOpen);
+  };
+
+  const toggleShareBox = () => {
+    setShowShareBox(!showShareBox);
+  };
+
+  const toggleReportBox = () => {
+    setShowReportBox(!showReportBox);
+  };
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+  };
+
+  const handleFeedbackChange = (text) => {
+    setFeedback(text);
+  };
+
+  const share = async () => {
+    try {
+      await Clipboard.setString(post.url);
+      setShareCap("COPIED")
+      //toggleShareBox();
+
+      console.log("URL copied to clipboard");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const submitFeedback = async () => {
+    try {
+      sendReportEmail(user.email, post.user.email, post.url)
+      toggleReportBox();
+      console.log("Feedback submitted successfully");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const pressedLike = async () => {
@@ -86,7 +161,6 @@ const SinglePost = forwardRef(({ post }, ref) => {
 
   const play = async () => {
     if (video.current == null) {
-      console.log("No video")
       return;
     }
     const status = await video.current.getStatusAsync();
@@ -179,7 +253,6 @@ const SinglePost = forwardRef(({ post }, ref) => {
             {post.user.profile.name}
           </Text>
         </TouchableWithoutFeedback>
-        {/* <FollowButton id={post.user.id} follows={true} /> */}
       </View>
       <TouchableWithoutFeedback
         style={{ position: "relative", height: windowHeight - 199 }}
@@ -198,13 +271,9 @@ const SinglePost = forwardRef(({ post }, ref) => {
             // figure out your image aspect ratio
             aspectRatio: 3 / 5,
           }}
-          shouldPlay={isVideoLoaded}
+          shouldPlay={false}
           isLooping={true}
           resizeMode="cover"
-          onLoad={() => {
-            console.log("loaded")
-            setIsVideoLoaded(true)
-          }}
         />
         {/* caption */}
         <View
@@ -213,7 +282,7 @@ const SinglePost = forwardRef(({ post }, ref) => {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             width: "100%",
             bottom: 0,
-            padding: 5
+            padding: 5,
           }}
         >
           {!captionOpen || !postInfo ? (
@@ -271,9 +340,45 @@ const SinglePost = forwardRef(({ post }, ref) => {
               <MessageSquare color="#fff" size={35}></MessageSquare>
               <Text style={{ color: "white" }}>{postInfo.commentCount}</Text>
             </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback style={{ alignItems: "center" }} onPress={share}>
+              <Share size={32} color="#ffffff" />
+              <Text style={{ color: "white" }}>{shareCap}</Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              style={{ alignItems: "center" }}
+              onPress={toggleReportBox}
+            >
+              <Flag size={32} color="#ffffff" />
+              <Text style={{ color: "white" }}>REPORT</Text>
+            </TouchableWithoutFeedback>
           </View>
         )}
       </TouchableWithoutFeedback>
+      {showShareBox && (
+        <View style={{ position: "absolute", top: "50%", left: "50%", transform: [{ translateX: -50 }, { translateY: -50 }], backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 20, borderRadius: 10 }}>
+          <TextInput
+            placeholder="Enter an email to share it with"
+            onChangeText={handleEmailChange}
+            value={email}
+            style={{ color: "white", borderWidth: 1, borderColor: "white", borderRadius: 5, padding: 5, marginBottom: 10 }}
+          />
+          {/*<Button title="SUBMIT" onPress={submitEmail} />*/}
+        </View>
+      )}
+      {showReportBox && (
+        <View style={{ position: "absolute", top: "50%", left: "50%", transform: [{ translateX: -50 }, { translateY: -50 }], backgroundColor: "rgba(0, 0, 0, 0.5)", padding: 20, borderRadius: 10 }}>
+          <Text style={{ color: "white", marginBottom: 3 }}>
+            Enter your feedback
+          </Text>
+          <TextInput
+            placeholder=""
+            onChangeText={handleFeedbackChange}
+            value={feedback}
+            style={{ color: "white", borderWidth: 1, borderColor: "white", borderRadius: 5, padding: 5, marginBottom: 10 }}
+          />
+          <Button title="SUBMIT" onPress={submitFeedback} />
+        </View>
+      )}
     </View>
   );
 });

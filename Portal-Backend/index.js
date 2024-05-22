@@ -22,7 +22,7 @@ app.use(express.json()); //middleware to interpret all request body as json
 // const url = await ngrok.connect(3000); //tunnel for backend requests
 app.use(
   fileUpload({
-    limits: { fileSize: 50 * 1024 * 1024 },
+    limits: { fileSize: 100 * 1024 * 1024 },
   })
 );
 app.use(cors());

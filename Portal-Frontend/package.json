@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "^2.2.0",
+    "@expo/metro-runtime": "^3.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@gluestack-ui/config": "^1.0.3",

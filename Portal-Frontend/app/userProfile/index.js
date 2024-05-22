@@ -446,7 +446,7 @@ const userProfile = () => {
               backgroundColor: "black",
             }}
           >
-            <SinglePost post={selectedPost} />
+            <SinglePost post={selectedPost} setModalVisible={setModalVisible} />
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
               style={{ marginTop: 20 }}

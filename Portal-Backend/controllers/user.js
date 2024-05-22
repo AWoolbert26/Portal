@@ -513,7 +513,7 @@ export const getUserWithPosts = async (req, res) => {
 //helpers
 const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
   try {
-    console.log("Made IT 2")
+    //console.log("Made IT 2")
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465, // SMTP port (465 for SSL)
@@ -524,7 +524,7 @@ const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
       },
     });
 
-    console.log("Made IT 3")
+    //console.log("Made IT 3")
     //creates token that encodes id and redirectUrl
     const verificationToken = jsonwebtoken.sign(
       {
@@ -537,7 +537,7 @@ const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
       { expiresIn: "10m" }
     );
 
-    console.log("Made IT 4")
+    //console.log("Made IT 4")
     const mailConfigurations = {
       from: "andrew.s.woolbert@gmail.com",
       to: email,
@@ -546,7 +546,38 @@ const sendVerificationEmail = (userId, email, serverIp, redirectUrl) => {
       // html: {make html for the email}
     };
 
-    console.log("Made IT 5")
+    //console.log("Made IT 5")
+    transporter.sendMail(mailConfigurations, function (error, info) {
+      if (error) throw Error(error);
+      console.log("Email Sent Successfully");
+      console.log(info);
+    });
+  } catch (err) {
+    console.log(err);
+    throw err; // caught in register function
+  }
+};
+
+export const sendReportEmail = (reporter, reportedUser, reportedPost) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465, // SMTP port (465 for SSL)
+      secure: true,
+      auth: {
+        user: "andrew.s.woolbert@gmail.com",
+        pass: "xzic ppsm dato racw"
+      },
+    });
+
+    const mailConfigurations = {
+      from: "andrew.s.woolbert@gmail.com",
+      to: email,
+      subject: "Portal - Report",
+      text: `The user ${reporter} reported the user ${reportedUser} for the post ${reportedPost}.`,
+      // html: {make html for the email}
+    };
+    
     transporter.sendMail(mailConfigurations, function (error, info) {
       if (error) throw Error(error);
       console.log("Email Sent Successfully");

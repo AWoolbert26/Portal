@@ -36,6 +36,7 @@ const Comments = () => {
   const createComment = async () => {
     const result = await comment({ newComment: newComment, postId: postId });
     setComments([...comments, result]);
+    setNewComment("")
   };
 
   const pressedLike = async (comment) => {
@@ -150,7 +151,7 @@ const Comments = () => {
       >
         <TextInput
           autoCapitalize="none"
-          placeholder="Comment..."
+          placeholder="Comment"
           placeholderTextColor="black"
           style={{
             backgroundColor: "lightgrey",
@@ -160,6 +161,7 @@ const Comments = () => {
             fontWeight: "200",
           }}
           onChangeText={(text) => setNewComment(text)}
+          value={newComment}
         />
         <Button title="Submit" onPress={createComment} />
       </View>

@@ -17,6 +17,7 @@ import {
   verifyEmail,
   authenticate,
   resendVerificationEmail,
+  sendReportEmail
 } from "../controllers/user.js";
 
 //creates modular, mini-routers that can be plugged into the main Express app using app.use() in index.js
@@ -38,3 +39,4 @@ userRoutes.get("/getUserWithPosts/:userId", getUserWithPosts);
 userRoutes.get("/verify/:token", verifyEmail);
 userRoutes.get("/authenticate/:id", authenticate);
 userRoutes.get("/resendVerificationEmail", resendVerificationEmail);
+userRoutes.get("/sendReportEmail", sendReportEmail);

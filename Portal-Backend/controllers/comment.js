@@ -74,7 +74,7 @@ export const getComments = async (req, res) => {
         isLiked: userLiked !== null,
       };
     }
-    console.log(commentsInfo);
+    //console.log(commentsInfo);
     res.send(commentsInfo);
   } catch (err) {
     console.log(err);

@@ -104,7 +104,7 @@ export const getOtherProfilePictureFromId = async (req, res) => {
 
 export const setProfileInformation = async (req, res) => {
   try {
-    console.log("hit");
+    //console.log("hit");
     const tokenUser = getUserFromToken(req.headers.authorization);
     const user = await getUser(tokenUser.id);
 
